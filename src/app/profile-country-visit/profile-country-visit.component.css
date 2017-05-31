@@ -1,0 +1,20 @@
+
+.fluid-container, .row, .left-side, .right-side{
+  margin: 0;
+  padding: 0;
+}
+
+.right-side{
+  height: 100vh;
+}
+
+
+
+.map-view{
+  height: 65vh;
+
+}
+
+#map-canvas {
+    height: 100%;
+  }

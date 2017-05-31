@@ -1,0 +1,47 @@
+.fluid-container, .row, .left-side, .right-side{
+  margin: 0;
+  padding: 0;
+}
+
+button{
+  background-color: #879dc9;
+  color: #fff;
+  border-radius: 5px;
+  box-shadow: 1px 3px 3px 1px #ccc;
+
+}
+#home-top{
+  box-shadow: inset 5px 0 5px #ccc;
+
+}
+.left-side, .right-side{
+  height: 100vh;
+  text-align: center;
+}
+
+.left-side{
+  background-color: #eeedec;
+  box-shadow: inset -5px 5px 5px #ccc;
+}
+
+.left-side > div{
+  margin: 5% 2%;
+}
+
+.img-div{
+  height: 20vh;
+  margin: 0 2%;
+}
+.img-circle{
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.map-view{
+  height: 65vh;
+
+}
+
+#map-canvas {
+    height: 100%;
+  }

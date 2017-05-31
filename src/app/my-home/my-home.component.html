@@ -1,0 +1,101 @@
+<div class="container-fluid" id="home-top">
+  <div class="row" >
+
+    <div class="col-md-9 left-side">
+      <div class="row map-view">
+        <div id="map-canvas"></div>
+      </div>
+      <div class="row visa-view">
+        <div class="row color-row">
+          <div class="col-md-3 color-column">
+              <div class="col-md-3 red-box"></div>
+              <div class="col-md-9">
+                 <strong>Visa-free:</strong><br />{{countryName1.name}}
+              </div>
+          </div>
+          <div class="col-md-3 color-column">
+              <div class="col-md-3 yellow-box"></div>
+              <div class="col-md-9">
+                 <strong>VOA:</strong><br />{{countryName1.name}}
+              </div>
+          </div>
+          <div class="col-md-3 color-column">
+              <div class="col-md-3 blue-box"></div>
+              <div class="col-md-9">
+                  <strong>Visa-free:</strong><br />{{countryName2.name}}
+              </div>
+          </div>
+          <div class="col-md-3 color-column">
+              <div class="col-md-3 black-box"></div>
+              <div class="col-md-9">
+                 <strong>VOA:</strong><br />{{countryName2.name}}
+              </div>
+          </div>
+        </div>
+        <div class="row nation-row">
+          <div class="col-md-6 nation-box">
+            <div class="form-group">
+  						<label for="nationalityInput"> Select Nationality 1</label>
+  						<select [(ngModel)]="selectedNationalityId1"  class="form-control" id="nationality" name="nationality" >
+                  <option value = {{country._id}} *ngFor="let country of countries">{{country.name}}</option>
+  						</select>
+  					</div>
+          </div>
+          <div class="col-md-6 nation-box">
+            <div class="form-group">
+  						<label for="nationalityInput2"> Select Nationality 2 (optional)</label>
+  						<select [(ngModel)]="selectedNationalityId2" class="form-control" id="nationality2" name="nationality2" >
+                  <option value = {{country._id}} *ngFor="let country of countries2">{{country.name}}</option>
+  						</select>
+  					</div>
+          </div>
+        </div>
+        <button class="country-button" (click)="loadCountries(selectedNationalityId1, selectedNationalityId2)">Show Visa Requirements</button>
+
+      </div>
+
+    </div> <!--div class="col-md-8 left-side"-->
+
+    <div class="col-md-3 right-side">
+        <div class="itinerary-box">
+          <div class="col-md-1"></div>
+          <div class="col-md-12" ng-change="totalDays()">
+            <div class="itinerary">
+              <h4><span class="white">Create your itinerary</span></h4>
+              <!-- <input id="new-name" [(ngModel)]= "newItinerary.name" type="text" placeholder="Create an itinerary name" /> -->
+        			<input id="new-address" [(ngModel)]="newAddress" type="text" name="address" placeholder="location" >
+              <input id="new-date" value="" type="date" name="date"/>
+        			<input id="new-submit" (click)="createPoint()" type="submit" name="" value="Add to list">
+              <!-- <input id="new-delete" (click)="deletePoint()" type="submit" name="" value="-"> -->
+              <div  class="location-box">
+                <div *ngFor="let location of locations, let i = index">
+
+                    <p class="days white">
+                      For {{itineraryDays[i]}} days
+                    </p>
+                    <div class="location-list">
+                      <strong>{{location.name}} {{location.country}}</strong> {{location.date | date:'EEE MMMM d, y'}}
+                      <input type="hidden" name="" #locationId [(ngModel)]="location.id">
+                      <input class="delete" type="submit" value="" (click)="deletePoint(locationId)" />
+                    </div>
+
+                </div>
+              </div>
+            </div>
+
+              <div class="total-days">
+                <span >Total Trip Length: {{sum}} Days</span>
+              </div>
+              <div class="save">
+                <p>Save itinerary</p>
+              </div>
+          </div>
+          <div class="col-md-1"></div>
+        </div>
+        <div class="row country-view">
+
+        </div>
+    </div>
+  </div>
+
+</div>

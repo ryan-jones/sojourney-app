@@ -1,0 +1,36 @@
+.fluid-container{
+  margin: 0;
+  padding: 0;
+  /*background-color: #879dc9;*/
+  border: 1px solid black;
+  height: 100vh;
+  /*background-image: url('IMG_0520.JPG');*/
+}
+
+.form-box{
+  margin: 5% 0;
+  padding: 5%;
+  text-align: center;
+  background-color: #eeedec;
+  border-top: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 1px 3px 3px 1px black;
+
+}
+
+input, button{
+  width: 100%;
+}
+
+h4{
+  margin: 5% 0 2%;
+}
+
+button{
+  background-color: #222061;
+  border-radius: 5px;
+  margin-top: 1%;
+  color: #fff;
+  padding: 1% 2%;
+  box-shadow: 3px 3px 3px 1px #ccc;
+}

@@ -1,0 +1,14 @@
+{"type":"FeatureCollection","features":[
+{"type":"Feature","geometry":null,"properties":{"<?xml version=\"1.0\" encoding=\"UTF-8\"?>":"<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:kml=\"http://www.opengis.net/kml/2.2\" xmlns:atom=\"http://www.w3.org/2005/Atom\">"}},
+{"type":"Feature","geometry":null,"properties":{"<?xml version=\"1.0\" encoding=\"UTF-8\"?>":"<NetworkLink>"}},
+{"type":"Feature","geometry":null,"properties":{"<?xml version=\"1.0\" encoding=\"UTF-8\"?>":"\t<name>World Borders</name>"}},
+{"type":"Feature","geometry":null,"properties":{"<?xml version=\"1.0\" encoding=\"UTF-8\"?>":"\t<visibility>0</visibility>"}},
+{"type":"Feature","geometry":null,"properties":{"<?xml version=\"1.0\" encoding=\"UTF-8\"?>":"\t<Snippet maxLines=\"0\"></Snippet>"}},
+{"type":"Feature","geometry":null,"properties":{"<?xml version=\"1.0\" encoding=\"UTF-8\"?>":"\t<description><![CDATA[<a href=\"http://www.gelib.com/world-borders.htm\">More Information</a><br><br>]]></description>"}},
+{"type":"Feature","geometry":null,"properties":{"<?xml version=\"1.0\" encoding=\"UTF-8\"?>":"\t<Url>"}},
+{"type":"Feature","geometry":null,"properties":{"<?xml version=\"1.0\" encoding=\"UTF-8\"?>":"\t\t<href>http://www.gelib.com/maps/world-borders.kmz</href>"}},
+{"type":"Feature","geometry":null,"properties":{"<?xml version=\"1.0\" encoding=\"UTF-8\"?>":"\t\t<viewRefreshMode>onRequest</viewRefreshMode>"}},
+{"type":"Feature","geometry":null,"properties":{"<?xml version=\"1.0\" encoding=\"UTF-8\"?>":"\t</Url>"}},
+{"type":"Feature","geometry":null,"properties":{"<?xml version=\"1.0\" encoding=\"UTF-8\"?>":"</NetworkLink>"}},
+{"type":"Feature","geometry":null,"properties":{"<?xml version=\"1.0\" encoding=\"UTF-8\"?>":"</kml>"}}
+]}

@@ -1,0 +1,172 @@
+.fluid-container, .row, .left-side, .right-side{
+  margin: 0;
+  padding: 0;
+}
+
+#home-top{
+  box-shadow: inset 5px 0 5px #ccc;
+  /*border: 5px solid red;*/
+
+}
+.left-side, .right-side{
+  height: 100vh;
+}
+
+.map-view{
+  height: 65vh;
+
+}
+
+#map-canvas {
+    height: 100%;
+  }
+
+.visa-view{
+  height: 35vh;
+  background-color: #fff;
+  text-align: center;
+}
+
+.color-row{
+  background-color: #fff;
+}
+
+.color-column{
+  height: 100%;
+  margin-bottom: 1%;
+}
+
+.yellow-box, .red-box, .blue-box, .black-box{
+  height: 2vh;
+  margin-top: 1%;
+  width: auto;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 1px 3px 3px 1px #ccc;
+}
+
+.yellow-box{
+  background-color: yellow;
+}
+
+.red-box{
+  background-color: red;
+}
+
+.blue-box{
+  background-color: blue;
+}
+
+.black-box{
+  background-color: black;
+}
+
+.nation-row{
+  /*margin-top: 2%;*/
+}
+
+.nation-box{
+  background-color: #879dc9;
+  color: #fff;
+  padding-top: 1%;
+  border-radius: 5px;
+  width:46%;
+  margin: 0 2% 0 2%;;
+  box-shadow: 3px 3px 3px 3px #ccc;
+}
+.country-button{
+  background-color: #222061;
+  border-radius: 5px;
+  margin-top: 1%;
+  color: #fff;
+  padding: 1% 2%;
+  box-shadow: 3px 3px 3px 1px #ccc;
+}
+
+
+
+.itinerary-box{
+  background-color: #fff;
+  height: 65vh;
+  box-shadow: inset 5px 0 5px #ccc;
+
+}
+.itinerary{
+  background-color: #879dc9;
+  margin-top: 2%;
+  padding: 2% 2% 2% 3%;
+  border-radius: 5px 5px 0 0;
+  box-shadow: 3px 3px 3px 3px #ccc;
+}
+
+
+
+.location-box{
+  margin-top: 1%;
+  background-color: #879dc9;
+
+}
+
+.location-list{
+  display: flex;
+  justify-content: space-between;
+  color: black;
+  border-radius: 5px;
+  background-color: #eeedec;
+  padding: 2% 3%;
+  border-bottom: 1px solid black;
+}
+
+
+.white{
+  color: #fff;
+}
+
+#new-address{
+  width: 62%;
+}
+#new-date{
+  width: 62%;
+}
+#new-submit{
+
+}
+
+.delete{
+  background-color: red;
+  border-radius: 5px;
+  /*margin-top: 1%;*/
+  color: #fff;
+  padding: 0 2%;
+  box-shadow: 3px 3px 3px 1px #ccc;
+}
+
+.days{
+  padding-top: 5%;
+  text-align: center;
+}
+
+.total-days{
+  background-color: #fff;
+  color: #879dc9;
+  border: 1px solid #879dc9;
+  padding: 2%;
+  box-shadow: 7px 2px 3px -1px #ccc;
+}
+
+.save{
+  text-align: center;
+  background-color: red;
+  color: #fff;
+  border-radius: 0 0 5px 5px;
+  border: 1px solid #879dc9;
+  height: 4vh;
+  padding: 2%;
+  box-shadow: 3px 3px 3px 3px #ccc;
+}
+
+
+.country-view{
+  height: 35vh;
+  box-shadow: inset 5px 0 5px #ccc;
+}

@@ -1,0 +1,53 @@
+<div class="container-fluid" id="home-top">
+
+  <div class="col-md-12 right-side">
+    <div class="row map-view">
+      <div id="map-canvas"></div>
+    </div>
+
+
+
+    <div class="itinerary-box">
+
+      <div class="col-md-12" ng-change="totalDays()">
+        <!-- <div class="row profile-itinerary">
+
+            <div class="itinerary col-md-11">
+              <h4><span class="white">Current itinerary</span></h4>
+              <div  class="location-box">
+                <div *ngFor="let location of locations, let i = index">
+
+                    <p class="days white">
+                      For {{itineraryDays[i]}} days
+                    </p>
+                    <div class="location-list">
+                      <strong>{{location.name}} {{location.country}}</strong> {{location.date | date:'EEE MMMM d, y'}}
+                      <input class="delete" type="submit" value="-" (click)="deletePoint()" />
+                    </div>
+                </div>
+              </div>
+            </div>
+
+          <div class="total-days col-md-1">
+            <span >Total <br /> {{sum}} Days</span>
+          </div>
+        </div> -->
+        <div class="share blue col-md-4">
+          <h4>Share your itinerary</h4>
+        </div>
+        <div class="share green-box col-md-4">
+          <h4>Edit your itinerary</h4>
+        </div>
+        <div class="share col-md-4">
+          <h4>Delete your itinerary</h4>
+        </div>
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+
+</div> <!--container fluid -->
