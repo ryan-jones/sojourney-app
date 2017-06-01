@@ -24,6 +24,7 @@ export class ProfileOverviewComponent implements OnInit {
     let user = JSON.parse(localStorage.getItem("user"))
     this.userService.get(user._id)
       .subscribe((user)=> {
+        console.log("get", user)
         this.user = user
       });
 

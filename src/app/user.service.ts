@@ -30,10 +30,35 @@ export class UserService {
       .map((res) => res.json());
   }
 
+  getTest(id) {
+    let headers = new Headers({ 'Authorization': 'JWT ' + this.SessionService.token });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.get(`${this.BASE_URL}/users/${id}`, options)
+      .map((res) => res.json())
+      .map((data) => {
+        let arr = [];
+        data.itineraries.forEach((item, index)=>{
+          console.log('item: ', item.flightPaths)
+          arr.push(item);
+        })
+        console.log('user service ', arr)
+        return {
+          arr: arr
+        };
+      });
+  }
+
   edit(user) {
     let headers = new Headers({ 'Authorization': 'JWT ' + this.SessionService.token });
     let options = new RequestOptions({ headers: headers });
     return this.http.put(`${this.BASE_URL}/users/${user.id}`, user, options )
+      .map((res) => res.json());
+  }
+
+  editItinerary(it) {
+    let headers = new Headers({ 'Authorization': 'JWT ' + this.SessionService.token });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.post(`${this.BASE_URL}/itinerary`, it)
       .map((res) => res.json());
   }
 

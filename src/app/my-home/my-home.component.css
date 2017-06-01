@@ -36,7 +36,7 @@
   margin-bottom: 1%;
 }
 
-.yellow-box, .red-box, .blue-box, .black-box{
+.yellow-box, .red-box, .blue-box, .green-box{
   height: 2vh;
   margin-top: 1%;
   width: auto;
@@ -57,8 +57,8 @@
   background-color: blue;
 }
 
-.black-box{
-  background-color: black;
+.green-box{
+  background-color: green;
 }
 
 .nation-row{
@@ -122,15 +122,11 @@
   color: #fff;
 }
 
-#new-address{
+#new-address, #new-date{
   width: 62%;
 }
-#new-date{
-  width: 62%;
-}
-#new-submit{
 
-}
+
 
 .delete{
   background-color: red;
@@ -168,5 +164,6 @@
 
 .country-view{
   height: 35vh;
+  text-align: center;
   box-shadow: inset 5px 0 5px #ccc;
 }

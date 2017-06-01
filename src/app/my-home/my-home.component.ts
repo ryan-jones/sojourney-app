@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import {CountryService} from '../country.service';
 import {WarningService} from '../warning.service';
@@ -17,16 +17,14 @@ declare var google: any;
 
 export class MyHomeComponent implements OnInit {
 
-  uploader: FileUploader = new FileUploader({
-    url: `http://localhost:3000/api/users/`,
-    authToken: `JWT ${this.session.token}`
-  });
+  
 
   newItinerary = {
+    id: '',
     name: '',
     nationality1: '',
     nationality2: '',
-    plan: []
+    placesAndDates: [],
   };
 
   feedback:string;
@@ -34,6 +32,7 @@ export class MyHomeComponent implements OnInit {
   selectedNationalityId1;
   selectedNationalityId2;
   map: any;
+  user;
   countries;
   countries2;
   warnings;
@@ -63,6 +62,7 @@ export class MyHomeComponent implements OnInit {
   colorLayers: Array<any> = [];
   layers: Array<any> = [];
 
+
   freeLayer;
   freeLayer2;
 
@@ -77,13 +77,20 @@ export class MyHomeComponent implements OnInit {
 
     this.initiateMap();
 
-    this.uploader.onSuccessItem = (item, response) => {
-      this.feedback = JSON.parse(response).message;
-    };
 
-    this.uploader.onErrorItem = (item, response, status, headers) => {
-      this.feedback = JSON.parse(response).message;
-    };
+    let user = JSON.parse(localStorage.getItem("user"))
+    console.log('THE ID', user)
+    if (user === null){
+      this.user = ''
+    } else {
+      this.userService.get(user._id)
+        .subscribe((user)=> {
+
+              this.user = user
+            });
+
+        }
+
 
 
     this.country.getList()
@@ -251,36 +258,16 @@ totalDays(){
 
           let freeLayer = new google.maps.Data();
 
-          if(index === 0){
 
-
-                console.log( "country", self.nation[visaKind][counter])
             freeLayer.loadGeoJson('https://raw.githubusercontent.com/johan/world.geo.json/master/countries/' + self.nation[visaKind][counter] + '.geo.json');
-              freeLayer.setStyle({ fillColor: colorsArray[visaKind][index], fillOpacity: 0.5, title: self.nation[visaKind][counter]});
+            freeLayer.setStyle({ fillColor: colorsArray[visaKind][index], fillOpacity: 0.5, title: self.nation[visaKind][counter]});
 
-              freeLayer.setMap(self.map);
-              counter++
+            freeLayer.setMap(self.map);
+            counter++
 
-              self.layers.push(freeLayer)
-            } else {
+            self.layers.push(freeLayer)
 
-                counter++
-             self.layers.forEach(function(layer){
-               if(layer.style.title == self.nation[visaKind][counter]) {
-                  // console.log("layer", layer)
 
-                 // console.log(self.nation[visaKind][counter])
-                  //  layer.setMap(null);
-                   layer.setStyle({ fillColor: "black", fillOpacity: 1});
-                  //    layer.setMap(self.map);
-                  //  layer.setMap(self.map);
-                }else {
-                  freeLayer.loadGeoJson('https://raw.githubusercontent.com/johan/world.geo.json/master/countries/' + self.nation[visaKind][counter] + '.geo.json');
-
-                    freeLayer.setStyle({ fillColor: colorsArray[visaKind][index], fillOpacity: 1, title: self.nation[visaKind][counter]});
-                    freeLayer.setMap(self.map);
-                }})
-              }
 
 
               if(counter == self.nation[visaKind].length){
@@ -303,27 +290,7 @@ totalDays(){
               })
       } //showCountries
 
-makeBlack(){
-  console.log("maop",this.map)
-  console.log("data", this.map.data)
-  this.map.data.forEach((data)=>{
-    console.log("data", data)
-  })
-  setTimeout(()=>{
 
-    this.layers.forEach((layer)=>{
-
-     //  if(layer.style.title == self.nation[visaKind][counter]) {
-
-        // console.log(self.nation[visaKind][counter])
-          // layer.setMap(null);
-          this.map.data.setStyle({visible: false});
-          // layer.setMap(this.map);
-     //  }
-    })
-  },10000)
-
-}
   //*************** Creates a point/polyline on the map **********
     createPoint(){
 
@@ -332,6 +299,7 @@ makeBlack(){
       this.place.date.autocomplete;
       this.locations.push(this.place);
       this.dates.push(this.place.date);
+      this.newItinerary.placesAndDates.push(this.place)
 
   //turns dates into numerical values for comparison
       if(this.dates.length >=0){
@@ -439,17 +407,17 @@ makeBlack(){
   }
 
 
-  // submit() {
-  //
-  //   this.newItinerary.plan = this.arrayOfTravel;
-  //
-  //   this.uploader.onBuildItemForm = (item, form) => {
-  //     form.append('name', this.newItinerary.name);
-  //     form.append('plan', this.newItinerary.plan);
-  //     form.append('nationality1', this.newItinerary.nationality1);
-  //     form.append('nationality2', this.newItinerary.nationality2);
-  //   };
-  //
-  //   this.uploader.uploadAll();
-  // }
+  addItinerary(){
+    console.log(this.flightPath)
+    this.newItinerary.id = this.user._id
+    this.newItinerary.nationality1 = this.selectedNationalityId1;
+    this.newItinerary.nationality2 = this.selectedNationalityId2;
+    // this.newItinerary.flightPaths = this.flightPath;
+    // this.newItinerary.placesAndDates.push(this.locations);
+    this.userService.editItinerary(this.newItinerary)
+    .subscribe((user)=>{
+      this.user = user;
+      console.log("user", user);
+    })
+  }
 }

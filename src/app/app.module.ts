@@ -7,7 +7,6 @@ import {RouterModule, Routes} from "@angular/router"; //necessary to add on for 
 import { AppComponent } from './app.component';
 import { MyHomeComponent } from './my-home/my-home.component';
 import { MyAboutComponent } from './my-about/my-about.component';
-import { MyProfileComponent } from './my-profile/my-profile.component';
 import {MyLoginComponent} from './my-login/my-login.component';
 import { MyNavComponent } from './my-nav/my-nav.component';
 import {AgmCoreModule} from 'angular2-google-maps/core';
@@ -22,6 +21,9 @@ import { ProfileCountryVisitComponent } from './profile-country-visit/profile-co
 import { ProfileItinerariesComponent } from './profile-itineraries/profile-itineraries.component';
 import { FileSelectDirective } from "ng2-file-upload";
 import { ProfileNavComponent } from './profile-nav/profile-nav.component';
+import { AlertModule } from 'ngx-bootstrap';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+
 
 
 
@@ -32,20 +34,18 @@ const routes: Routes = [
   {path: 'signup', component: MySignupFormComponent},
   {path: 'login', component: MyLoginComponent},
   {path: 'user', component: ProfileOverviewComponent},
-  // {path: 'user/:id', component: MyProfileComponent ,
-  // children: [
-  //   { path: '', component: ProfileOverviewComponent },
-  //   { path: 'edit', component: ProfileEditComponent }
-  // ]}
+  {path: 'countries_visited', component: ProfileCountryVisitComponent},
+  {path: 'itineraries', component: ProfileItinerariesComponent},
+  { path: 'edit', component: ProfileEditComponent },
+  ]
 
-]
+
 
 @NgModule({
   declarations: [
     AppComponent,
     MyHomeComponent,
     MyAboutComponent,
-    MyProfileComponent,
     MyLoginComponent,
     MyNavComponent,
     ProfileEditComponent,
@@ -62,11 +62,13 @@ const routes: Routes = [
     FormsModule,
     HttpModule,
     CommonModule,
-    RouterModule.forRoot(routes),  //  <!-- "routes" is the array defined above
+    RouterModule.forRoot(routes),   //  <!-- "routes" is the array defined above
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyD0I9Hi4pdArBe7w4bxrZfLTTKfFKp64nw',
       libraries: ["places"]
     }),
+    AlertModule.forRoot(),
+    TabsModule.forRoot(),
 
   ],
   providers: [CountryService, WarningService, SessionService, UserService],

@@ -22,11 +22,7 @@ export class MyProfileComponent implements OnInit {
   constructor(private route: ActivatedRoute, private userService: UserService) { }
 
   ngOnInit() {
-    let user = JSON.parse(localStorage.getItem("user"))
-    this.userService.get(user._id)
-      .subscribe((user)=> {
-        this.user = user
-      });
+
   }
 
 

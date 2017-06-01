@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {Router, ActivatedRoute } from '@angular/router';
+import { SessionService } from '../session.service';
+import {UserService} from '../user.service';
 
 declare var google: any;
 
@@ -10,17 +12,22 @@ declare var google: any;
 })
 export class ProfileCountryVisitComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, ) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private session: SessionService,
+    private userService: UserService, ) { }
 
   user: any;
   map: any;
 
   ngOnInit() {
-    // this.route.params  //receives the params sent from ViewDetails() method in contact-list.component.ts
-    //   .subscribe((params) => {
-    //     this.user = this.userService.get(+params['id']);
-    // });
-    // this.initiateMap();
+    let user = JSON.parse(localStorage.getItem("user"))
+    this.userService.get(user._id)
+      .subscribe((user)=> {
+        this.user = user
+      });
+    this.initiateMap();
   }
 
   initiateMap(){

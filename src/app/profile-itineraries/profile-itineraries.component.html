@@ -1,50 +1,84 @@
 <div class="container-fluid" id="home-top">
+  <div class="col-md-2 left-side">
+    <app-profile-nav></app-profile-nav>
+  </div>
+  <div class="col-md-10 right-side" *ngIf="allItinerariesArray.length > 0">
 
-  <div class="col-md-12 right-side">
-    <div class="row map-view">
-      <div id="map-canvas"></div>
-    </div>
+    <tabset>
+    <tab heading="{{allItinerariesArray[0].name}}"></tab>
+
+    <tab #map *ngFor="let itinerary of allItinerariesArray, let i = index"
+         [heading]="itinerary.name"
+         [active]="itinerary.active"
+         (select)="itinerary.active = true"
+         (deselect)="itinerary.active = false"
+         [disabled]="itinerary.disabled"
+         [removable]="itinerary.removable"
+         (removed)="removeTabHandler(itinerary)"
+         [customClass]="itinerary.customClass">
+         <div class="row map-view">
+           <input type="hidden" ng-value ="[i]" [(ngModel)]="itemIndex">
+           <div  [id] ="this.itemIndex" ng-style="{'height':100%}"></div>
+         </div>
+
+         <div class="itinerary-box">
+
+           <div class="col-md-12" ng-change="totalDays()">
+             <div class="profile-itinerary">
+                 <div>
+                   <!-- <h4><span class="white">Current</span></h4> -->
+                   <div  class="location-box">
+                     <div *ngFor="let location of itinerary.placesAndDates, let i = index" class="list-row">
+                       <div class="location-list">
+                           <div class="col-md-2 location-list-days" *ngIf="i === 0">
+                             <p class="days blue-text" >
+                               For {{itineraryDays[i-1]}} days
+                             </p>
+                           </div>
+                           <div class="col-md-2 location-list-days" *ngIf="i !== 0">
+                             <p class="days white " >
+                               For {{itineraryDays[i-1]}} days
+                             </p>
+                           </div>
+
+                           <div class="col-md-10 location-list-details">
+                             <div>
+                               <strong>{{location.name}} {{location.country}}</strong>
+                             </div>
+                             <div>
+                               {{location.date | date:'EEE MMMM d, y'}}
+                             </div>
+                           </div>
+
+                           <!-- <input class="delete" type="submit" value="-" (click)="deletePoint()" /> -->
+                         </div>
+
+                     </div>
+                   </div>
+                 </div>
+
+               <!-- <div class="total-days col-md-1">
+                 <span >Total <br /> {{sum}} Days</span>
+               </div> -->
+             </div>
+             <div class="share blue col-md-4">
+               <h4>Share your itinerary</h4>
+             </div>
+             <div class="share green-box col-md-4">
+               <h4>Edit your itinerary</h4>
+             </div>
+             <div class="share col-md-4">
+               <h4>Delete your itinerary</h4>
+             </div>
+           </div>
+
+
+         </div>
+    </tab>
+  </tabset>
 
 
 
-    <div class="itinerary-box">
-
-      <div class="col-md-12" ng-change="totalDays()">
-        <!-- <div class="row profile-itinerary">
-
-            <div class="itinerary col-md-11">
-              <h4><span class="white">Current itinerary</span></h4>
-              <div  class="location-box">
-                <div *ngFor="let location of locations, let i = index">
-
-                    <p class="days white">
-                      For {{itineraryDays[i]}} days
-                    </p>
-                    <div class="location-list">
-                      <strong>{{location.name}} {{location.country}}</strong> {{location.date | date:'EEE MMMM d, y'}}
-                      <input class="delete" type="submit" value="-" (click)="deletePoint()" />
-                    </div>
-                </div>
-              </div>
-            </div>
-
-          <div class="total-days col-md-1">
-            <span >Total <br /> {{sum}} Days</span>
-          </div>
-        </div> -->
-        <div class="share blue col-md-4">
-          <h4>Share your itinerary</h4>
-        </div>
-        <div class="share green-box col-md-4">
-          <h4>Edit your itinerary</h4>
-        </div>
-        <div class="share col-md-4">
-          <h4>Delete your itinerary</h4>
-        </div>
-      </div>
-
-
-    </div>
 
   </div>
 

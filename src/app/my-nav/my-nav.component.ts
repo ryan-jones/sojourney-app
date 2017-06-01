@@ -9,7 +9,7 @@ import {UserService} from '../user.service';
   styleUrls: ['./my-nav.component.css']
 })
 export class MyNavComponent implements OnInit {
-  user: any;
+  user: Object = {};
 
   constructor(
     private router: Router,
@@ -18,19 +18,30 @@ export class MyNavComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
     let user = JSON.parse(localStorage.getItem("user"))
-    this.userService.get(user._id)
-      .subscribe((user)=> {
-        this.user = user
-      });
+    console.log('THE ID', user)
+    if (user === null){
+      this.user = ''
+    } else {
+      this.userService.get(user._id)
+        .subscribe((user)=> {
+
+              this.user = user
+            });
+
+        }
+
+
+
   }
 
   goToAbout(){
-      this.router.navigate(['/about']);
+      this.router.navigate(['about']);
     }
 
     goToLogin(){
-      this.router.navigate(['/login']);
+      this.router.navigate(['login']);
     }
 
     goToHome(){

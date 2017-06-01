@@ -26,7 +26,7 @@
               </div>
           </div>
           <div class="col-md-3 color-column">
-              <div class="col-md-3 black-box"></div>
+              <div class="col-md-3 green-box"></div>
               <div class="col-md-9">
                  <strong>VOA:</strong><br />{{countryName2.name}}
               </div>
@@ -54,7 +54,8 @@
 
       </div>
 
-    </div> <!--div class="col-md-8 left-side"-->
+    </div>
+    <!--div class="col-md-8 left-side"-->
 
     <div class="col-md-3 right-side">
         <div class="itinerary-box">
@@ -62,12 +63,13 @@
           <div class="col-md-12" ng-change="totalDays()">
             <div class="itinerary">
               <h4><span class="white">Create your itinerary</span></h4>
-              <!-- <input id="new-name" [(ngModel)]= "newItinerary.name" type="text" placeholder="Create an itinerary name" /> -->
+              <input id="new-name" [(ngModel)]= "newItinerary.name" type="text" placeholder="Create an itinerary name" />
         			<input id="new-address" [(ngModel)]="newAddress" type="text" name="address" placeholder="location" >
               <input id="new-date" value="" type="date" name="date"/>
         			<input id="new-submit" (click)="createPoint()" type="submit" name="" value="Add to list">
+
               <!-- <input id="new-delete" (click)="deletePoint()" type="submit" name="" value="-"> -->
-              <div  class="location-box">
+             <div  class="location-box">
                 <div *ngFor="let location of locations, let i = index">
 
                     <p class="days white">
@@ -86,14 +88,17 @@
               <div class="total-days">
                 <span >Total Trip Length: {{sum}} Days</span>
               </div>
-              <div class="save">
+              <div class="save"  (click)="addItinerary()">
                 <p>Save itinerary</p>
               </div>
           </div>
           <div class="col-md-1"></div>
         </div>
         <div class="row country-view">
-
+          <h3>Ready to Book?</h3>
+          <p>
+            Check out GoTo to book all your plans!
+          </p>
         </div>
     </div>
   </div>

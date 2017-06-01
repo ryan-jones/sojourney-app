@@ -37,11 +37,7 @@ button{
   max-height: 100%;
 }
 
-.map-view{
-  height: 65vh;
+.right-side > div{
+  margin: 5% 0;
 
 }
-
-#map-canvas {
-    height: 100%;
-  }
