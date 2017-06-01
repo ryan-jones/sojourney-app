@@ -4,17 +4,20 @@
   </div>
 
   <div class="col-md-10 right-side">
-    <div>
-      {{user.name}}
+    <div id="user-info">
+      <div>
+          <strong>Name: </strong>{{user.name}}
 
+      </div>
+      <div>
+        <strong> Username: </strong>{{user.username}}
+      </div>
+      <div>
+        <strong>Nationality: </strong>{{user.nationality}}
+      </div>
+      <button class="share"> Edit Details</button>
+      <button class="share blue">Delete Details</button>
     </div>
-    <div>
-      {{user.username}}
-    </div>
-    <div>
-      {{user.nationality}}
-    </div>
-    <h3> Edit Details</h3>
-    <h3>Delete Details</h3>
+
   </div>
 </div>

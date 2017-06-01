@@ -61,7 +61,7 @@ export class ProfileItinerariesComponent implements OnInit {
   layers: Array<any> = [];
   coordinates: Array<any> = [];
   indexProvider: Array<any> = [];
-  itemIndex: any;
+
 
 
 
@@ -106,10 +106,9 @@ export class ProfileItinerariesComponent implements OnInit {
 
             arr.push(item);
 
-            this.itemIndex = "map"+this.user.arr.indexOf(item)
-            console.log("itemIndex", this.itemIndex);
-            this.initiateMap(this.itemIndex);
 
+
+            this.initiateMap();
             // this.loadCountries(this.selectedNationalityId1, this.selectedNationalityId2)
             // this.loadPolylines(this.coordinates);
             // this.differenceInDays();
@@ -148,7 +147,7 @@ export class ProfileItinerariesComponent implements OnInit {
 
 
 
-  initiateMap(itemIndex){
+  initiateMap(){
 
     var myOptions = {
       zoom: 2,
@@ -157,7 +156,7 @@ export class ProfileItinerariesComponent implements OnInit {
     };
     // initialize the map
 
-      this.map = new google.maps.Map(document.getElementById(itemIndex),
+      this.map = new google.maps.Map(document.getElementsByClassName('map-canvas'),
         myOptions);
         var styles = [
 

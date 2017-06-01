@@ -1,12 +1,15 @@
 .fluid-container{
   margin: 0;
   padding: 0;
-  /*background-color: #879dc9;*/
-  border: 1px solid black;
   height: 100vh;
-  /*background-image: url('IMG_0520.JPG');*/
+  background-image: url('http://www.switchbacktravel.com/sites/default/files/images/articles/Los%20Glaciares%20Patagonia.jpg');
+  background-size: cover;
 }
 
+
+.panel{
+  margin-top: 10%;
+}
 .form-box{
   margin: 5% 0;
   padding: 5%;

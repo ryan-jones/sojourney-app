@@ -3,7 +3,7 @@
     <app-profile-nav></app-profile-nav>
   </div>
   <div class="col-md-10 right-side" *ngIf="allItinerariesArray.length > 0">
-
+    
     <tabset>
     <tab heading="{{allItinerariesArray[0].name}}"></tab>
 
@@ -17,8 +17,7 @@
          (removed)="removeTabHandler(itinerary)"
          [customClass]="itinerary.customClass">
          <div class="row map-view">
-           <input type="hidden" ng-value ="[i]" [(ngModel)]="itemIndex">
-           <div  [id] ="this.itemIndex" ng-style="{'height':100%}"></div>
+           <div  class ="map-canvas" ng-style="{'height':100%}"></div>
          </div>
 
          <div class="itinerary-box">
