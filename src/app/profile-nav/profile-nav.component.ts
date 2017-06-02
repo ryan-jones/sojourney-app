@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from '@angular/router';
+import {Router, Routes} from '@angular/router';
 import { SessionService } from '../session.service';
 import {UserService} from '../user.service';
 
@@ -10,7 +10,7 @@ import {UserService} from '../user.service';
 })
 export class ProfileNavComponent implements OnInit {
 
-user: Object = {}
+user: any;
   constructor(
     private router: Router,
     private session: SessionService,
@@ -18,11 +18,18 @@ user: Object = {}
   ) { }
 
   ngOnInit() {
+    this.user= {};
     let user = JSON.parse(localStorage.getItem("user"))
-    this.userService.get(user._id)
-      .subscribe((user)=> {
-        this.user = user
-      });
+    console.log('THE ID', user)
+    if (user === null){
+      this.user = ''
+    } else {
+      this.userService.get(user._id)
+        .subscribe((user)=> {
+
+              this.user = user
+            });
+      }
   }
 
   goToOverview(){

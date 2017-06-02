@@ -13,7 +13,7 @@ export class MyNavComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private session: SessionService,
+    public session: SessionService,
     private userService: UserService,
   ) { }
 

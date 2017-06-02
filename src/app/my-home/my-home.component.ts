@@ -17,7 +17,7 @@ declare var google: any;
 
 export class MyHomeComponent implements OnInit {
 
-  
+
 
   newItinerary = {
     id: '',
@@ -418,6 +418,7 @@ totalDays(){
     .subscribe((user)=>{
       this.user = user;
       console.log("user", user);
+      alert("Itinerary saved!");
     })
   }
 }

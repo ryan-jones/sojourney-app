@@ -12,7 +12,7 @@ declare var google: any;
 })
 
 export class ProfileOverviewComponent implements OnInit {
-  user: Object = {};
+  user: any;
 
   constructor(private route: ActivatedRoute, private router: Router, private userService: UserService) { }
 
@@ -21,18 +21,23 @@ export class ProfileOverviewComponent implements OnInit {
   view;
 
   ngOnInit() {
+    this.user = {};
+    
     let user = JSON.parse(localStorage.getItem("user"))
-    this.userService.get(user._id)
-      .subscribe((user)=> {
-        console.log("get", user)
-        this.user = user
-      });
+    console.log('THE ID', user)
+    if (user === null){
+      this.user = ''
+    } else {
+      this.userService.get(user._id)
+        .subscribe((user)=> {
 
+              this.user = user
+            });
 
 
     console.log('initiate', this.view);
   }
-
+}
 
   deleteUser(){
     if (window.confirm('Are you sure?')) {

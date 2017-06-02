@@ -9,7 +9,7 @@ import {UserService} from '../user.service';
   providers: [UserService]
 })
 export class ProfileEditComponent implements OnInit {
-  user: Object = {}
+  user: any;
 
   originalUser: any; //user stores in user.service.ts
   editUser: any; //shown to the user to edit
@@ -20,6 +20,7 @@ export class ProfileEditComponent implements OnInit {
     ) { }
 
   ngOnInit() {
+    this.user = {}
     let user = JSON.parse(localStorage.getItem("user"))
     this.userService.get(user._id)
       .subscribe((user)=> {
@@ -29,8 +30,10 @@ export class ProfileEditComponent implements OnInit {
 
   deleteUser(){
     if (window.confirm('Are you sure?')) {
+
     	this.userService.remove(this.user)
       .subscribe(() => {
+        alert('user deleted')
         this.router.navigate(['']);
       });
   	}

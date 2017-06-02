@@ -39,7 +39,7 @@ export class MySignupFormComponent implements OnInit {
       .subscribe(result => {
           if (result === true) {
 
-
+            alert('successfully signed in')
             let user = JSON.parse(localStorage.getItem("user"))
             this.userService.get(user._id)
               .subscribe((user)=> {

@@ -12,7 +12,7 @@
     <strong><button type="submit" (click)="goToEdit()"> Edit User </button></strong>
   </div>
   <div>
-    <strong><button  ng-model="view" type="submit" (click)="goToItinerary()" name="View itineraries" value="itinerary">View itineraries</button></strong>
+    <strong> <button ng-model="view" type="submit"  name="View itineraries" value="itinerary"  [routerLink]="['/itineraries']">View itineraries </button></strong>
   </div>
   <div>
     <strong><button  ng-model="view" type="submit"  (click)="goToCountryView()" name="View countries visited" value="country">View countries visited</button></strong>

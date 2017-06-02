@@ -19,7 +19,6 @@ import {ProfileEditComponent} from './profile-edit/profile-edit.component';
 import { MySignupFormComponent } from './my-signup-form/my-signup-form.component';
 import { ProfileCountryVisitComponent } from './profile-country-visit/profile-country-visit.component';
 import { ProfileItinerariesComponent } from './profile-itineraries/profile-itineraries.component';
-import { FileSelectDirective } from "ng2-file-upload";
 import { ProfileNavComponent } from './profile-nav/profile-nav.component';
 import { AlertModule } from 'ngx-bootstrap';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -53,8 +52,7 @@ const routes: Routes = [
     MySignupFormComponent,
     ProfileCountryVisitComponent,
     ProfileItinerariesComponent,
-    FileSelectDirective,
-    ProfileNavComponent
+    ProfileNavComponent,
 
   ],
   imports: [
