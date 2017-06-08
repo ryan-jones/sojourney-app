@@ -404,6 +404,7 @@ totalPrice(){
       this.dates.push(place.date);
     })
     this.updateTotalDays();
+    this.totalDays();
 
 
     //reconfigures the total price of trip
