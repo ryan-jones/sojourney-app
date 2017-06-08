@@ -206,7 +206,6 @@ export class MyHomeComponent implements OnInit {
 //**************** total days*********************
 totalDays(){
   var total = this.itineraryDays.reduce((a, b) => a + b, 0);
-  // this.sum = this.itineraryDays.reduce((a, b) => a + b, 0);
 
   if(total === 0 || total === NaN || total === undefined){
     this.sum === 0;
@@ -236,6 +235,7 @@ totalPrice(){
  loadCountries(selectedNationalityId1, selectedNationalityId2){
   let countriesArray = [selectedNationalityId1, selectedNationalityId2]
 
+
   let colorsArray = {
     visaFree: ['red', 'blue'],
     visaOnArrival: ['yellow', 'green']
@@ -255,75 +255,73 @@ totalPrice(){
     this.country.get(countriesArray[index])
         .subscribe((nation) => {
           this.nation = nation;
-          console.log("nation", nation)
 
-          this.countryName1 = this.nation;
+          if(index== 0){
+            this.countryName1 = this.nation;
+          } else {
+            this.countryName2 = this.nation;
+          }
 
           var self = this
 
           let visaKindArray = ['visaFree', 'visaOnArrival' ];
           let visaKindIndex = 0;
-
-
           let counter = 0;
-
           var test = 0;
 
           function starter(visaKind){
 
           let freeLayer = new google.maps.Data();
 
+          freeLayer.loadGeoJson('https://raw.githubusercontent.com/johan/world.geo.json/master/countries/' + self.nation[visaKind][counter] + '.geo.json');
+          freeLayer.setStyle({ fillColor: colorsArray[visaKind][index], fillOpacity: 0.5, title: self.nation[visaKind][counter]});
 
-            freeLayer.loadGeoJson('https://raw.githubusercontent.com/johan/world.geo.json/master/countries/' + self.nation[visaKind][counter] + '.geo.json');
-            freeLayer.setStyle({ fillColor: colorsArray[visaKind][index], fillOpacity: 0.5, title: self.nation[visaKind][counter]});
+          freeLayer.setMap(self.map);
+          counter++
 
-            freeLayer.setMap(self.map);
-            counter++
-
-            self.layers.push(freeLayer)
-
+          self.layers.push(freeLayer)
 
 
+          if(counter == self.nation[visaKind].length){
+            counter = 0
+            if(visaKind == 'visaOnArrival'){
+              index ++
+              self.showCountries(countriesArray, colorsArray, index);
+            } else {
+              visaKindIndex++
 
-              if(counter == self.nation[visaKind].length){
-                counter = 0
-                if(visaKind == 'visaOnArrival'){
-                  index ++
-                  self.showCountries(countriesArray, colorsArray, index);
-                } else {
-                  visaKindIndex++
+              starter(visaKindArray[visaKindIndex])
+              }
+            } else {
 
-                  starter(visaKindArray[visaKindIndex])
-                  }
-                } else {
+              starter(visaKindArray[visaKindIndex])
+            }
+            }
 
-                  starter(visaKindArray[visaKindIndex])
-                }
-                }
-
-                starter(visaKindArray[visaKindIndex])
-              })
+            starter(visaKindArray[visaKindIndex])
+          })
       } //showCountries
 
 
   //*************** Creates a point/polyline on the map **********
     createPoint(){
 
-      console.log("this.itineraryPrice before", this.itineraryPrice)
-      //date input field
-      this.place.date = document.getElementById('new-date')['valueAsDate'];
-      this.place.date.autocomplete;
-      this.dates.push(this.place.date);
-
-
+      // price input field
       this.place.price = document.getElementById('new-price')['valueAsNumber'];
+      if (isNaN(this.place.price)){
+        this.place.price = 0;
+      }
       this.itineraryPrice.push(this.place.price);
       this.totalPrice();
-      console.log("this.itineraryPrice after", this.itineraryPrice)
 
 
       this.locations.push(this.place);
       this.newItinerary.placesAndDates.push(this.place)
+
+      //date input field
+      this.place.date = document.getElementById('new-date')['valueAsDate'];
+      this.place.date.autocomplete;
+      this.dates.push(this.place.date);
 
       //turns dates into numerical values for comparison
       if(this.dates.length >=0){
@@ -361,7 +359,7 @@ totalPrice(){
                strokeWeight: 4,
 
              });
-             that.allFlightPaths.push(that.flightPath)
+           that.allFlightPaths.push(that.flightPath)
            that.flightPath.setMap(that.map);
            that.marker = new google.maps.Marker({
              position: point,
@@ -373,7 +371,7 @@ totalPrice(){
            that.allMarkers.push(that.marker)
 
   	     } else {
-  	        alert('Geocode was not successful for the following reason: ' + status);
+  	       alert('Geocode was not successful for the following reason: ' + status);
   	     }
   	  });
 
@@ -382,69 +380,96 @@ totalPrice(){
 
   deletePoint(locationInput){
 
+    // clear polylines and reset allFlightPaths array
     this.allFlightPaths.forEach((flightPath)=>{
       flightPath.setMap(null)
     })
-   this.allFlightPaths = []
+    this.allFlightPaths = []
 
+    //clear markers and reset allMarkers array
     this.allMarkers.forEach((marker)=>{
        marker.setMap(null);
-
     })
-    this.allMarkers = []
+    this.allMarkers = [];
 
-
+    //delete selected location from itinerary list
     this.locations = this.locations.filter((savedLocation)=>{
       return savedLocation.id != locationInput.value
     })
 
-     this.arrayOfTravel = []
+    //reconfigures the total number of days
+    this.dates=[];
+    this.itineraryDays = [];
+    this.locations.forEach((place)=>{
+      this.dates.push(place.date);
+    })
+    this.updateTotalDays();
 
 
+    //reconfigures the total price of trip
+    this.itineraryPrice = [];
+    this.locations.forEach((place)=>{
+      this.itineraryPrice.push(place.price);
+    })
+    this.totalPrice();
+
+    //creates new polyline path and markers
+    this.arrayOfTravel = [];
     this.locations.forEach((location)=>{
-
-
 
       var point = {lat: location.geometry.location.lat(), lng: location.geometry.location.lng()}
 
-
       this.arrayOfTravel.push(point);
 
-       this.flightPath = new google.maps.Polyline({
-           path: this.arrayOfTravel,
-           geodesic: true,
-           strokeColor: 'yellow',
-           strokeOpacity: 1.0,
-           strokeWeight: 4,
+      this.flightPath = new google.maps.Polyline({
+         path: this.arrayOfTravel,
+         geodesic: true,
+         strokeColor: 'yellow',
+         strokeOpacity: 1.0,
+         strokeWeight: 4,
 
-         });
-       this.flightPath.setMap(this.map);
-
-
-       this.allFlightPaths.push(this.flightPath)
-       this.marker = new google.maps.Marker({
-         position: point,
-         map: this.map
-       })
-       this.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png')
-        this.allMarkers.push(this.marker)
+       });
+      this.flightPath.setMap(this.map);
+      this.allFlightPaths.push(this.flightPath)
+      this.marker = new google.maps.Marker({
+        position: point,
+        map: this.map
+      })
+      this.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png')
+      this.allMarkers.push(this.marker)
     })
 
   }
 
 
+//*********** whenever a user deletes a value from the itinerary
+  updateTotalDays(){
+    if(this.dates.length >=0){
+      this.dates.forEach((day) =>{
+        let dayIndex = this.dates.indexOf(day);
+        this.diffDays = (Math.abs(new Date(this.dates[dayIndex]).getTime() - new Date(this.dates[dayIndex-1]).getTime())) / (1000 * 3600 * 24);
+        if(isNaN(this.diffDays)){
+          this.diffDays = 0;
+        }
+        this.itineraryDays.push(this.diffDays);
+      })
+
+    }
+    return this.itineraryDays;
+  }
+
+
+//saving to user profile in the database
   addItinerary(){
-    console.log(this.flightPath)
     this.newItinerary.id = this.user._id
     this.newItinerary.nationality1 = this.selectedNationalityId1;
     this.newItinerary.nationality2 = this.selectedNationalityId2;
-    // this.newItinerary.flightPaths = this.flightPath;
-    // this.newItinerary.placesAndDates.push(this.locations);
+
     this.userService.editItinerary(this.newItinerary)
     .subscribe((user)=>{
       this.user = user;
       console.log("user", user);
-      alert("Itinerary saved!");
+      alert("Itinerary saved! View in your user profile.");
     })
   }
 }
