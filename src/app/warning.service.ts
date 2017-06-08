@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';  //allows angular to recognize the map operator
 @Injectable()
 
 export class WarningService {
-  // BASE_URL: string = 'http://localhost:3000';
+  // BASE_URL: string = 'https://sojourney.herokuapp.com';
   constructor(private http: Http) {}
 
   getList() {

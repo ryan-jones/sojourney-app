@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 
 export class UserService {
-  BASE_URL: string = 'http://localhost:3000/api';
+  BASE_URL: string = 'https://sojourney.herokuapp.com/api';
 
   constructor(
     private http: Http,

@@ -3,8 +3,69 @@ body, .container-fluid{
   padding: 0;
   }
 
+  .white{
+    color: #fff;
+  }
+
   .navbar{
     border-radius: 0;
     padding: 0 2%;
     margin: 0;
   }
+
+footer {
+  padding: 2% 1% 0;
+  background-image:url('../assets/philippines.jpg');
+  background-size: cover;
+  height: 80vh;
+  color: #fff;
+
+}
+
+footer  h2{
+  text-align: center;
+  background-color: #879dc9;
+  border-radius: 5px;
+  margin: 0 25%;
+  padding: 2%;
+}
+
+footer p {
+  padding: 15% 5% 10%;
+  margin: 0 2% 1%;
+  background-color: #879dc9;
+  border-radius: 5px;
+}
+
+.data-needs, .currency, .flights{
+  text-align: center;
+  flex-wrap: wrap;
+}
+
+
+.row{
+  margin-top: 10%;
+}
+
+.visa-script{
+  margin-top: 10%;
+}
+
+.goto{
+  background-image:url('../assets/goto.jpg');
+  background-size: contain;
+  height: 10vh;
+  margin: 10% 15% 0;
+}
+
+.go-to-flights{
+  background-color: #879dc9;
+  border-radius: 5px;
+  /*padding-top: 1%;
+  padding-right: 1%;*/
+  padding: 1% 1% 5% 0;
+}
+
+#down-arrow{
+  margin-top: 2%;
+}

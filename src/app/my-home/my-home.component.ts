@@ -50,8 +50,10 @@ export class MyHomeComponent implements OnInit {
   dates = [];
   diffDays: number;
   itineraryDays: Array<any>=[];
+  itineraryPrice: Array<any>=[];
   totalItinerary;
   sum: any;
+  price: any;
   deleteLocation;
   marker;
   indexTarget;
@@ -116,6 +118,7 @@ export class MyHomeComponent implements OnInit {
       //   console.log(this.warnings);
 
         this.sum = 0;
+        this.price = 0;
   }
 
 
@@ -215,6 +218,18 @@ totalDays(){
 
 }
 
+//********************* Create cost total *********************
+totalPrice(){
+  var totalPrice = this.itineraryPrice.reduce((a, b) => a + b, 0);
+
+  if(totalPrice === 0 || totalPrice === NaN || totalPrice === undefined){
+    this.price === 0;
+    return this.price;
+  } else{
+    this.price = totalPrice;
+    return this.price;
+  }
+}
 
 
 //********************** shows country layers *************
@@ -294,14 +309,23 @@ totalDays(){
   //*************** Creates a point/polyline on the map **********
     createPoint(){
 
+      console.log("this.itineraryPrice before", this.itineraryPrice)
       //date input field
       this.place.date = document.getElementById('new-date')['valueAsDate'];
       this.place.date.autocomplete;
-      this.locations.push(this.place);
       this.dates.push(this.place.date);
+
+
+      this.place.price = document.getElementById('new-price')['valueAsNumber'];
+      this.itineraryPrice.push(this.place.price);
+      this.totalPrice();
+      console.log("this.itineraryPrice after", this.itineraryPrice)
+
+
+      this.locations.push(this.place);
       this.newItinerary.placesAndDates.push(this.place)
 
-  //turns dates into numerical values for comparison
+      //turns dates into numerical values for comparison
       if(this.dates.length >=0){
         this.diffDays = (Math.abs(new Date(this.dates[this.dates.length-1]).getTime() - new Date(this.dates[this.dates.length - 2]).getTime())) / (1000 * 3600 * 24);
         if(isNaN(this.diffDays)===true){
@@ -312,6 +336,8 @@ totalDays(){
       //array of differences between dates to be loaded on the view
       this.itineraryDays.push(this.diffDays);
       this.totalDays();
+
+
 
   //geocodes the address, creates a marker and polyline segment
       this.geocoder = new google.maps.Geocoder();

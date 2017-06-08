@@ -12,6 +12,7 @@
   height: 100vh;
 }
 
+
 .map-view{
   height: 65vh;
 
@@ -67,7 +68,6 @@
 
 .nation-box{
   background-color: #879dc9;
-  color: #fff;
   padding-top: 1%;
   border-radius: 5px;
   width:46%;
@@ -78,7 +78,6 @@
   background-color: #222061;
   border-radius: 5px;
   margin-top: 1%;
-  color: #fff;
   padding: 1% 2%;
   box-shadow: 3px 3px 3px 1px #ccc;
 }
@@ -87,7 +86,7 @@
 
 .itinerary-box{
   background-color: #fff;
-  height: 65vh;
+  height: 100vh;
   box-shadow: inset 5px 0 5px #ccc;
 
 }
@@ -114,11 +113,10 @@
   border-radius: 5px;
   background-color: #eeedec;
   padding: 2% 3%;
-  border-bottom: 1px solid black;
 }
 
 
-.white{
+.white, .delete, .save, .country-view, .country-button, .nation-box{
   color: #fff;
 }
 
@@ -132,7 +130,6 @@
   background-color: red;
   border-radius: 5px;
   /*margin-top: 1%;*/
-  color: #fff;
   padding: 0 2%;
   box-shadow: 3px 3px 3px 1px #ccc;
 }
@@ -153,7 +150,6 @@
 .save{
   text-align: center;
   background-color: red;
-  color: #fff;
   border-radius: 0 0 5px 5px;
   border: 1px solid #879dc9;
   height: 4vh;
@@ -165,5 +161,18 @@
 .country-view{
   height: 35vh;
   text-align: center;
-  box-shadow: inset 5px 0 5px #ccc;
+  box-shadow: inset 5px 0 10px #4d4d4d;
+  background-color: #879dc9;
+  padding-top: 2%;
+}
+
+.country-view > p {
+  margin-top: 4%;
+}
+
+.goto{
+  background-image:url('../../../assets/goto.jpg');
+  background-size: contain;
+  height: 10vh;
+  margin: 0 15%;
 }

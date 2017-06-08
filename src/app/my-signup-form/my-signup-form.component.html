@@ -11,24 +11,20 @@
           <p>
             <input type="text" name="username" [(ngModel)]="newUser.username" #myUsername="ngModel" placeholder="Your email (your username)" required />
           </p>
-              <div *ngIf="myUsername.errors && (myUsername.dirty || myUsername.touched)">
-                <p class="error" [hidden]="!myUsername.errors.required">
+              <div *ngIf="(myUsername.dirty || myUsername.touched)">
+                <p class="error" [hidden]="!myUsername.required">
                   Oy! An email-based username is required.
                 </p>
               </div>
           <p>
             <input type="password" name="password" [(ngModel)]="newUser.password" #myPassword="ngModel" required  minlength="6" placeholder="Your password (at least 6 characters)"/>
           </p>
-              <div *ngIf="myPassword.errors && (myPassword.dirty || myPassword.touched)">
-                <p class="error" [hidden]="!myPasswords.errors.minlength">
+              <div *ngIf="(myPassword.dirty || myPassword.touched)">
+                <p class="error" [hidden]="!myPassword.minlength">
                   Sorry! Passwords are required and must be at least 6 characters long.
                 </p>
               </div>
-              <!-- <div *ngIf="myPassword.errors && (myPassword.dirty || myPassword.touched)">
-                <p class="error" [hidden]="!myPassword.errors.required">
-                  Oy! A Password is required.
-                </p>
-              </div> -->
+
           <p> Nationality
             <input type="text" name="nationality" [(ngModel)]="newUser.nationality"  placeholder="Your nationality"/>
           </p>

@@ -64,8 +64,9 @@
             <div class="itinerary">
               <h4><span class="white">Create your itinerary</span></h4>
               <input id="new-name" [(ngModel)]= "newItinerary.name" type="text" placeholder="Create an itinerary name" />
-        			<input id="new-address" [(ngModel)]="newAddress" type="text" name="address" placeholder="location" >
+        			<input id="new-address" [(ngModel)]="newAddress" type="text" name="address" placeholder="Add a location to your list" >
               <input id="new-date" value="" type="date" name="date"/>
+              <input id="new-price" type="number" name="price" placeholder="Add travel cost" />
         			<input id="new-submit" (click)="createPoint()" type="submit" name="" value="Add to list">
 
               <!-- <input id="new-delete" (click)="deletePoint()" type="submit" name="" value="-"> -->
@@ -76,9 +77,10 @@
                       For {{itineraryDays[i]}} days
                     </p>
                     <div class="location-list">
-                      <strong>{{location.name}} {{location.country}}</strong> {{location.date | date:'EEE MMMM d, y'}}
+                      <strong>{{location.name}} {{location.country}}</strong> {{location.date | date:'EEE MMMM d, y'}} <br />
+                      {{location.price | currency:'USD':true}}
                       <input type="hidden" name="" #locationId [(ngModel)]="location.id">
-                      <input class="delete" type="submit" value="" (click)="deletePoint(locationId)" />
+                      <input class="delete" type="submit" value="-" (click)="deletePoint(locationId)" />
                     </div>
 
                 </div>
@@ -88,18 +90,24 @@
               <div class="total-days">
                 <span >Total Trip Length: {{sum}} Days</span>
               </div>
+              <div class="total-days">
+                <span >Total Trip Cost: ${{price}}</span>
+              </div>
               <div class="save"  (click)="addItinerary()">
                 <p>Save itinerary</p>
               </div>
           </div>
           <div class="col-md-1"></div>
         </div>
-        <div class="row country-view">
+        <!-- <div class="row country-view">
           <h3>Ready to Book?</h3>
+          <div class="goto">
+
+          </div>
           <p>
-            Check out GoTo to book all your plans!
+            <a class="white" href="https://gototravelv2.herokuapp.com">Check out GoTo Travel to book all your plans!</a>
           </p>
-        </div>
+        </div> -->
     </div>
   </div>
 
