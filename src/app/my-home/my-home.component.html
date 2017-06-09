@@ -62,11 +62,37 @@
           <div class="col-md-1"></div>
           <div class="col-md-12" ng-change="totalDays()">
             <div class="itinerary">
-              <h4><span class="white">Create your itinerary</span></h4>
-              <input id="new-name" [(ngModel)]= "newItinerary.name" type="text" placeholder="Create an itinerary name" />
-        			<input id="new-address" [(ngModel)]="newAddress" type="text" name="address" placeholder="Add a location to your list" >
-              <input id="new-date" value="" type="date" name="date"/>
-              <input id="new-price" type="number" name="price" placeholder="Add travel cost" />
+              <section>
+                <h4><span class="white">Create your itinerary</span></h4>
+                <input id="new-name" [(ngModel)]= "newItinerary.name" type="text" placeholder="Create an itinerary name" />
+          			<input id="new-address" [(ngModel)]="newAddress" type="text" name="address" placeholder="Add a location to your list" >
+                <input id="new-date" value="" type="date" name="date"/>
+
+                <section id="price-and-transport">
+                  <div id="currency-div">
+                    <select id="new-currency" [(ngModel)]="newCurrency" class="form-control" name="currency">
+                      <option value="$">USD</option>
+                      <option value="£">GBP</option>
+                      <option value="€">EUR</option>
+                      <option value="¥">JPY</option>
+                      <option value="NT$">TWD</option>
+                    </select>
+                  </div>
+                  <div id="price-div">
+                    <input id="new-price"  [(ngModel)]="newPrice" type="number" name="price" placeholder="Add travel cost" />
+                  </div>
+                  <div id="transport-div">
+                    <select id="new-transport" [(ngModel)]="newTransport" class="form-control" name="transport" >
+                      <option value="plane">Plane</option>
+                      <option value="train">Train</option>
+                      <option value="bus">Bus</option>
+                      <option value="boat">Boat</option>
+                      <option value="car">Car</option>
+                    </select>
+                  </div>
+                </section>
+
+              </section>
         			<input id="new-submit" (click)="createPoint()" type="submit" name="" value="Add to list">
 
               <!-- <input id="new-delete" (click)="deletePoint()" type="submit" name="" value="-"> -->
@@ -77,10 +103,23 @@
                       For {{itineraryDays[i]}} days
                     </p>
                     <div class="location-list">
-                      <strong>{{location.name}} {{location.country}}</strong> {{location.date | date:'EEE MMMM d, y'}} <br />
-                      {{location.price | currency:'USD':true}}
-                      <input type="hidden" name="" #locationId [(ngModel)]="location.id">
-                      <input class="delete" type="submit" value="-" (click)="deletePoint(locationId)" />
+                      <div class="col-md-11">
+                        <div class="location-date">
+                          <strong>{{location.name}} {{location.country}}</strong> {{location.date | date:'EEE MMMM d, y'}}
+                        </div>
+
+                        <div class="currency-and-price">
+                           <strong>{{location.currency}}{{location.price}}</strong>   <i>Via {{location.transport}}</i>
+                        </div>
+                      </div>
+                      <div class="col-md-1 delete-input">
+                        <div>
+                          <input type="hidden" name="" #locationId [(ngModel)]="location.id">
+                        </div>
+                        <div>
+                          <input class="delete" type="submit" value="-" (click)="deletePoint(locationId)" />
+                        </div>
+                      </div>
                     </div>
 
                 </div>
@@ -91,7 +130,7 @@
                 <span >Total Trip Length: {{sum}} Days</span>
               </div>
               <div class="total-days">
-                <span >Total Trip Cost: ${{price}}</span>
+                <span >Total Trip Cost: {{newCurrency}}{{price}}</span>
               </div>
               <div class="save"  (click)="addItinerary()">
                 <p>Save itinerary</p>

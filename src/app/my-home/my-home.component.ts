@@ -27,11 +27,8 @@ export class MyHomeComponent implements OnInit {
     placesAndDates: [],
   };
 
-  feedback:string;
-
   selectedNationalityId1;
   selectedNationalityId2;
-  map: any;
   user;
   countries;
   countries2;
@@ -40,33 +37,37 @@ export class MyHomeComponent implements OnInit {
   nation2;
   countryName1;
   countryName2;
+  freeLayer;
+  freeLayer2;
   address;
-  newAddress: any;
   geocoder;
   flightPath;
-  arrayOfTravel = [];
-  place: any;
-  locations: Array<any> = [];
-  dates = [];
-  diffDays: number;
-  itineraryDays: Array<any>=[];
-  itineraryPrice: Array<any>=[];
   totalItinerary;
-  sum: any;
-  price: any;
   deleteLocation;
   marker;
   indexTarget;
   locationIndex;
+  feedback:string;
+  map: any;
+  diffDays: number;
+  place: any;
+  sum: any;
+  price: any;
+  newAddress: any;
+  newPrice: any;
+  newCurrency: any;
+  newTransport: any;
+  arrayOfTravel = [];
+  dates = [];
+  locations: Array<any> = [];
+  itineraryDays: Array<any>=[];
+  itineraryPrice: Array<any>=[];
   allMarkers: Array<any> = [];
   allFlightPaths: Array<any> = [];
   allTravelArray: Array<any> = [];
   colorLayers: Array<any> = [];
   layers: Array<any> = [];
 
-
-  freeLayer;
-  freeLayer2;
 
 
 
@@ -87,13 +88,9 @@ export class MyHomeComponent implements OnInit {
     } else {
       this.userService.get(user._id)
         .subscribe((user)=> {
-
               this.user = user
             });
-
         }
-
-
 
     this.country.getList()
       .subscribe((countries) => {
@@ -117,8 +114,8 @@ export class MyHomeComponent implements OnInit {
       //   })
       //   console.log(this.warnings);
 
-        this.sum = 0;
-        this.price = 0;
+      this.sum = 0;
+      this.price = 0;
   }
 
 
@@ -200,7 +197,8 @@ export class MyHomeComponent implements OnInit {
      this.place = autocomplete.getPlace()
 
      })
-
+     this.newCurrency = "$";
+     this.newTransport = "plane";
   }
 
 //**************** total days*********************
@@ -306,6 +304,13 @@ totalPrice(){
   //*************** Creates a point/polyline on the map **********
     createPoint(){
 
+      this.place.currency = this.newCurrency;
+      this.place.transport = this.newTransport;
+      console.log("this.place.transport",this.place.transport)
+      if(this.place.transport == null || this.place.transport == undefined){
+        this.place.transport = "plane";
+      }
+
       // price input field
       this.place.price = document.getElementById('new-price')['valueAsNumber'];
       if (isNaN(this.place.price)){
@@ -374,6 +379,8 @@ totalPrice(){
   	       alert('Geocode was not successful for the following reason: ' + status);
   	     }
   	  });
+      this.newAddress = '';
+      this.newPrice = '';
 
     }
 

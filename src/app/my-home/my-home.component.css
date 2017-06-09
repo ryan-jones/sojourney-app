@@ -74,7 +74,7 @@
   margin: 0 2% 0 2%;;
   box-shadow: 3px 3px 3px 3px #ccc;
 }
-.country-button{
+.country-button, #new-submit{
   background-color: #222061;
   border-radius: 5px;
   margin-top: 1%;
@@ -116,21 +116,58 @@
 }
 
 
-.white, .delete, .save, .country-view, .country-button, .nation-box{
+.white, .delete, .save, .country-view, .country-button, .nation-box, #new-submit{
   color: #fff;
 }
 
 #new-address, #new-date, #new-name{
-  width: 62%;
+  width: 72%;
+}
+
+#new-price{
+  width: 100%;
+}
+
+#price-and-transport{
+  display: flex;
+  flex-flow: row;
+  height: 4vh;
+}
+
+#currency-div, #transport-div, #new-currency, #new-transport, #new-price{
+  height: 100%;
 }
 
 
 
+#price-div{
+  width: 50.5%;
+  margin: 0 2% 0 1%;
+}
+
+
+#new-submit{
+  box-shadow: 0 0 0 0;
+  width: 100%;
+  margin-top: 5%;
+}
+
+
+.currency-and-price, .location-date{
+  text-align: center;
+  display: flex;
+  justify-content: space-around;
+}
+
+.delete-input{
+  margin: 2% 5%;
+  padding: 0 5%;
+}
+
 .delete{
   background-color: red;
+  border: 1px solid black;
   border-radius: 5px;
-  /*margin-top: 1%;*/
-  padding: 0 2%;
   box-shadow: 3px 3px 3px 1px #ccc;
 }
 
