@@ -112,15 +112,21 @@
   color: black;
   border-radius: 5px;
   background-color: #eeedec;
-  padding: 2% 3%;
+  /*padding: 2% 3%;*/
 }
 
+.location-date{
+  width: 100%;
+  border: 1px solid black;
+  flex-flow: column;
+  height: 60%;
+}
 
 .white, .delete, .save, .country-view, .country-button, .nation-box, #new-submit{
   color: #fff;
 }
 
-#new-address, #new-date, #new-name{
+#new-address, #new-date, #new-name, #starting-name, #starting-address, #starting-date{
   width: 72%;
 }
 
@@ -159,14 +165,14 @@
   justify-content: space-around;
 }
 
+
 .delete-input{
-  margin: 2% 5%;
-  padding: 0 5%;
+  /*margin: 5% 5% 5% 0;*/
+  padding: 0 5% 0 0;
 }
 
 .delete{
   background-color: red;
-  border: 1px solid black;
   border-radius: 5px;
   box-shadow: 3px 3px 3px 1px #ccc;
 }

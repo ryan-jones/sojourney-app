@@ -47,6 +47,10 @@ export class MyHomeComponent implements OnInit {
   marker;
   indexTarget;
   locationIndex;
+  placeholder;
+  locationAddress;
+  passableValue;
+  checked: boolean = false;
   feedback:string;
   map: any;
   diffDays: number;
@@ -77,6 +81,8 @@ export class MyHomeComponent implements OnInit {
 
   ngOnInit() {
 
+    this.placeholder = "Create an itinerary name"
+    this.locationAddress = "Enter a starting location";
 
     this.initiateMap();
 
@@ -195,10 +201,11 @@ export class MyHomeComponent implements OnInit {
 
      autocomplete.addListener("place_changed", ()=> {
      this.place = autocomplete.getPlace()
-
+     console.log("this.place", this.place)
      })
      this.newCurrency = "$";
      this.newTransport = "plane";
+     this.checked = false;
   }
 
 //**************** total days*********************
@@ -306,10 +313,15 @@ totalPrice(){
 
       this.place.currency = this.newCurrency;
       this.place.transport = this.newTransport;
-      console.log("this.place.transport",this.place.transport)
+
       if(this.place.transport == null || this.place.transport == undefined){
         this.place.transport = "plane";
       }
+
+      //get country value
+      let countryStringSplit = this.place.formatted_address.split(',');
+      this.place.country = countryStringSplit[countryStringSplit.length-1];
+
 
       // price input field
       this.place.price = document.getElementById('new-price')['valueAsNumber'];
@@ -321,12 +333,19 @@ totalPrice(){
 
 
       this.locations.push(this.place);
-      this.newItinerary.placesAndDates.push(this.place)
+      this.newItinerary.placesAndDates.push(this.place);
 
-      //date input field
-      this.place.date = document.getElementById('new-date')['valueAsDate'];
+
+
+
+
+        //date input field
+      let variableDate = document.getElementById('new-date')['valueAsDate'];
+
+      this.place.date = variableDate.getDate() + '/' + (variableDate.getMonth()+1) + '/' + variableDate.getFullYear();
       this.place.date.autocomplete;
       this.dates.push(this.place.date);
+
 
       //turns dates into numerical values for comparison
       if(this.dates.length >=0){
@@ -342,7 +361,7 @@ totalPrice(){
 
 
 
-  //geocodes the address, creates a marker and polyline segment
+      //geocodes the address, creates a marker and polyline segment
       this.geocoder = new google.maps.Geocoder();
       var that = this;
   	  this.address = this.newAddress;
@@ -351,7 +370,13 @@ totalPrice(){
 
   	     if (status === 'OK') {
            var point = {lat: that.place.geometry.location.lat(), lng: that.place.geometry.location.lng()}
-
+           let infowindow = new google.maps.InfoWindow();
+           let name = that.place.name;
+           let country = that.place.country;
+           let date = that.place.date;
+           let days = that.diffDays;
+           let transport = that.place.transport;
+           let price = that.place.price;
 
   	       that.arrayOfTravel.push(point);
            that.allTravelArray.push(that.arrayOfTravel);
@@ -364,16 +389,38 @@ totalPrice(){
                strokeWeight: 4,
 
              });
+
            that.allFlightPaths.push(that.flightPath)
            that.flightPath.setMap(that.map);
            that.marker = new google.maps.Marker({
              position: point,
-             map: that.map
+             map: that.map,
+             name: name,
+             country: country,
+             date: date,
+             days: days,
+             transport: transport,
+             price: price
            })
 
 
            that.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png')
            that.allMarkers.push(that.marker)
+
+           if(that.locations.length == 1){
+             google.maps.event.addListener(that.marker, 'click', function(){
+                infowindow.setContent(`<div><h3> Starting in ${name}, ${country} </h3></div>`);
+                infowindow.open(that.map, this);
+                console.log(infowindow);
+              });
+           } else{
+               google.maps.event.addListener(that.marker, 'click', function(){
+                  infowindow.setContent(`<div><h3> Location: ${name}, ${country} </h3></div><div><p><strong>Arriving on Day </strong> ${days} <strong> of the trip </strong></p></div> <div><p><strong>Arriving on </strong> ${date}  via  <i>${transport}</i> </p></div><div><p><strong>Price: </strong>  ${price} per person  </p></div> `);
+                  infowindow.open(that.map, this);
+                  console.log(infowindow);
+                });
+           }
+
 
   	     } else {
   	       alert('Geocode was not successful for the following reason: ' + status);
@@ -381,7 +428,8 @@ totalPrice(){
   	  });
       this.newAddress = '';
       this.newPrice = '';
-
+      this.placeholder = "Edit itinerary name"
+      this.locationAddress = "Add a location";
     }
 
 
@@ -479,5 +527,13 @@ totalPrice(){
       console.log("user", user);
       alert("Itinerary saved! View in your user profile.");
     })
+  }
+
+  toggleNote(){
+    if (this.checked === false){
+      this.checked = true;
+    } else {
+      this.checked = false;
+    }
   }
 }
