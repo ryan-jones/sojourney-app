@@ -117,9 +117,8 @@
 
 .location-date{
   width: 100%;
-  border: 1px solid black;
   flex-flow: column;
-  height: 60%;
+  /*height: 60%;*/
 }
 
 .white, .delete, .save, .country-view, .country-button, .nation-box, #new-submit{
@@ -145,7 +144,6 @@
 }
 
 
-
 #price-div{
   width: 50.5%;
   margin: 0 2% 0 1%;
@@ -159,22 +157,36 @@
 }
 
 
+
 .currency-and-price, .location-date{
   text-align: center;
   display: flex;
   justify-content: space-around;
+  padding: 2% 0;
 }
 
+.location-date > div {
+  padding: 1% 0;
+}
 
+.addCost{
+  color: #fff;
+  background-color: #222061;
+  border-radius: 5px;
+}
 .delete-input{
-  /*margin: 5% 5% 5% 0;*/
-  padding: 0 5% 0 0;
+   display: flex;
+   justify-content: center;
+   text-align: center;
+   padding: 15% 5% 15% 0;
 }
 
-.delete{
+
+.delete, .deleteCost{
+  color: #fff;
   background-color: red;
   border-radius: 5px;
-  box-shadow: 3px 3px 3px 1px #ccc;
+  /*box-shadow: 3px 3px 3px 1px #ccc;*/
 }
 
 .days{
@@ -218,4 +230,11 @@
   background-size: contain;
   height: 10vh;
   margin: 0 15%;
+}
+
+.hidden-details{
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 3px 3px 3px 3px #ccc;
+  margin: 2%;
 }

@@ -67,8 +67,8 @@
 
                 <div>
                   <h4><span class="white">{{newItinerary.name}}</span></h4>
-                  <input id="new-name" [(ngModel)]= "newItinerary.name" type="text" [placeholder] = "placeholder" />
-            			<input id="new-address" [(ngModel)]="newAddress" type="text" name="address" [placeholder]= "locationAddress" >
+                  <input id="new-name" [(ngModel)]= "newItinerary.name" type="text" [placeholder] = "namePlaceholder" />
+            			<input id="new-address" [(ngModel)]="newAddress" type="text" name="address" [placeholder]= "locationPlaceholder" >
                   <input id="new-date" value="" type="date" name="date"/>
                 </div>
 
@@ -76,7 +76,7 @@
                 <section id="price-and-transport">
                   <div id="currency-div">
                     <select id="new-currency" [(ngModel)]="newCurrency" class="form-control" name="currency">
-                      <option value="$">USD</option>
+                      <option value="$"><span class="currency-type">USD</span></option>
                       <option value="£">GBP</option>
                       <option value="€">EUR</option>
                       <option value="¥">JPY</option>
@@ -84,7 +84,7 @@
                     </select>
                   </div>
                   <div id="price-div">
-                    <input id="new-price"  [(ngModel)]="newPrice" type="number" name="price" placeholder="Add travel cost" />
+                    <input id="new-price"  [(ngModel)]="newPrice" type="number" name="price" value = "" placeholder="Add an expense" />
                   </div>
                   <div id="transport-div">
                     <select id="new-transport" [(ngModel)]="newTransport" class="form-control" name="transport" >
@@ -94,16 +94,31 @@
                       <option value="boat">Boat</option>
                       <option value="car">Car</option>
                     </select>
+
                   </div>
                 </section>
-                <section class="notes" >
-                  <input type="checkbox"  (click)="toggleNote()" />Add a note
-                  <div class="form-group" *ngIf="checked == true">
-                    <input type="text" />
+                <section>
+                  <div *ngFor="let expense of expenseArray">
+                    <div class="white" *ngIf="expenseArray.length !==0">
+                      {{newCurrency}}{{expense.expense}} <span class="white"><i>Via</i></span> {{expense.transport}} <br />
+                      <i>Note: {{expense.note}}</i>
+                    </div>
+                  </div>
+                  <section class="notes" >
+                    <input type="checkbox"  (click)="toggleNote()" /> <span class= "white"> Add a note </span>
+                    <div class="form-group" *ngIf="checked == true">
+                      <input id="new-note" type="text" />
+                    </div>
+                  </section>
+                  <div>
+                    <input class="addCost" (click)="addExpense()" type="submit" value= "+" />
+                    <input class="deleteCost" (click)="deleteExpense()" type="submit" value= "-" />
+                    <span class="white"> {{placeExpenditure}} expenditures: {{newCurrency}}{{currentCost}}</span>
                   </div>
                 </section>
+
               </section>
-        			<input id="new-submit" (click)="createPoint()" type="submit" name="" value="Add to list">
+        			<input id="new-submit" (click)="createPoint()" type="submit" name="" value="Add to itinerary">
 
               <!-- <input id="new-delete" (click)="deletePoint()" type="submit" name="" value="-"> -->
               <div  class="location-box">
@@ -112,14 +127,22 @@
                      <p class="days white">
                        Starting in
                      </p>
-                     <div class="location-list">
+                     <div class="location-list row">
                        <div class="col-md-11">
                          <div class="location-date">
                            <div class="col-md-12">
                              <strong>{{location.name}}</strong>, <strong>{{location.country}}</strong>
                            </div>
                            <div class="col-md-12">
-                             <p> {{location.date | date:'EEE MMMM d, y'}}</p>
+                             <p> {{location.date}}</p>
+                           </div>
+                           <div class="col-md-12 hidden-details" *ngFor="let detail of location.details">
+                             <div>
+                               <div>
+                                 <p> {{newCurrency}}{{detail.expense}}  via {{detail.transport}} </p>
+                                 <p> Note: {{detail.note}}</p>
+                               </div>
+                             </div>
                            </div>
                          </div>
 
@@ -128,12 +151,11 @@
                          </div>
                        </div>
                        <div class="col-md-1 delete-input">
-                         <div>
-                           <input type="hidden" name="" #locationId [(ngModel)]="location.id">
-                         </div>
-                         <div>
+
+
                            <input class="delete" type="submit" value="-" (click)="deletePoint(locationId)" />
-                         </div>
+                           <input type="hidden" name="" #locationId [(ngModel)]="location.id">
+
                        </div>
                      </div>
                    </div>
@@ -146,7 +168,14 @@
                          <div class="location-date">
                            <strong>{{location.name}} {{location.country}}</strong> {{location.date | date:'EEE MMMM d, y'}}
                          </div>
-
+                         <div class="col-md-12 hidden-details" *ngFor="let detail of location.details">
+                           <div>
+                             <div>
+                               <p> {{newCurrency}}{{detail.expense}}  via {{detail.transport}} </p>
+                               <p> Note: {{detail.note}}</p>
+                             </div>
+                           </div>
+                         </div>
                          <div class="currency-and-price">
                             <strong>{{location.currency}}{{location.price}}</strong>   <i>Via {{location.transport}}</i>
                          </div>
