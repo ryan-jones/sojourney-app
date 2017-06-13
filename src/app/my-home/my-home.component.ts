@@ -22,6 +22,7 @@ export class MyHomeComponent implements OnInit {
   newItinerary = {
     id: '',
     name: '',
+    details: '',
     nationality1: '',
     nationality2: '',
     placesAndDates: [],
@@ -50,9 +51,12 @@ export class MyHomeComponent implements OnInit {
   locationIndex;
   namePlaceholder;
   locationPlaceholder;
+  locationView;
   passableValue;
   currentCost;
+  arrow;
   checked: boolean = false;
+  isCollapsed:boolean = false;
   feedback:string;
   map: any;
   diffDays: number;
@@ -120,6 +124,11 @@ export class MyHomeComponent implements OnInit {
         this.countryName2 = '';
       }
 
+      if (!this.isCollapsed){
+        this.arrow = ">"
+      } else{
+        this.arrow = "v"
+      }
       // this.status.getList()
       //   .subscribe((warnings)=>{
       //     this.warnings = warnings;
@@ -203,12 +212,14 @@ export class MyHomeComponent implements OnInit {
 
     this.map.setOptions({styles: styles});
 
+     this.place = {};
      let input = document.getElementById('new-address');
      let autocomplete = new google.maps.places.Autocomplete(input);
 
      autocomplete.addListener("place_changed", ()=> {
+
      this.place = autocomplete.getPlace()
-     this.placeExpenditure = this.place.name;
+     this.locationView = this.place.name;
      console.log("this.place", this.place)
      })
      this.newCurrency = "$";
@@ -319,7 +330,15 @@ totalPrice(){
 
   //*************** Creates a point/polyline on the map **********
     createPoint(){
-      this.place.details = this.expenseArray;
+
+      // checks to see if there are any details/notes for the itinerary
+      if (this.expenseArray.length === 0){
+        this.place.details = '';
+      } else {
+        this.place.details = this.expenseArray;
+      }
+
+      //assigns currency and transport method
       this.place.currency = this.newCurrency;
       this.place.transport = this.newTransport;
 
@@ -333,9 +352,9 @@ totalPrice(){
 
 
       // price input field
-
-      if (this.expenseArray.length === 0){
+      if (this.totalCostArray.length === 0){
         this.place.price = document.getElementById('new-price')['valueAsNumber'];
+        this.currentCost = this.place.price;
       } else{
         this.place.price = this.currentCost;
       }
@@ -343,6 +362,10 @@ totalPrice(){
       if (isNaN(this.place.price)){
         this.place.price = 0;
       }
+      if (isNaN(this.currentCost)){
+        this.currentCost = 0;
+      }
+
       this.itineraryPrice.push(this.place.price);
       this.totalPrice();
 
@@ -444,14 +467,20 @@ totalPrice(){
   	     }
   	  });
 
-      document.getElementById("new-note")["value"] = '';
+      let note = document.getElementById("new-note");
+      if(note !== null){
+        document.getElementById("new-note")["value"] = '';
+      }
       document.getElementById("new-price")["value"] = '';
 
       this.newAddress = '';
       this.expenseArray= [];
+      this.totalCostArray = [];
       this.namePlaceholder = "Edit itinerary name"
       this.locationPlaceholder = "Add a location";
+      this.locationView = '';
       this.currentCost = 0;
+
     }
 
 
@@ -557,7 +586,12 @@ totalPrice(){
 
      newestExpense.expense = document.getElementById('new-price')['valueAsNumber'];
      newestExpense.transport = document.getElementById('new-transport')['value']
-     newestExpense.note = document.getElementById('new-note')['value'];
+
+     if (document.getElementById('new-note') == null){
+       newestExpense.note = '';
+     } else {
+       newestExpense.note = document.getElementById('new-note')['value'];
+     }
      this.expenseArray.push(newestExpense);
      console.log("after", this.expenseArray);
 
@@ -567,7 +601,9 @@ totalPrice(){
 
      let newTotalExpense = this.totalCostArray.reduce((a, b) => a + b, 0);
 
-     document.getElementById("new-note")["value"] = '';
+     if(document.getElementById("new-note") !== null){
+       document.getElementById("new-note")["value"] = '';
+     }
      document.getElementById("new-price")["value"] = '';
 
      if(newTotalExpense === 0 || newTotalExpense === NaN || newTotalExpense === undefined){
@@ -578,9 +614,28 @@ totalPrice(){
        return this.currentCost;
      }
 
-
-
    }
+
+  //delete expense from list
+  deleteExpense(){
+    this.expenseArray.pop();
+    this.totalCostArray.pop();
+
+    let newTotalExpense = this.totalCostArray.reduce((a, b) => a + b, 0);
+    console.log("newTotalExpense", newTotalExpense);
+    if(document.getElementById("new-note") !== null){
+      document.getElementById("new-note")["value"] = '';
+    }
+    document.getElementById("new-price")["value"] = '';
+
+    if(newTotalExpense == 0 || newTotalExpense === NaN || newTotalExpense === undefined){
+      this.currentCost = 0;
+      return this.currentCost;
+    } else{
+      this.currentCost = newTotalExpense;
+      return this.currentCost;
+    }
+  }
 //saving to user profile in the database
   addItinerary(){
     this.newItinerary.id = this.user._id

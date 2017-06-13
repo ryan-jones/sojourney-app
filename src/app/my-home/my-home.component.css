@@ -112,13 +112,12 @@
   color: black;
   border-radius: 5px;
   background-color: #eeedec;
-  /*padding: 2% 3%;*/
+  box-shadow: 0px 3px 5px 1px black;
 }
 
 .location-date{
   width: 100%;
   flex-flow: column;
-  /*height: 60%;*/
 }
 
 .white, .delete, .save, .country-view, .country-button, .nation-box, #new-submit{
@@ -162,18 +161,18 @@
   text-align: center;
   display: flex;
   justify-content: space-around;
-  padding: 2% 0;
+  /*padding: 2% 0;*/
 }
 
 .location-date > div {
   padding: 1% 0;
 }
 
-.addCost{
+.addCost, .deleteCost, .delete{
   color: #fff;
-  background-color: #222061;
   border-radius: 5px;
 }
+
 .delete-input{
    display: flex;
    justify-content: center;
@@ -183,10 +182,20 @@
 
 
 .delete, .deleteCost{
-  color: #fff;
   background-color: red;
-  border-radius: 5px;
-  /*box-shadow: 3px 3px 3px 1px #ccc;*/
+}
+
+.deleteCost{
+  margin: 3% 0;
+}
+
+.delete{
+  height: 4vh;
+}
+
+.addCost{
+  background-color: #222061;
+  margin: 2% 0;
 }
 
 .days{
@@ -237,4 +246,8 @@
   border-radius: 5px;
   box-shadow: 3px 3px 3px 3px #ccc;
   margin: 2%;
+}
+
+.space{
+  padding-right: 2%;
 }

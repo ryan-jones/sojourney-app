@@ -20,8 +20,9 @@ import { MySignupFormComponent } from './my-signup-form/my-signup-form.component
 import { ProfileCountryVisitComponent } from './profile-country-visit/profile-country-visit.component';
 import { ProfileItinerariesComponent } from './profile-itineraries/profile-itineraries.component';
 import { ProfileNavComponent } from './profile-nav/profile-nav.component';
-import { AlertModule } from 'ngx-bootstrap';
+import { AlertModule, CollapseModule } from 'ngx-bootstrap';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+
 
 
 
@@ -67,6 +68,7 @@ const routes: Routes = [
     }),
     AlertModule.forRoot(),
     TabsModule.forRoot(),
+    CollapseModule.forRoot()
 
   ],
   providers: [CountryService, WarningService, SessionService, UserService],

@@ -68,7 +68,7 @@
                 <div>
                   <h4><span class="white">{{newItinerary.name}}</span></h4>
                   <input id="new-name" [(ngModel)]= "newItinerary.name" type="text" [placeholder] = "namePlaceholder" />
-            			<input id="new-address" [(ngModel)]="newAddress" type="text" name="address" [placeholder]= "locationPlaceholder" >
+            			<input id="new-address" [(ngModel)]= "newAddress" type="text" name="address" [placeholder]= "locationPlaceholder" >
                   <input id="new-date" value="" type="date" name="date"/>
                 </div>
 
@@ -100,7 +100,7 @@
                 <section>
                   <div *ngFor="let expense of expenseArray">
                     <div class="white" *ngIf="expenseArray.length !==0">
-                      {{newCurrency}}{{expense.expense}} <span class="white"><i>Via</i></span> {{expense.transport}} <br />
+                      {{newCurrency}}{{expense.expense}} <i>Via</i> {{expense.transport}} <br />
                       <i>Note: {{expense.note}}</i>
                     </div>
                   </div>
@@ -110,10 +110,10 @@
                       <input id="new-note" type="text" />
                     </div>
                   </section>
-                  <div>
-                    <input class="addCost" (click)="addExpense()" type="submit" value= "+" />
-                    <input class="deleteCost" (click)="deleteExpense()" type="submit" value= "-" />
-                    <span class="white"> {{placeExpenditure}} expenditures: {{newCurrency}}{{currentCost}}</span>
+                  <div class="white">
+                    <input class="addCost" (click)="addExpense()" type="submit" value= "+" /> <span class="space">Add Expense</span>  
+                    <input class="deleteCost" (click)="deleteExpense()" type="submit" value= "-" /> Delete Expense
+                     {{locationView}} Expenditures: {{newCurrency}}{{currentCost}}
                   </div>
                 </section>
 
@@ -136,18 +136,19 @@
                            <div class="col-md-12">
                              <p> {{location.date}}</p>
                            </div>
-                           <div class="col-md-12 hidden-details" *ngFor="let detail of location.details">
-                             <div>
-                               <div>
-                                 <p> {{newCurrency}}{{detail.expense}}  via {{detail.transport}} </p>
-                                 <p> Note: {{detail.note}}</p>
-                               </div>
-                             </div>
+                           <div class="currency-and-price">
+                              <strong>{{location.currency}}{{location.price}}</strong>   <i>Via {{location.transport}}</i>
                            </div>
                          </div>
-
-                         <div class="currency-and-price">
-                            <strong>{{location.currency}}{{location.price}}</strong>   <i>Via {{location.transport}}</i>
+                         <button type="button" (click)="isCollapsed = !isCollapsed">{{arrow}}</button>
+                         <div class="col-md-12 hidden-details" (collapsed)="collapsed($event)" (expanded)="expanded($event)"
+                            [collapse]="!isCollapsed" *ngFor="let detail of location.details">
+                           <div>
+                             <div>
+                               <p> {{newCurrency}}{{detail.expense}}  via {{detail.transport}} </p>
+                               <p> Note: {{detail.note}}</p>
+                             </div>
+                           </div>
                          </div>
                        </div>
                        <div class="col-md-1 delete-input">
@@ -163,12 +164,22 @@
                      <p class="days white">
                        For {{itineraryDays[i]}} days
                      </p>
-                     <div class="location-list">
+                     <div class="location-list row">
                        <div class="col-md-11">
                          <div class="location-date">
-                           <strong>{{location.name}} {{location.country}}</strong> {{location.date | date:'EEE MMMM d, y'}}
+                           <div class="col-md-12">
+                             <strong>{{location.name}}</strong>, <strong>{{location.country}}</strong>
+                           </div>
+                           <div class="col-md-12">
+                             <p> {{location.date}}</p>
+                           </div>
+                           <div class="currency-and-price">
+                              <strong>{{location.currency}}{{location.price}}</strong>   <i>Via {{location.transport}}</i>
+                           </div>
                          </div>
-                         <div class="col-md-12 hidden-details" *ngFor="let detail of location.details">
+                         <button type="button" (click)="isCollapsed = !isCollapsed">{{arrow}}</button>
+                         <div class="col-md-12 hidden-details" (collapsed)="collapsed($event)" (expanded)="expanded($event)"
+                            [collapse]="!isCollapsed" *ngFor="let detail of location.details">
                            <div>
                              <div>
                                <p> {{newCurrency}}{{detail.expense}}  via {{detail.transport}} </p>
@@ -176,17 +187,13 @@
                              </div>
                            </div>
                          </div>
-                         <div class="currency-and-price">
-                            <strong>{{location.currency}}{{location.price}}</strong>   <i>Via {{location.transport}}</i>
-                         </div>
                        </div>
                        <div class="col-md-1 delete-input">
-                         <div>
-                           <input type="hidden" name="" #locationId [(ngModel)]="location.id">
-                         </div>
-                         <div>
+
+
                            <input class="delete" type="submit" value="-" (click)="deletePoint(locationId)" />
-                         </div>
+                           <input type="hidden" name="" #locationId [(ngModel)]="location.id">
+
                        </div>
                      </div>
                    </div>
