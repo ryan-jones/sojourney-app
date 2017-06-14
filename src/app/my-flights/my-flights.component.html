@@ -1,0 +1,59 @@
+<div class="container-fluid">
+  <div class="col-md-6">
+    <div>
+      <input type="text" id="departure"  placeholder="Departing from"/>
+    </div>
+    <div>
+      From: <input id="departure-date-start" value="" type="date" name="date"/>
+      To: <input id="departure-date-end" value="" type="date" name="date"/>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div>
+      <input type="text" id="arrival" placeholder="Going to"/>
+    </div>
+    <div>
+      Returning From: <input id="return-date-start" value="" type="date" name="date"/> To: <input id="return-date-end" value="" type="date" name="date"/>
+    </div>
+  </div>
+  <div>
+    Departure:
+    {{departureLocation}}
+  </div>
+  <div>
+    Arrival:
+    {{arrivalLocation}}
+  </div>
+
+  <button (click)="searchFlights(flight)">Search for flights</button>
+
+  <div *ngIf="checked == true">
+    <div *ngFor="let result of searchResult.data">
+      <div class="results container">
+        <div class="col-md-2 pricing">
+          <h3> {{result.price | currency:'EUR':true}}</h3><br />
+          <p>{{result.nightsInDest}} days total</p>
+        </div>
+        <div class="col-md-10 routes">
+          <div *ngFor="let route of result.route, let i of index" class="ind-route">
+
+              <div class = "col-md-3">
+                <p>{{route.airline}}</p>
+                <p>Flight #{{route.flight_no}}</p>
+              </div>
+              <div class="col-md-4">
+                <h4>{{durations[i]}}</h4>
+                <p><i>{{route.dTime * 1000 | date}} -> {{route.aTime * 1000 | date}}</i> </p>
+              </div>
+              <div class="col-md-5">
+                <h4>{{route.dTime * 1000 | date:'shortTime'}} -> {{route.aTime * 1000 | date:'shortTime'}} </h4>
+                <p>{{route.cityFrom}}({{route.flyFrom}}) -> {{route.cityTo}}({{route.flyTo}})
+              </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

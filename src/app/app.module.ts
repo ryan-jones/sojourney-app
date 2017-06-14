@@ -22,6 +22,7 @@ import { ProfileItinerariesComponent } from './profile-itineraries/profile-itine
 import { ProfileNavComponent } from './profile-nav/profile-nav.component';
 import { AlertModule, CollapseModule } from 'ngx-bootstrap';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { MyFlightsComponent } from './my-flights/my-flights.component';
 
 
 
@@ -37,6 +38,7 @@ const routes: Routes = [
   {path: 'countries_visited', component: ProfileCountryVisitComponent},
   {path: 'itineraries', component: ProfileItinerariesComponent},
   { path: 'edit', component: ProfileEditComponent },
+  {path: 'flights', component: MyFlightsComponent}
   ]
 
 
@@ -54,6 +56,7 @@ const routes: Routes = [
     ProfileCountryVisitComponent,
     ProfileItinerariesComponent,
     ProfileNavComponent,
+    MyFlightsComponent,
 
   ],
   imports: [

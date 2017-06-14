@@ -6,16 +6,22 @@
   <div class="col-md-10 right-side">
     <div id="user-info">
       <div>
-          <strong>Name: </strong>{{user.name}}
+          <strong>Name: </strong><input type="text" [(ngModel)]="editUser.name" placeholder="Enter new name" />
 
       </div>
       <div>
-        <strong> Username: </strong>{{user.username}}
+        <strong> Username: </strong><input type="text" [(ngModel)]="editUser.username" placeholder="Enter new email address" />
       </div>
       <div>
-        <strong>Nationality: </strong>{{user.nationality}}
+        <strong>Password: </strong><input type="password" [(ngModel)]="editUser.password" placeholder="Enter new password"/>
       </div>
-      <button class="share"> Edit Details</button>
+      <div>
+        <strong>Nationality: </strong><input type="text" [(ngModel)]="editUser.nationality1" placeholder="Enter new nationality" />
+      </div>
+      <div>
+        <strong>Second Nationality: </strong><input type="text" [(ngModel)]="editUser.nationality2" placeholder="Enter second new nationality" />
+      </div>
+      <button class="share" (click)="editUserInfo()"> Edit Details</button>
       <button class="share blue" (click)="deleteUser()">Delete User</button>
     </div>
 

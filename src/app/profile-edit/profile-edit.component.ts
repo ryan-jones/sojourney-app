@@ -11,8 +11,13 @@ import {UserService} from '../user.service';
 export class ProfileEditComponent implements OnInit {
   user: any;
 
-  originalUser: any; //user stores in user.service.ts
-  editUser: any; //shown to the user to edit
+  editUser = {
+    name: '',
+    username: '',
+    password: '',
+    nationality1: '',
+    nationality2: '',
+  } //shown to the user to edit
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -26,6 +31,16 @@ export class ProfileEditComponent implements OnInit {
       .subscribe((user)=> {
         this.user = user
       });
+  }
+
+  editUserInfo(){
+    this.user = this.editUser;
+    this.userService.edit(this.user)
+      .subscribe((user)=>{
+        alert('subscribed!')
+        this.user = user;
+        this.router.navigate(['user']);
+      })
   }
 
   deleteUser(){

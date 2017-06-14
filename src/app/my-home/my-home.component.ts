@@ -22,7 +22,6 @@ export class MyHomeComponent implements OnInit {
   newItinerary = {
     id: '',
     name: '',
-    details: '',
     nationality1: '',
     nationality2: '',
     placesAndDates: [],

@@ -1,0 +1,33 @@
+.container-fluid{
+  height: 100vh;
+  overflow: scroll;
+  background-color: #ccc;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.results{
+  background-color: #fff;
+  height: 100%;
+  box-shadow: 0px 3px 3px 3px black;
+  margin-bottom: 1%;
+}
+
+
+
+.pricing{
+  border: 1px solid black;
+  padding: 15% 0;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.routes{
+  border: 1px solid blue;
+}
+
+.ind-route{
+  background-color: red;
+}
