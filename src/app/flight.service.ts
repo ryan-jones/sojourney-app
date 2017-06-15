@@ -23,25 +23,19 @@ export class FlightService {
 
     flight.departures.forEach((departure)=>{
       let departureDate = encodeURIComponent(departure);
-      console.log("departureDate", departureDate);
       departureDays.push(departureDate);
-      console.log("departureDays post-push", departureDays)
     })
 
     flight.returns.forEach((flight)=>{
       let returnDate = encodeURIComponent(flight);
-      console.log("returnDate", returnDate)
       returnDays.push(returnDate);
-      console.log("returnDays post-push", returnDays);
     })
 
     if (flight.type === "return"){
       if(departureDays.length === 2 && returnDays.length < 2){
         request = `${request}${departureDays[0]}&dateTo=${departureDays[1]}&typeFlight=return&returnFrom=${returnDays[0]}`;
-        console.log('new request', request);
       } else if(departureDays.length === 2 && returnDays.length === 2){
         request = `${request}${departureDays[0]}&dateTo=${departureDays[1]}&typeFlight=return&returnFrom=${returnDays[0]}&returnTo=${returnDays[1]}`;
-        console.log('new request', request);
       } else if (departureDays.length < 2 && returnDays.length < 2){
         request = `${request}${departureDays[0]}&typeFlight=return&returnFrom=${returnDays[0]}`;
       } else {

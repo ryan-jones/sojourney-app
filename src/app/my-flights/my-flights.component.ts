@@ -20,8 +20,12 @@ export class MyFlightsComponent implements OnInit {
   searchResult;
   durations = ['result.fly_duration', 'result.return_duration'];
   checked: boolean = false;
+  toggle: boolean = true;
+  map: any;
+
 
   ngOnInit() {
+    this.initiateMap();
 
     if (this.arrivalView === undefined){
       this.arrivalView = '';
@@ -31,6 +35,7 @@ export class MyFlightsComponent implements OnInit {
 
     departureAutocomplete.addListener("place_changed", ()=> {
       this.departureLocation = departureAutocomplete.getPlace();
+      console.log("departure", this.departureLocation);
       this.departureView = departureAutocomplete.getPlace()
     });
 
@@ -39,6 +44,7 @@ export class MyFlightsComponent implements OnInit {
 
     arrivalAutocomplete.addListener("place_changed", ()=> {
       this.arrivalLocation = arrivalAutocomplete.getPlace();
+      console.log('arrival', this.arrivalLocation);
       this.arrivalView = arrivalAutocomplete.getPlace();
 
     this.departureAutocomplete();
@@ -49,18 +55,23 @@ export class MyFlightsComponent implements OnInit {
   departureAutocomplete(){
     this.flightService.getLocation(this.departureLocation.name)
       .subscribe((location) => {
-      this.departureLocation = location[0].id;
+        console.log('location1',location);
+        this.departureLocation = location[0].id;
+        console.log("new departure", this.departureLocation)
     });
   }
 
   arrivalAutocomplete(){
     this.flightService.getLocation(this.arrivalLocation.name)
       .subscribe((location) => {
+      console.log('location2', location);
       this.arrivalLocation = location[0].id;
+      console.log('new arrival', this.arrivalLocation)
     });
   }
 
   searchFlights(){
+    this.toggle = false;
     this.departureAutocomplete();
     this.arrivalAutocomplete();
     let departureDates = [];
@@ -80,25 +91,29 @@ export class MyFlightsComponent implements OnInit {
     returnDates.push(returnDateFrom,returnDateEnd)
     console.log("returnDates", returnDates);
 
-    let flight = {
-      from: this.departureLocation,
-      to: this.arrivalLocation,
-      departures: departureDates,
-      returns: returnDates,
-      type: 'return'
+    if(this.departureLocation !== undefined && this.arrivalLocation !== undefined){
+      let flight = {
+        from: this.departureLocation,
+        to: this.arrivalLocation,
+        departures: departureDates,
+        returns: returnDates,
+        type: 'return'
+      }
+      this.flightService.getFlights(flight)
+      .subscribe((result) => {
+      this.searchResult = result;
+      console.log("result", this.searchResult)
+      console.log("data", this.searchResult.data)
+      console.log("data[0]", this.searchResult.data[0]);
+      if (this.checked === false){
+        this.checked = true;
+      } else {
+        this.checked = false;
+      }
+      this.toggle = true;
+    });
     }
-    this.flightService.getFlights(flight)
-    .subscribe((result) => {
-    this.searchResult = result;
-    console.log("result", this.searchResult)
-    console.log("data", this.searchResult.data)
-    console.log("data[0]", this.searchResult.data[0]);
-    if (this.checked === false){
-      this.checked = true;
-    } else {
-      this.checked = false;
-    }
-  });
+
 
 }
 
@@ -111,5 +126,76 @@ export class MyFlightsComponent implements OnInit {
     }
     console.log("formatted date", date);
     return date;
+  }
+
+  initiateMap(){
+
+    var myOptions = {
+      zoom: 2,
+      center: new google.maps.LatLng(10, 0),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    // initialize the map
+    this.map = new google.maps.Map(document.getElementById('map-canvas'),
+        myOptions);
+
+        var styles = [
+
+        {
+          featureType: "landscape",
+          stylers: [
+            { hue: "#fff" },
+            { saturation: 100 }
+          ]
+        },{
+          featureType: "road",
+          stylers: [
+            { visibility: "on" }
+          ]
+        },{
+          featureType: "administrative.land_parcel",
+          stylers: [
+            { visibility: "off" }
+          ]
+        },{
+          featureType: "administrative.locality",
+          stylers: [
+            { visibility: "on" }
+          ]
+        },{
+          featureType: "administrative.neighborhood",
+          stylers: [
+            { visibility: "off" }
+          ]
+        },{
+          featureType: "administrative.province",
+          stylers: [
+            { visibility: "on" }
+          ]
+        },{
+          featureType: "landscape.man_made",
+          stylers: [
+            { visibility: "off" }
+          ]
+        },{
+          featureType: "landscape.natural",
+          stylers: [
+            { visibility: "off" }
+          ]
+        },{
+          featureType: "poi",
+          stylers: [
+            { visibility: "on" }
+          ]
+        },{
+          featureType: "transit",
+          stylers: [
+            { visibility: "off" }
+          ]
+        }
+      ];
+
+    this.map.setOptions({styles: styles});
   }
 }
