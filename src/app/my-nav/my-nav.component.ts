@@ -56,6 +56,10 @@ export class MyNavComponent implements OnInit {
       this.router.navigate(['user']);
     }
 
+    goToFlight(){
+      this.router.navigate(['flights']);
+    }
+
     logout(){
       this.session.logout();
     }
