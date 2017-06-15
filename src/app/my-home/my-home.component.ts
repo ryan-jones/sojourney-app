@@ -228,13 +228,17 @@ export class MyHomeComponent implements OnInit {
 
 //**************** total days*********************
 totalDays(){
+  console.log("totalDays()", this.itineraryDays)
   var total = this.itineraryDays.reduce((a, b) => a + b, 0);
+  console.log("total", total)
 
-  if(total === 0 || total === NaN || total === undefined){
-    this.sum === 0;
+  if(isNaN(total)){
+    this.sum = 0;
+    console.log('this.sum ===0', this.sum)
     return this.sum;
   } else{
     this.sum = total;
+    console.log('this.sum', this.sum)
     return this.sum;
   }
 
@@ -387,17 +391,36 @@ totalPrice(){
 
 
       //turns dates into numerical values for comparison
-      if(this.dates.length >=0){
-        this.diffDays = (Math.abs(new Date(this.dates[this.dates.length-1]).getTime() - new Date(this.dates[this.dates.length - 2]).getTime())) / (1000 * 3600 * 24);
+      if (this.dates.length > 1){
+        let firstDate = this.dates[this.dates.length-1].split('/');
+
+        let newFirstDate = [];
+        let secondDate = this.dates[this.dates.length-2].split('/');
+        if(secondDate ==undefined){
+          secondDate = 0;
+        }
+        let newSecondDate = [];
+
+        for (let i = firstDate.length-1; i >= 0; i--){
+          newFirstDate.push(firstDate[i]);
+        }
+        var returnFirstDate = newFirstDate.join();
+
+        for (var x = secondDate.length-1; x >= 0; x--){
+          newSecondDate.push(secondDate[x]);
+        }
+        var returnSecondDate = newSecondDate.join();
+      }
+
+        this.diffDays = (Math.abs(new Date(returnFirstDate).getTime() - new Date(returnSecondDate).getTime())) / (1000 * 3600 * 24);
         if(isNaN(this.diffDays)){
           this.diffDays = 0;
         }
-      }
 
+      console.log("this.diffDays", this.diffDays);
       //array of differences between dates to be loaded on the view
       this.itineraryDays.push(this.diffDays);
       this.totalDays();
-
 
 
       //geocodes the address, creates a marker and polyline segment
@@ -550,18 +573,18 @@ totalPrice(){
 
 //*********** whenever a user deletes a value from the itinerary
   updateTotalDays(){
-    if(this.dates.length >=0){
+
       this.dates.forEach((day) =>{
+        console.log('day', day)
         let dayIndex = this.dates.indexOf(day);
+        console.log('dayIndex', dayIndex)
         this.diffDays = (Math.abs(new Date(this.dates[dayIndex]).getTime() - new Date(this.dates[dayIndex-1]).getTime())) / (1000 * 3600 * 24);
         if(isNaN(this.diffDays)){
           this.diffDays = 0;
         }
+        console.log('this.diffDays', this.diffDays);
         this.itineraryDays.push(this.diffDays);
       })
-
-    }
-    return this.itineraryDays;
   }
 
 
