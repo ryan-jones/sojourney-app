@@ -22,6 +22,7 @@ export class MyFlightsComponent implements OnInit {
   checked: boolean = false;
   toggle: boolean = true;
   map: any;
+  flightPath;
 
 
   ngOnInit() {
@@ -197,5 +198,45 @@ export class MyFlightsComponent implements OnInit {
       ];
 
     this.map.setOptions({styles: styles});
+  }
+
+  hover(){
+    let hoverItem = document.getElementsByClassName('results');
+    for (let i = 0; i< hoverItem.length; i ++){
+      hoverItem[i].addEventListener('mouseover', this.addFlightPath);
+      hoverItem[i].addEventListener('mouseout', this.removeFlightPath);
+    }
+  }
+
+  addFlightPath(index){
+    console.log("addflightPath", index);
+    console.log("index.routes", index.routes);
+    let routes = this.searchResult.data[index].route
+    let coordinates = [];
+    let that = this
+    routes.forEach((route)=>{
+      let routeLatLng = {lat: route.latFrom, lng: route.lngFrom};
+      coordinates.push(routeLatLng);
+    })
+    let lastRoute = routes[routes.length-1];
+    let lastRouteLatLng = {lat: lastRoute.latTo, lng: lastRoute.lngTo};
+    coordinates.push(lastRouteLatLng);
+
+    this.flightPath = new google.maps.Polyline({
+        path: coordinates,
+        geodesic: true,
+        strokeColor: 'yellow',
+        strokeOpacity: 1.0,
+        strokeWeight: 4,
+
+      });
+    this.flightPath.setMap(this.map);
+  }
+
+  removeFlightPath(index){
+    // this.flightPath.forEach((path)=>{
+    //   path.setMap(null);
+    // })
+    this.flightPath.setMap(null);
   }
 }

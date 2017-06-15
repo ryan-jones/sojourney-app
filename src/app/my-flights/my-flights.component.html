@@ -35,8 +35,8 @@
       </div>
       <div *ngIf="checked == true">
         <div *ngIf="toggle == true">
-          <div *ngFor="let result of searchResult.data">
-            <div class="results container">
+          <div *ngFor="let result of searchResult.data; let i = index">
+            <div (mouseout)="removeFlightPath(i) "(mouseover)="addFlightPath(i)" class="results container">
               <div class="col-md-2 pricing">
                 <h3> {{result.price | currency:'EUR':true}}</h3><br />
                 <i><p>{{result.nightsInDest}} days total in {{arrivalView.name}}</p></i>
