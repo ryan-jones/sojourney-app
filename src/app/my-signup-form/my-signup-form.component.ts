@@ -45,7 +45,7 @@ export class MySignupFormComponent implements OnInit {
 
           } else {
               alert('Uh oh! Looks like something went wrong')
-          		console.log('result ko', result);
+          		console.log('result ok', result);
               // login failed
               // this.error = 'Username or password is incorrect';
           }

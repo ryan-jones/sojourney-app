@@ -13,7 +13,8 @@ export class SessionService implements CanActivate {
   public isAuth: boolean;
   public user: string;
 
-  BASE_URL: string = 'https://sojourney.herokuapp.com';
+  // BASE_URL: string = 'https://sojourney.herokuapp.com';
+  BASE_URL: string = 'http://localhost:3000';
   constructor(private router: Router, private http: Http) {
 
     // set token if saved in local storage
@@ -70,9 +71,9 @@ export class SessionService implements CanActivate {
   login(user) {
     return this.http.post(`${this.BASE_URL}/login`, user)
         .map((response: Response) => {
-            console.log(response)
             // login successful if there's a jwt token in the response
             let token = response.json() && response.json().token;
+            console.log('token', token);
             let user = response.json() && response.json().user;
 
             if (token) {

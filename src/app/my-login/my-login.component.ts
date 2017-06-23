@@ -29,7 +29,7 @@ export class MyLoginComponent implements OnInit {
     				        .subscribe(result => {
     				            if (result === true) {
 
-                            console.log(result)
+                            console.log('result', result)
     			                // login successful
     			                this.router.navigate(['user']);
     			         			} else {
