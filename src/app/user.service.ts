@@ -8,7 +8,7 @@ import 'rxjs/add/operator/catch';
 
 export class UserService {
   // BASE_URL: string = 'https://sojourney.herokuapp.com/api';
-  BASE_URL: string = 'http://localhost:3000';
+  BASE_URL: string = 'http://localhost:3000/api';
 
   constructor(
     private http: Http,
