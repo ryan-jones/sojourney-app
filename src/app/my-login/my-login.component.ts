@@ -25,18 +25,18 @@ export class MyLoginComponent implements OnInit {
     }
 
     login() {
-        this.session.login(this.user)
-    				        .subscribe(result => {
-    				            if (result === true) {
+      this.session.login(this.user)
+        .subscribe(result => {
+            if (result === true) {
 
-                            console.log('result', result)
-    			                // login successful
-    			                this.router.navigate(['user']);
-    			         			} else {
-    			                // login failed
-    			                this.error = 'Username or password is incorrect';
-    				            }
-    				        });
+                console.log('result', result)
+              // login successful
+              this.router.navigate(['user']);
+       			} else {
+              // login failed
+              this.error = 'Username or password is incorrect';
+            }
+        });
       }
 
       goToSignup(){

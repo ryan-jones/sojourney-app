@@ -30,18 +30,18 @@ export class ProfileEditComponent implements OnInit {
     this.userService.get(user._id)
       .subscribe((user)=> {
 
-        this.user = user;
-        console.log('this.user', this.user);
+        this.editUser = {
+          _id: user._id,
+          name: user.name,
+          username: user.username,
+          password: undefined,
+          nationality1: user.nationality,
+          nationality2: user.nationality2,
+        }
+        console.log('this.user', this.editUser);
       });
 
-    // this.editUser = {
-    //   _id: this.user._id,
-    //   name: this.user.name,
-    //   username: this.user.username,
-    //   password: '',
-    //   nationality1: this.user.nationality,
-    //   nationality2: this.user.nationality2,
-    // }
+
 
   }
 
