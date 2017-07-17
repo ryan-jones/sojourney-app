@@ -235,6 +235,7 @@ totalDays(){
     return this.sum;
   } else{
     this.sum = total;
+    console.log('this.sum', this.sum);
     return this.sum;
   }
 
@@ -378,24 +379,29 @@ totalPrice(){
       let variableDate = document.getElementById('new-date')['valueAsDate'];
       let dateLength = variableDate.getMonth()
       if(dateLength <= 8){
-        this.place.date = variableDate.getDate() + '/0' + (variableDate.getMonth()+1) + '/' + variableDate.getFullYear();
+        this.place.date = variableDate.getFullYear() + '-0' + (variableDate.getMonth()+1) + '-' + variableDate.getDate();
       } else{
-        this.place.date = variableDate.getDate() + '/' + (variableDate.getMonth()+1) + '/' + variableDate.getFullYear();
+        this.place.date = variableDate.getFullYear() + '-' + (variableDate.getMonth()+1) + '-' + variableDate.getDate();
       }
+      console.log('before autocomplete', this.place.date);
       this.place.date.autocomplete;
+      console.log('this.place.date', this.place.date);
       this.dates.push(this.place.date);
-
+      console.log('this.dates', this.dates);
 
       //turns dates into numerical values for comparison
       if(this.dates.length >=0){
         this.diffDays = (Math.abs(new Date(this.dates[this.dates.length-1]).getTime() - new Date(this.dates[this.dates.length - 2]).getTime())) / (1000 * 3600 * 24);
+        console.log('this.diffDays', this.dates[this.dates.length-1]);
         if(isNaN(this.diffDays)){
           this.diffDays = 0;
         }
+
       }
 
       //array of differences between dates to be loaded on the view
       this.itineraryDays.push(this.diffDays);
+      console.log('this.itineraryDays', this.itineraryDays);
       this.totalDays();
 
 

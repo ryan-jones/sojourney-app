@@ -17,12 +17,13 @@ footer {
   padding: 2% 1% 0;
   background-image:url('http://www.wallpaperup.com/uploads/wallpapers/2014/07/10/393089/7efae7f6dce13596b70641cc2b274431.jpg');
   background-size: cover;
-  height: 80vh;
+  height: 100vh;
   color: #fff;
 
 }
 
 footer  h2{
+  position: fixed;
   text-align: center;
   background-color: #222061;
   border-radius: 5px;
