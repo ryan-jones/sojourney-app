@@ -83,14 +83,12 @@ export class MyFlightsComponent implements OnInit {
     let startDateEnd = document.getElementById('departure-date-end')['valueAsDate'];
     startDateEnd = this.formatDate(startDateEnd);
     departureDates.push(startDateFrom,startDateEnd);
-    console.log("departureDates", departureDates);
 
     let returnDateFrom = document.getElementById('return-date-start')['valueAsDate'];
     returnDateFrom = this.formatDate(returnDateFrom);
     let returnDateEnd = document.getElementById('return-date-end')['valueAsDate'];
     returnDateEnd = this.formatDate(returnDateEnd);
     returnDates.push(returnDateFrom,returnDateEnd)
-    console.log("returnDates", returnDates);
 
     if(this.departureLocation !== undefined && this.arrivalLocation !== undefined){
       let flight = {
@@ -100,11 +98,12 @@ export class MyFlightsComponent implements OnInit {
         returns: returnDates,
         type: 'return'
       }
+      let that=this;
       this.flightService.getFlights(flight)
       .subscribe((result) => {
+      // let search = this.searchResult.data[0].route[0]
+      // that.initiateMap(search.latFrom, search.lngFrom, 3);
       this.searchResult = result;
-      console.log("result", this.searchResult)
-      console.log("data", this.searchResult.data)
       console.log("data[0]", this.searchResult.data[0]);
       if (this.checked === false){
         this.checked = true;
@@ -125,7 +124,6 @@ export class MyFlightsComponent implements OnInit {
     } else{
       date = date.getDate() + '/' + (date.getMonth()+1) + '/' + date.getFullYear();
     }
-    console.log("formatted date", date);
     return date;
   }
 
