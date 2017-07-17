@@ -17,12 +17,9 @@ export class ProfileOverviewComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router, private userService: UserService) { }
 
 
-  map: any;
-  view;
-
   ngOnInit() {
     this.user = {};
-    
+
     let user = JSON.parse(localStorage.getItem("user"))
     console.log('THE ID', user)
     if (user === null){
@@ -32,10 +29,8 @@ export class ProfileOverviewComponent implements OnInit {
         .subscribe((user)=> {
 
               this.user = user
+              console.log('this.user', this.user);
             });
-
-
-    console.log('initiate', this.view);
   }
 }
 
@@ -47,10 +42,6 @@ export class ProfileOverviewComponent implements OnInit {
       });
   	}
   }
-
-
-
-
 
 
 }

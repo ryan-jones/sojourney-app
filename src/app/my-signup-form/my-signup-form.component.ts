@@ -30,33 +30,17 @@ export class MySignupFormComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
-
     }
 
   signup() {
   	this.session.signup(this.newUser)
       .subscribe(result => {
           if (result === true) {
-            console.log(result);
-            alert('successfully signed in')
-
-
-
+            console.log('signed up')
+            this.router.navigate(['user'])
           } else {
               alert('Uh oh! Looks like something went wrong')
-          		console.log('result ko', result);
-              // login failed
-              // this.error = 'Username or password is incorrect';
           }
       });
-      this.session.login(this.newUser)
-        .subscribe(result => {
-          if (result === true){
-            this.router.navigate(['user']);
-          } else{
-            alert('There seems to be a problem');
-          }
-        })
   }
 }
