@@ -239,7 +239,8 @@ totalDays(){
   } else{
     this.sum = total;
 
-    console.log('this.sum', this.sum);
+
+    console.log('this.sum', this.sum)
 
     return this.sum;
   }
@@ -395,7 +396,20 @@ totalPrice(){
       console.log('this.dates', this.dates);
 
       //turns dates into numerical values for comparison
+
 //********* original code
+
+
+      if(this.dates.length >=0){
+        this.diffDays = (Math.abs(new Date(this.dates[this.dates.length-1]).getTime() - new Date(this.dates[this.dates.length - 2]).getTime())) / (1000 * 3600 * 24);
+        console.log('this.diffDays', this.dates[this.dates.length-1]);
+        if(isNaN(this.diffDays)){
+          this.diffDays = 0;
+        }
+
+      }
+
+
       if (this.dates.length > 1){
         let firstDate = this.dates[this.dates.length-1].split('/');
 
@@ -421,6 +435,7 @@ totalPrice(){
         if(isNaN(this.diffDays)){
           this.diffDays = 0;
         }
+
 //new code*******************
       // if(this.dates.length >=0){
       //   this.diffDays = (Math.abs(new Date(this.dates[this.dates.length-1]).getTime() - new Date(this.dates[this.dates.length - 2]).getTime())) / (1000 * 3600 * 24);
@@ -430,8 +445,6 @@ totalPrice(){
       //   }
       //
       // }
-
-
       console.log("this.diffDays", this.diffDays);
       //array of differences between dates to be loaded on the view
       this.itineraryDays.push(this.diffDays);

@@ -78,10 +78,12 @@ export class SessionService implements CanActivate {
             // login successful if there's a jwt token in the response
             let token = response.json() && response.json().token;
 
+
             //let user = response.json() && response.json().id;
 
             console.log('token', token);
             let user = response.json() && response.json().user;
+
 
 
             if (token) {
