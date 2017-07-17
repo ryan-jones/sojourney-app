@@ -39,7 +39,7 @@
             <div (mouseout)="removeFlightPath(i) "(mouseover)="addFlightPath(i)" class="results container">
               <div class="col-md-2 pricing">
                 <h3> {{result.price | currency:'EUR':true}}</h3><br />
-                <i><p>{{result.nightsInDest}} days total in {{arrivalView.name}}</p></i>
+                <i><p>{{result.nightsInDest}} nights total in {{arrivalView.name}}</p></i>
               </div>
               <div class="col-md-10 routes">
                 <div class="ind-route" *ngFor="let route of result.route, let i of index">

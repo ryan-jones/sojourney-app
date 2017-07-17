@@ -54,9 +54,13 @@ export class UserService {
   edit(id) {
     let headers = new Headers({ 'Authorization': 'JWT ' + this.SessionService.token });
     let options = new RequestOptions({ headers: headers });
+<<<<<<< HEAD
     console.log("before put");
     console.log('id', id);
     return this.http.put(`${this.BASE_URL}/users`, id, options )
+=======
+    return this.http.post(`${this.BASE_URL}/users/${user.id}`, user, options)
+>>>>>>> master
       .map((res) => res.json());
   }
 
