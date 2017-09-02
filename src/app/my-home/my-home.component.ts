@@ -93,6 +93,7 @@ export class MyHomeComponent implements OnInit {
     this.initiateMap();
     this.authorizeUser();
     this.getCountries();
+    this.autoCompleteAddress();
 
     this.countryName1 =  !this.countryName1 ? (this.countryName1 = '') : this.countryName1;
     this.countryName2 =  !this.countryName2 ? (this.countryName2 = '') : this.countryName2;
@@ -194,22 +195,24 @@ export class MyHomeComponent implements OnInit {
       ];
 
      this.map.setOptions({styles: styles});
-     let autocomplete = new google.maps.places.Autocomplete(this.selectedAddress);
-     this.checkForAddressChange(autocomplete);
-  }
+}
 
-
-  updateAddress(event) {
-    this.selectedAddress = event;
-  }
 
   checkForAddressChange(autocomplete) {
-    autocomplete.addListener("place_changed", ()=> {
-      this.place = autocomplete.getPlace()
-      this.locationView = this.place.name;
-      console.log("this.place", this.place)
-    })
+
   }
+
+autoCompleteAddress() {
+  let input = document.getElementById('new-address');
+  let autocomplete = new google.maps.places.Autocomplete(input);
+
+  autocomplete.addListener("place_changed", ()=> {
+
+  this.place = autocomplete.getPlace()
+  this.locationView = this.place.name;
+  console.log("this.place", this.place)
+  })
+}
 
 //**************** total days*********************
 totalDays(){
