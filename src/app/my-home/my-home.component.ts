@@ -48,12 +48,10 @@ export class MyHomeComponent implements OnInit {
   marker;
   indexTarget;
   locationIndex;
-  namePlaceholder;
-  locationPlaceholder;
   locationView;
   passableValue;
-  currentCost;
-  arrow;
+  currentCost: number = 0;
+  arrow: string;
   checked: boolean = false;
   isCollapsed:boolean = false;
   feedback:string;
@@ -61,13 +59,14 @@ export class MyHomeComponent implements OnInit {
   diffDays: number;
   place: any;
   placeExpenditure: any;
-  sum: any;
-  price: any;
+  sum: number = 0;
+  price: number = 0;
   newAddress: any;
   newPrice: any;
-  newCurrency: any;
-  newTransport: any;
-
+  newCurrency: string = '$';
+  newTransport: string = 'plane';
+  namePlaceholder: string = "Create an itinerary name"
+  locationPlaceholder: string  = "Enter a starting location";
   arrayOfTravel = [];
   dates = [];
   locations: Array<any> = [];
@@ -81,6 +80,8 @@ export class MyHomeComponent implements OnInit {
   totalCostArray: Array<any> = [];
   expenseArray: Array<any> = [];
 
+  selectedAddress: any;
+
 
 
 
@@ -89,61 +90,44 @@ export class MyHomeComponent implements OnInit {
 
 
   ngOnInit() {
-
-    this.namePlaceholder = "Create an itinerary name"
-    this.locationPlaceholder = "Enter a starting location";
-
     this.initiateMap();
+    this.authorizeUser();
+    this.getCountries();
 
-
-    let user = JSON.parse(localStorage.getItem("user"))
-    console.log('THE ID', user)
-    if (user === null){
-      this.user = ''
-    } else {
-      this.userService.get(user._id)
-        .subscribe((user)=> {
-              this.user = user
-            });
-        }
-
-    this.country.getList()
-      .subscribe((countries) => {
-        this.countries = countries;
-      });
-    this.country.getList()
-      .subscribe((countries2) =>{
-        this.countries2 = countries2;
-      })
-
-      if(this.countryName1 === undefined){
-        this.countryName1 = '';
-      }
-      if(this.countryName2 === undefined){
-        this.countryName2 = '';
-      }
-
-      if (!this.isCollapsed){
-        this.arrow = ">"
-      } else{
-        this.arrow = "v"
-      }
-      // this.status.getList()
-      //   .subscribe((warnings)=>{
-      //     this.warnings = warnings;
-      //   })
-      //   console.log(this.warnings);
-
-      this.sum = 0;
-      this.price = 0;
-      this.currentCost = 0;
+    this.countryName1 =  !this.countryName1 ? (this.countryName1 = '') : this.countryName1;
+    this.countryName2 =  !this.countryName2 ? (this.countryName2 = '') : this.countryName2;
+    !this.isCollapsed ? this.arrow = ">" : this.arrow = "v";
+    this.place = {};
   }
 
 
+
+
+  authorizeUser() {
+    let user = JSON.parse(localStorage.getItem("user"))
+    console.log('THE ID', user)
+    !user ? this.user = '' : this.getUser(this.user);
+  }
+
+  getUser(user) {
+    this.userService.get(user._id)
+      .subscribe((user)=> {
+        this.user = user
+      });
+  }
+
+  getCountries() {
+    this.country.getList()
+      .subscribe((countries) => {
+        console.log('countries', countries)
+        this.countries = countries;
+        this.countries2 = countries;
+      });
+  }
 //**************** creates initial map *********
   initiateMap(){
 
-    var myOptions = {
+    const myOptions = {
       zoom: 2,
       center: new google.maps.LatLng(10, 0),
       mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -153,7 +137,7 @@ export class MyHomeComponent implements OnInit {
     this.map = new google.maps.Map(document.getElementById('map-canvas'),
         myOptions);
 
-        var styles = [
+        const styles = [
 
         {
           featureType: "landscape",
@@ -209,68 +193,50 @@ export class MyHomeComponent implements OnInit {
         }
       ];
 
-    this.map.setOptions({styles: styles});
+     this.map.setOptions({styles: styles});
+     let autocomplete = new google.maps.places.Autocomplete(this.selectedAddress);
+     this.checkForAddressChange(autocomplete);
+  }
 
-     this.place = {};
-     let input = document.getElementById('new-address');
-     let autocomplete = new google.maps.places.Autocomplete(input);
 
-     autocomplete.addListener("place_changed", ()=> {
+  updateAddress(event) {
+    this.selectedAddress = event;
+  }
 
-     this.place = autocomplete.getPlace()
-     this.locationView = this.place.name;
-     console.log("this.place", this.place)
-     })
-     this.newCurrency = "$";
-     this.newTransport = "plane";
-     this.checked = false;
+  checkForAddressChange(autocomplete) {
+    autocomplete.addListener("place_changed", ()=> {
+      this.place = autocomplete.getPlace()
+      this.locationView = this.place.name;
+      console.log("this.place", this.place)
+    })
   }
 
 //**************** total days*********************
 totalDays(){
   console.log("totalDays()", this.itineraryDays)
-  var total = this.itineraryDays.reduce((a, b) => a + b, 0);
+  const total = this.itineraryDays.reduce((a, b) => a + b, 0);
   console.log("total", total)
-
-  if(isNaN(total)){
-    this.sum = 0;
-    console.log('this.sum ===0', this.sum)
-    return this.sum;
-  } else{
-    this.sum = total;
-
-
-    console.log('this.sum', this.sum)
-
-    return this.sum;
-  }
-
+  isNaN(total) ? (this.sum = 0) : this.sum = total;
 }
 
 //********************* Create cost total *********************
 totalPrice(){
-
-
-    let totalPrice = this.itineraryPrice.reduce((a, b) => a + b, 0);
+    const totalPrice = this.itineraryPrice.reduce((a, b) => a + b, 0);
     if(totalPrice == 0 || totalPrice === NaN || totalPrice === undefined){
       this.price = 0;
     } else{
       this.price = totalPrice;
     }
-
 }
 
 
 //********************** shows country layers *************
  loadCountries(selectedNationalityId1, selectedNationalityId2){
   let countriesArray = [selectedNationalityId1, selectedNationalityId2]
-
-
   let colorsArray = {
     visaFree: ['red', 'blue'],
     visaOnArrival: ['yellow', 'green']
   }
-
   let index = 0
   this.showCountries(countriesArray, colorsArray, index);
 }
@@ -279,7 +245,7 @@ totalPrice(){
 //********************   creates country data layers ***************
   showCountries(countriesArray, colorsArray, index ){
 
-    if(index == 2){
+    if(index == 2) {
       return
     }
 
@@ -293,12 +259,12 @@ totalPrice(){
             this.countryName2 = this.nation;
           }
 
-          var self = this
+          let self = this
 
-          let visaKindArray = ['visaFree', 'visaOnArrival' ];
+          const visaKindArray = ['visaFree', 'visaOnArrival' ];
           let visaKindIndex = 0;
           let counter = 0;
-          var test = 0;
+          let test = 0;
 
           function starter(visaKind){
 
