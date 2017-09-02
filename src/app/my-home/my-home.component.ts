@@ -28,16 +28,16 @@ export class MyHomeComponent implements OnInit {
   };
 
 
-  selectedNationalityId1;
-  selectedNationalityId2;
+  selectedNationalityId1: string;
+  selectedNationalityId2: string;
   user;
   countries;
   countries2;
   warnings;
   nation;
   nation2;
-  countryName1;
-  countryName2;
+  countryName1: string;
+  countryName2: string;
   freeLayer;
   freeLayer2;
   address;
@@ -48,7 +48,7 @@ export class MyHomeComponent implements OnInit {
   marker;
   indexTarget;
   locationIndex;
-  locationView;
+  locationView: string;
   passableValue;
   currentCost: number = 0;
   arrow: string;
@@ -106,7 +106,6 @@ export class MyHomeComponent implements OnInit {
 
   authorizeUser() {
     let user = JSON.parse(localStorage.getItem("user"))
-    console.log('THE ID', user)
     !user ? this.user = '' : this.getUser(this.user);
   }
 
@@ -120,7 +119,6 @@ export class MyHomeComponent implements OnInit {
   getCountries() {
     this.country.getList()
       .subscribe((countries) => {
-        console.log('countries', countries)
         this.countries = countries;
         this.countries2 = countries;
       });
@@ -198,19 +196,14 @@ export class MyHomeComponent implements OnInit {
 }
 
 
-  checkForAddressChange(autocomplete) {
-
-  }
-
 autoCompleteAddress() {
   let input = document.getElementById('new-address');
   let autocomplete = new google.maps.places.Autocomplete(input);
 
   autocomplete.addListener("place_changed", ()=> {
-
-  this.place = autocomplete.getPlace()
-  this.locationView = this.place.name;
-  console.log("this.place", this.place)
+    this.place = autocomplete.getPlace()
+    this.locationView = this.place.name;
+    console.log("this.place", this.place)
   })
 }
 
@@ -225,7 +218,7 @@ totalDays(){
 //********************* Create cost total *********************
 totalPrice(){
     const totalPrice = this.itineraryPrice.reduce((a, b) => a + b, 0);
-    if(totalPrice == 0 || totalPrice === NaN || totalPrice === undefined){
+    if(!totalPrice || isNaN(totalPrice)){
       this.price = 0;
     } else{
       this.price = totalPrice;
@@ -235,74 +228,73 @@ totalPrice(){
 
 //********************** shows country layers *************
  loadCountries(selectedNationalityId1, selectedNationalityId2){
-  let countriesArray = [selectedNationalityId1, selectedNationalityId2]
-  let colorsArray = {
+  const selectedCountries = [selectedNationalityId1, selectedNationalityId2]
+  const colors = {
     visaFree: ['red', 'blue'],
     visaOnArrival: ['yellow', 'green']
   }
   let index = 0
-  this.showCountries(countriesArray, colorsArray, index);
+  this.showCountries(selectedCountries, colors, index);
 }
 
 
 //********************   creates country data layers ***************
-  showCountries(countriesArray, colorsArray, index ){
-
-    if(index == 2) {
+  showCountries(selectedCountries, colors, index ){
+    if(index === 2) {
       return
     }
+    this.setDataLayersForSelectedCountry(selectedCountries, index, colors);
+  }
 
-    this.country.get(countriesArray[index])
+  setDataLayersForSelectedCountry(selectedCountries, index, colors) {
+    this.country.get(selectedCountries[index])
         .subscribe((nation) => {
           this.nation = nation;
+          this.setDataLayers(this.nation, index, colors, selectedCountries);
+      })
+  }
 
-          if(index== 0){
-            this.countryName1 = this.nation;
-          } else {
-            this.countryName2 = this.nation;
+    setDataLayers(nation, index, colors, countries) {
+      const visaKindArray = ['visaFree', 'visaOnArrival' ];
+      let visaKindIndex = 0;
+      let counter = 0;
+      let test = 0;
+      let self = this
+
+      index === 0 ? (this.countryName1 = nation) : (this.countryName2 = nation)
+
+
+      function starter(visaKind){
+
+      let freeLayer = new google.maps.Data();
+
+      freeLayer.loadGeoJson('https://raw.githubusercontent.com/johan/world.geo.json/master/countries/' + self.nation[visaKind][counter] + '.geo.json');
+      freeLayer.setStyle({ fillColor: colors[visaKind][index], fillOpacity: 0.5, title: self.nation[visaKind][counter]});
+
+      freeLayer.setMap(self.map);
+      counter++
+
+      self.layers.push(freeLayer)
+
+
+      if(counter == self.nation[visaKind].length){
+        counter = 0
+        if(visaKind == 'visaOnArrival'){
+          index ++
+          self.showCountries(countries, colors, index);
+        } else {
+          visaKindIndex++
+
+          starter(visaKindArray[visaKindIndex])
           }
+        } else {
 
-          let self = this
+          starter(visaKindArray[visaKindIndex])
+        }
+      }
 
-          const visaKindArray = ['visaFree', 'visaOnArrival' ];
-          let visaKindIndex = 0;
-          let counter = 0;
-          let test = 0;
-
-          function starter(visaKind){
-
-          let freeLayer = new google.maps.Data();
-
-          freeLayer.loadGeoJson('https://raw.githubusercontent.com/johan/world.geo.json/master/countries/' + self.nation[visaKind][counter] + '.geo.json');
-          freeLayer.setStyle({ fillColor: colorsArray[visaKind][index], fillOpacity: 0.5, title: self.nation[visaKind][counter]});
-
-          freeLayer.setMap(self.map);
-          counter++
-
-          self.layers.push(freeLayer)
-
-
-          if(counter == self.nation[visaKind].length){
-            counter = 0
-            if(visaKind == 'visaOnArrival'){
-              index ++
-              self.showCountries(countriesArray, colorsArray, index);
-            } else {
-              visaKindIndex++
-
-              starter(visaKindArray[visaKindIndex])
-              }
-            } else {
-
-              starter(visaKindArray[visaKindIndex])
-            }
-            }
-
-            starter(visaKindArray[visaKindIndex])
-          })
-      } //showCountries
-
-
+        starter(visaKindArray[visaKindIndex])
+  }
   //*************** Creates a point/polyline on the map **********
     createPoint(){
 
