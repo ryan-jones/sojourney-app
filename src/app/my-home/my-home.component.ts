@@ -28,13 +28,10 @@ export class MyHomeComponent implements OnInit {
   };
 
 
-  
+
   user;
   countries: any;
   nation;
-  countryName1: string;
-  countryName2: string;
-  freeLayer;
   address;
   flightPath;
   marker;
@@ -85,10 +82,14 @@ export class MyHomeComponent implements OnInit {
     this.authorizeUser();
     this.getCountries();
     this.autoCompleteAddress();
-    !this.isCollapsed ? this.arrow = ">" : this.arrow = "v";
+    this.checkCollapsed();
     this.place = {};
   }
 
+  checkCollapsed() {
+    this.isCollapsed = !this.isCollapsed;
+    !this.isCollapsed ? this.arrow = ">" : this.arrow = "v";
+  }
 
   authorizeUser() {
     let user = JSON.parse(localStorage.getItem("user"))
@@ -185,7 +186,7 @@ export class MyHomeComponent implements OnInit {
     autocomplete.addListener("place_changed", () => {
       this.place = autocomplete.getPlace()
       this.locationView = this.place.name;
-      console.log("this.place", this.place)
+      console.log('this.place', this.place)
     })
   }
 
@@ -203,19 +204,6 @@ export class MyHomeComponent implements OnInit {
     } else {
       this.price = totalPrice;
     }
-  }
-
-  createDataLayers(event: {visaKind: string, nation: any, index: number, colors: any, counter: number}) {
-    const visaKind = event.visaKind;
-    const nation = event.nation;
-    const index = event.index;
-    const colors = event.colors;
-    const counter = event.counter;
-    const freeLayer = new google.maps.Data();
-    freeLayer.loadGeoJson('https://raw.githubusercontent.com/johan/world.geo.json/master/countries/' + nation[visaKind][counter] + '.geo.json');
-    freeLayer.setStyle({ fillColor: colors[visaKind][index], fillOpacity: 0.5, title: nation[visaKind][counter] });
-    freeLayer.setMap(this.map);
-    this.layers.push(freeLayer);
   }
 
   createPoint() {
@@ -320,61 +308,69 @@ export class MyHomeComponent implements OnInit {
 
   geocodeMarker(address) {
     const geocoder = new google.maps.Geocoder();
+    this.buildFlightPath(geocoder, address);
+  }
+
+  buildFlightPath(geocoder, address) {
+    const that = this;
+    const name = this.place.name;
+    const date = this.place.date;
+    const days = this.diffDays;
+    const transport = this.place.transport;
+    const country = this.place.country;
+    const price = this.place.price;
+    const point = { lat: this.place.geometry.location.lat(), lng: this.place.geometry.location.lng() }
     geocoder.geocode({ 'address': address }, function (results, status) {
       if (status === 'OK') {
-        const point = { lat: this.place.geometry.location.lat(), lng: this.place.geometry.location.lng() }
         const infowindow = new google.maps.InfoWindow();
-        const name = this.place.name;
-        const country = this.place.country;
-        const date = this.place.date;
-        const days = this.diffDays;
-        const transport = this.place.transport;
-        const price = this.place.price;
-
-        this.arrayOfTravel.push(point);
-        this.allTravelArray.push(this.arrayOfTravel);
-
-        this.flightPath = new google.maps.Polyline({
-          path: this.arrayOfTravel,
-          geodesic: true,
-          strokeColor: 'yellow',
-          strokeOpacity: 1.0,
-          strokeWeight: 4,
-
-        });
-
-        this.allFlightPaths.push(this.flightPath)
-        this.flightPath.setMap(this.map);
-        this.marker = new google.maps.Marker({
-          position: point,
-          map: this.map,
-          name: name,
-          country: country,
-          date: date,
-          days: days,
-          transport: transport,
-          price: price
-        })
-        this.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png')
-        this.allMarkers.push(this.marker)
-
-        if (this.locations.length == 1) {
-          google.maps.event.addListener(this.marker, 'click', function () {
-            infowindow.setContent(`<div><h3> Starting in ${name}, ${country} </h3></div>`);
-            infowindow.open(this.map, this);
-            console.log(infowindow);
-          });
-        } else {
-          google.maps.event.addListener(this.marker, 'click', function () {
-            infowindow.setContent(`<div><h3> Location: ${name}, ${country} </h3></div><div><p><strong>Arriving on Day </strong> ${days} <strong> of the trip </strong></p></div> <div><p><strong>Arriving on </strong> ${date}  via  <i>${transport}</i> </p></div><div><p><strong>Price: </strong>  ${price} per person  </p></div> `);
-            infowindow.open(this.map, this);
-            console.log(infowindow);
-          });
-        }
-      } else {
-        alert('Geocode was not successful for the following reason: ' + status);
+        that.createFlightPath(point);
+        that.setMarker(point, name, country, date, days, transport, price, infowindow);
       }
     });
+  }
+
+  createFlightPath(point) {
+    this.arrayOfTravel.push(point);
+    this.allTravelArray.push(this.arrayOfTravel);
+    this.flightPath = new google.maps.Polyline({
+      path: this.arrayOfTravel,
+      geodesic: true,
+      strokeColor: 'yellow',
+      strokeOpacity: 1.0,
+      strokeWeight: 4,
+    });
+    this.allFlightPaths.push(this.flightPath)
+    this.flightPath.setMap(this.map);
+  }
+
+  setMarker(point: any, name: string, country: string, date: string, days: number, transport: string, price: number, infowindow: any) {
+    this.marker = new google.maps.Marker({
+      position: point,
+      map: this.map,
+      name: name,
+      country: country,
+      date: date,
+      days: days,
+      transport: transport,
+      price: price
+    })
+    this.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png')
+    this.allMarkers.push(this.marker);
+    this.setWindowContent(name, country, infowindow, date, days, transport, price);
+  }
+
+  setWindowContent(name: string, country: string, infowindow: any, date: string, days: number, transport: string, price: number) {
+    if (this.locations.length === 1) {
+      google.maps.event.addListener(this.marker, 'click', function () {
+        infowindow.setContent(`<div><h3> Starting in ${name}, ${country} </h3></div>`);
+        infowindow.open(this.map, this);
+      });
+    } else {
+      google.maps.event.addListener(this.marker, 'click', function () {
+        infowindow.setContent(`<div><h3> Location: ${name}, ${country} </h3></div><div><p><strong>Arriving on Day </strong> ${days} <strong> of the trip </strong></p></div> <div><p><strong>Arriving on </strong> ${date}  via  <i>${transport}</i> </p></div><div><p><strong>Price: </strong>  ${price} per person  </p></div> `);
+        infowindow.open(this.map, this);
+      });
+    }
   }
 
   resetValues() {
@@ -486,7 +482,7 @@ export class MyHomeComponent implements OnInit {
   //adds expense to a single location in the itinerary*********************
   addExpense() {
     const newTotalExpense = this.createNewExpense();
-    this.createCurrentCost(newTotalExpense);    
+    this.createCurrentCost(newTotalExpense);
   }
 
   createNewExpense() {
@@ -543,5 +539,18 @@ export class MyHomeComponent implements OnInit {
         this.user = user;
         alert("Itinerary saved! View in your user profile.");
       })
+  }
+
+  createDataLayers(event: { visaKind: string, nation: any, index: number, colors: any, counter: number }) {
+    const visaKind = event.visaKind;
+    const nation = event.nation;
+    const index = event.index;
+    const colors = event.colors;
+    const counter = event.counter;
+    const freeLayer = new google.maps.Data();
+    freeLayer.loadGeoJson('https://raw.githubusercontent.com/johan/world.geo.json/master/countries/' + nation[visaKind][counter] + '.geo.json');
+    freeLayer.setStyle({ fillColor: colors[visaKind][index], fillOpacity: 0.5, title: nation[visaKind][counter] });
+    freeLayer.setMap(this.map);
+    this.layers.push(freeLayer);
   }
 }

@@ -83,8 +83,8 @@
                           <strong>{{location.currency}}{{location.price}}</strong> <i>Via {{location.transport}}</i>
                         </div>
                       </div>
-                      <button type="button" (click)="isCollapsed = !isCollapsed">{{arrow}}</button>
-                      <div class="col-md-12 hidden-details" (collapsed)="collapsed($event)" (expanded)="expanded($event)" [collapse]="!isCollapsed"
+                      <button type="button" (click)="checkCollapsed()">{{arrow}}</button>
+                      <div class="col-md-12 hidden-details" [collapse]="!isCollapsed"
                         *ngFor="let detail of location.details">
                         <div>
                           <div>
