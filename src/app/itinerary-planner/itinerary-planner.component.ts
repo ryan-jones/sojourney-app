@@ -27,30 +27,25 @@ export class ItineraryPlannerComponent {
     placesAndDates: [],
   };
 
-  newAddress: any;
-  placeExpenditure: any;
-  newPrice: any;
-
-
-  diffDays: number;
+  differenceBetweenDates: number;
   currentCost: number = 0;
-  price: number = 0;
-  sum: number = 0;
+  totalPrice: number = 0;
+  totalTripDuration: number = 0;
 
   checked: boolean = false;
 
-  name: string;
   locationView: string;
-  newCurrency: string = '$';
-  newTransport: string = 'plane';
+  newAddress: string;
+  selectedCurrency: string = '$';
+  selectedTransport: string = 'plane';
   namePlaceholder: string = "Create an itinerary name"
   locationPlaceholder: string = "Enter a starting location";
 
   itineraryDays: Array<number> = [];
-  expenseArray: Array<any> = [];
-  totalCostArray: Array<any> = [];
+  displayableExpenses: Array<any> = [];
+  accumulatedDailyExpense: Array<number> = [];
   dates: Array<any> = [];
-  itineraryPrice: Array<number> = [];
+  costs: Array<number> = [];
 
   ngOnInit() {
     this.autoCompleteAddress();
@@ -62,7 +57,6 @@ export class ItineraryPlannerComponent {
     autocomplete.addListener("place_changed", () => {
       this.place = autocomplete.getPlace()
       this.locationView = this.place.name;
-      console.log('this.place', this.place)
     })
   }
 
@@ -74,9 +68,9 @@ export class ItineraryPlannerComponent {
 
   //delete expense from list
   deleteExpense() {
-    this.expenseArray.pop();
-    this.totalCostArray.pop();
-    let newTotalExpense = this.totalCostArray.reduce((a, b) => a + b, 0);
+    this.displayableExpenses.pop();
+    this.accumulatedDailyExpense.pop();
+    const newTotalExpense = this.accumulatedDailyExpense.reduce((a, b) => a + b, 0);
     this.createCurrentCost(newTotalExpense);
   }
 
@@ -91,9 +85,9 @@ export class ItineraryPlannerComponent {
     } else {
       newestExpense.note = document.getElementById('new-note')['value'];
     }
-    this.expenseArray.push(newestExpense);
-    this.totalCostArray.push(newestExpense.expense);
-    return this.totalCostArray.reduce((a, b) => a + b, 0);
+    this.displayableExpenses.push(newestExpense);
+    this.accumulatedDailyExpense.push(newestExpense.expense);
+    return this.accumulatedDailyExpense.reduce((a, b) => a + b, 0);
   }
 
   createCurrentCost(newTotalExpense) {
@@ -108,72 +102,57 @@ export class ItineraryPlannerComponent {
     }
   }
 
-  //********************* Create cost total *********************
-  totalPrice() {
-    this.price = this.itineraryPrice.reduce((a, b) => a + b, 0);
+  getTotalPrice() {
+    this.totalPrice = this.costs.reduce((a, b) => a + b, 0);
   }
 
-  //**************** total days*********************
-  totalDays() {
-    this.sum = this.itineraryDays.reduce((a, b) => a + b, 0);
+  getTotalDays() {
+    this.totalTripDuration = this.itineraryDays.reduce((a, b) => a + b, 0);
   }
 
-  //*********** whenever a user deletes a value from the itinerary
   updateTotalDays() {
     this.dates.forEach((day) => {
-      let dayIndex = this.dates.indexOf(day);
-      this.diffDays = (Math.abs(new Date(this.dates[dayIndex]).getTime() - new Date(this.dates[dayIndex - 1]).getTime())) / (1000 * 3600 * 24);
-      if (!this.diffDays) {
-        this.diffDays = 0;
+      const dayIndex = this.dates.indexOf(day);
+      this.differenceBetweenDates = (Math.abs(new Date(this.dates[dayIndex]).getTime() - new Date(this.dates[dayIndex - 1]).getTime())) / (1000 * 3600 * 24);
+      if (!this.differenceBetweenDates) {
+        this.differenceBetweenDates = 0;
       }
-      this.itineraryDays.push(this.diffDays);
+      this.itineraryDays.push(this.differenceBetweenDates);
     })
   }
 
-
-
   //**********************Create a new marker and flightPath******************* */
   createPoint() {
-    // checks to see if there are any details/notes for the itinerary
     this.setPlaceDetails();
-    //assigns currency and transport method
     this.setCurrencyAndTransport();
-    //get country value
     this.setCountryName();
-    // price input field
     this.setPrice();
-    //add place to the locations array(used to create itinerary) and newItinerary object (used for saving itinerary)
-    this.locations.push(this.place);
-    this.newItinerary.placesAndDates.push(this.place);
-    //date input field
+    this.setLocations();
     this.setDates();
     this.setItineraryLength();
-    //geocodes the address, creates a marker and polyline segment
     this.sendMarker(this.newAddress);
     this.resetValues();
   }
 
   setPlaceDetails() {
-    this.place.details = this.expenseArray.length === 0 ? '' : this.expenseArray;
-    console.log('place in set details', this.place)
+    this.place.details = this.displayableExpenses.length === 0 ? '' : this.displayableExpenses;
   }
 
   setCurrencyAndTransport() {
-    this.place.currency = this.newCurrency;
-    this.place.transport = this.newTransport;
+    this.place.currency = this.selectedCurrency;
+    this.place.transport = this.selectedTransport;
     if (!this.place.transport) {
       this.place.transport = "plane";
     }
   }
 
   setCountryName() {
-    console.log('country name', this.place)
-    let countryStringSplit = this.place.formatted_address.split(',');
+    const countryStringSplit = this.place.formatted_address.split(',');
     this.place.country = countryStringSplit[countryStringSplit.length - 1];
   }
 
   setPrice() {
-    if (this.totalCostArray.length === 0) {
+    if (this.accumulatedDailyExpense.length === 0) {
       this.place.price = document.getElementById('new-price')['valueAsNumber'];
       this.currentCost = this.place.price;
     } else {
@@ -185,62 +164,59 @@ export class ItineraryPlannerComponent {
     if (isNaN(this.currentCost)) {
       this.currentCost = 0;
     }
-    this.itineraryPrice.push(this.place.price);
-    this.totalPrice();
+    this.costs.push(this.place.price);
+    this.getTotalPrice();
   }
 
   setDates() {
     const variableDate = document.getElementById('new-date')['valueAsDate'];
-    const dateLength = variableDate.getMonth()
-    if (dateLength <= 8) {
-      this.place.date = variableDate.getFullYear() + '-0' + (variableDate.getMonth() + 1) + '-' + variableDate.getDate();
-    } else {
-      this.place.date = variableDate.getFullYear() + '-' + (variableDate.getMonth() + 1) + '-' + variableDate.getDate();
-    }
+    const dateLength = variableDate.getMonth();
+    const digit = (dateLength <= 8) ? '-0' : '-';
+
+    this.place.date = variableDate.getFullYear() + `${digit}` + (variableDate.getMonth() + 1) + '-' + variableDate.getDate();
     this.place.date.autocomplete;
     this.dates.push(this.place.date);
   }
 
+  setLocations() {
+    this.locations.push(this.place);
+    this.newItinerary.placesAndDates.push(this.place);
+  }
+
   setItineraryLength() {
-    console.log('dates', this.dates);
     const newFirstDate = [];
     const newSecondDate = [];
+    let returnFirstDate;
+    let returnSecondDate;
 
     if (this.dates.length >= 0) {
-      this.diffDays = (Math.abs(new Date(this.dates[this.dates.length - 1]).getTime() - new Date(this.dates[this.dates.length - 2]).getTime())) / (1000 * 3600 * 24);
-      if (isNaN(this.diffDays)) {
-        this.diffDays = 0;
+      this.differenceBetweenDates = Math.round(Math.abs(new Date(this.dates[this.dates.length - 1]).getTime() - new Date(this.dates[this.dates.length - 2]).getTime()) / (1000 * 3600 * 24));
+      if (isNaN(this.differenceBetweenDates)) {
+        this.differenceBetweenDates = 0;
       }
-    }
-    if (this.dates.length > 1) {
+    } else {
       let firstDate = this.dates[this.dates.length - 1].split('/');
       let secondDate = this.dates[this.dates.length - 2].split('/');
       if (!secondDate) {
         secondDate = 0;
       }
-
       for (let i = firstDate.length - 1; i >= 0; i--) {
         newFirstDate.push(firstDate[i]);
       }
-      var returnFirstDate = newFirstDate.join();
-
       for (var x = secondDate.length - 1; x >= 0; x--) {
         newSecondDate.push(secondDate[x]);
       }
-      var returnSecondDate = newSecondDate.join();
+      returnFirstDate = newFirstDate.join();
+      returnSecondDate = newSecondDate.join();
+      this.differenceBetweenDates = Math.round(Math.abs(new Date(returnFirstDate).getTime() - new Date(returnSecondDate).getTime()) / (1000 * 3600 * 24));
     }
-    this.diffDays = (Math.abs(new Date(returnFirstDate).getTime() - new Date(returnSecondDate).getTime())) / (1000 * 3600 * 24);
-    if (isNaN(this.diffDays)) {
-      this.diffDays = 0;
-    }
-    this.itineraryDays.push(this.diffDays);
-    this.totalDays();
+    this.itineraryDays.push(this.differenceBetweenDates);
+    this.getTotalDays();
   }
 
-
-  sendMarker(input) {
+  sendMarker(address) {
     const exportedValues = {
-      address: input,
+      address: address,
       name: this.place.name,
       date: this.place.date,
       days: this.place.date,
@@ -265,15 +241,15 @@ export class ItineraryPlannerComponent {
       this.dates.push(place.date);
     })
     this.updateTotalDays();
-    this.totalDays();
+    this.getTotalDays();
   }
 
   adjustItineraryCost() {
-    this.itineraryPrice = [];
+    this.costs = [];
     this.locations.forEach((place) => {
-      this.itineraryPrice.push(place.price);
+      this.costs.push(place.price);
     })
-    this.totalPrice();
+    this.getTotalPrice();
   }
 
 
@@ -284,8 +260,8 @@ export class ItineraryPlannerComponent {
     }
     document.getElementById("new-price")["value"] = '';
     this.newAddress = '';
-    this.expenseArray = [];
-    this.totalCostArray = [];
+    this.displayableExpenses = [];
+    this.accumulatedDailyExpense = [];
     this.namePlaceholder = "Edit itinerary name"
     this.locationPlaceholder = "Add a location";
     this.locationView = '';

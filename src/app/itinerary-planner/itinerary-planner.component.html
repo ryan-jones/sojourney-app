@@ -11,7 +11,7 @@
         </div>
         <section id="price-and-transport">
           <div id="currency-div">
-            <select id="new-currency" [(ngModel)]="newCurrency" class="form-control" name="currency">
+            <select id="new-currency" [(ngModel)]="selectedCurrency" class="form-control" name="currency">
                 <option value="$"><span class="currency-type">USD</span></option>
                 <option value="£">GBP</option>
                 <option value="€">EUR</option>
@@ -23,7 +23,7 @@
             <input id="new-price" [(ngModel)]="newPrice" type="number" name="price" value="" placeholder="Add an expense" />
           </div>
           <div id="transport-div">
-            <select id="new-transport" [(ngModel)]="newTransport" class="form-control" name="transport">
+            <select id="new-transport" [(ngModel)]="selectedTransport" class="form-control" name="transport">
                 <option value="plane">Plane</option>
                 <option value="train">Train</option>
                 <option value="bus">Bus</option>
@@ -33,9 +33,9 @@
           </div>
         </section>
         <section>
-          <div *ngFor="let expense of expenseArray">
-            <div class="white" *ngIf="expenseArray.length !==0">
-              {{newCurrency}}{{expense.expense}} <i>Via</i> {{expense.transport}} <br />
+          <div *ngFor="let expense of displaybleExpenses">
+            <div class="white" *ngIf="displaybleExpenses.length !==0">
+              {{selectedCurrency}}{{expense.expense}} <i>Via</i> {{expense.transport}} <br />
               <i>Note: {{expense.note}}</i>
             </div>
           </div>
@@ -48,7 +48,7 @@
           <div class="white">
             <input class="addCost" (click)="addExpense()" type="submit" value="+" /> <span class="space">Add Expense</span>
             <input class="deleteCost" (click)="deleteExpense()" type="submit" value="-" /> Delete Expense {{locationView}}
-            Expenditures: {{newCurrency}}{{currentCost}}
+            Expenditures: {{selectedCurrency}}{{currentCost}}
           </div>
         </section>
       </section>
@@ -76,7 +76,7 @@
                 <div class="col-md-12 hidden-details" [collapse]="!isCollapsed" *ngFor="let detail of location.details">
                   <div>
                     <div>
-                      <p> {{newCurrency}}{{detail.expense}} via {{detail.transport}} </p>
+                      <p> {{selectedCurrency}}{{detail.expense}} via {{detail.transport}} </p>
                       <p> Note: {{detail.note}}</p>
                     </div>
                   </div>
@@ -110,7 +110,7 @@
                   *ngFor="let detail of location.details">
                   <div>
                     <div>
-                      <p> {{newCurrency}}{{detail.expense}} via {{detail.transport}} </p>
+                      <p> {{selectedCurrency}}{{detail.expense}} via {{detail.transport}} </p>
                       <p> Note: {{detail.note}}</p>
                     </div>
                   </div>
@@ -126,10 +126,10 @@
       </div>
     </div>
     <div class="total-days">
-      <span>Total Trip Length: {{sum}} Days</span>
+      <span>Total Trip Length: {{totalTripDuration}} Days</span>
     </div>
     <div class="total-days">
-      <span>Total Trip Cost: {{newCurrency}}{{price}}</span>
+      <span>Total Trip Cost: {{selectedCurrency}}{{totalPrice}}</span>
     </div>
     <div class="save" (click)="addItinerary()">
       <p>Save itinerary</p>
