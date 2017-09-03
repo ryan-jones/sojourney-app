@@ -1,18 +1,18 @@
-.fluid-container, .row, .left-side, .right-side{
+.fluid-container, .row, .left-side, .right-side {
   margin: 0;
   padding: 0;
 }
 
-#home-top{
+#home-top {
   box-shadow: inset 5px 0 5px #ccc;
   /*border: 5px solid red;*/
 }
 
-.left-side, .right-side{
+.left-side, .right-side {
   height: 100vh;
 }
 
-.map-view{
+.map-view {
   height: 65vh;
 }
 
@@ -20,177 +20,19 @@
   height: 100%;
 }
 
-.visa-view{
+.visa-view {
   height: 35vh;
   background-color: #fff;
   text-align: center;
 }
 
-#new-submit{
-  background-color: #222061;
-  border-radius: 5px;
-  margin-top: 1%;
-  padding: 1% 2%;
-  box-shadow: 3px 3px 3px 1px #ccc;
-}
-
-.itinerary-box{
-  background-color: #fff;
-  height: 100vh;
-  box-shadow: inset 5px 0 5px #ccc;
-  overflow: scroll;
-}
-
-.itinerary{
-  background-color: #879dc9;
-  margin-top: 2%;
-  padding: 2% 2% 2% 3%;
-  border-radius: 5px 5px 0 0;
-  box-shadow: 3px 3px 3px 3px #ccc;
-  overflow: scroll;
-}
-
-.location-box{
-  margin-top: 1%;
-  background-color: #879dc9;
-}
-
-.location-list{
-  display: flex;
-  justify-content: space-between;
-  color: black;
-  border-radius: 5px;
-  background-color: #eeedec;
-  box-shadow: 0px 3px 5px 1px black;
-}
-
-.location-date{
-  width: 100%;
-  flex-flow: column;
-}
-
-.white, .delete, .save, #new-submit{
-  color: #fff;
-}
-
-#new-address, #new-date, #new-name, #starting-name, #starting-address, #starting-date{
-  width: 72%;
-}
-
-#new-price{
-  width: 100%;
-}
-
-#price-and-transport{
-  display: flex;
-  flex-flow: row;
-  height: 4vh;
-}
-
-#currency-div, #transport-div, #new-currency, #new-transport, #new-price{
-  height: 100%;
-}
-
-#price-div{
-  width: 50.5%;
-  margin: 0 2% 0 1%;
-}
-
-#new-submit{
-  box-shadow: 0 0 0 0;
-  width: 100%;
-  margin-top: 5%;
-}
-
-.currency-and-price, .location-date{
-  text-align: center;
-  display: flex;
-  justify-content: space-around;
-  /*padding: 2% 0;*/
-}
-
-.location-date > div {
-  padding: 1% 0;
-}
-
-.addCost, .deleteCost, .delete{
-  color: #fff;
-  border-radius: 5px;
-}
-
-.delete-input{
-   display: flex;
-   justify-content: center;
-   text-align: center;
-   padding: 15% 5% 15% 0;
-}
-
-.delete, .deleteCost{
-  background-color: red;
-}
-
-.deleteCost{
-  margin: 3% 0;
-}
-
-.delete{
-  height: 4vh;
-}
-
-.addCost{
-  background-color: #222061;
-  margin: 2% 0;
-}
-
-.days{
-  padding-top: 5%;
-  text-align: center;
-}
-
-.total-days{
-  background-color: #fff;
-  color: #879dc9;
-  border: 1px solid #879dc9;
-  padding: 2%;
-  box-shadow: 7px 2px 3px -1px #ccc;
-}
-
-.save{
-  text-align: center;
-  background-color: red;
-  border-radius: 0 0 5px 5px;
-  border: 1px solid #879dc9;
-  height: 4vh;
-  padding: 2%;
-  box-shadow: 3px 3px 3px 3px #ccc;
-}
-
-.country-view{
-  height: 35vh;
-  text-align: center;
-  box-shadow: inset 5px 0 10px #4d4d4d;
-  background-color: #879dc9;
-  padding-top: 2%;
-}
-
-.country-view > p {
-  margin-top: 4%;
-}
-
-.goto{
+.goto {
   background-image:url('../../../assets/goto.jpg');
   background-size: contain;
   height: 10vh;
   margin: 0 15%;
 }
 
-.hidden-details{
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 3px 3px 3px 3px #ccc;
-  margin: 2%;
-}
 
-.space{
-  padding-right: 2%;
-}
+
+

@@ -1,0 +1,151 @@
+.itinerary-box {
+    height: 100vh;
+    box-shadow: inset 5px 0 5px #ccc;
+}
+  
+.itinerary {
+    background-color: #879dc9;
+    margin-top: 2%;
+    padding: 2% 2% 2% 3%;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 3px 3px 3px 3px #ccc;
+}
+
+.itinerary, .itinerary-box {
+    overflow: scroll;    
+}
+
+#new-submit{ 
+    background-color: #222061;
+    padding: 1% 2%;
+    box-shadow: 3px 3px 3px 1px #ccc;
+}
+  
+
+.location-box {
+    background-color: #879dc9;
+}
+
+.location-box, #new-submit {
+    margin-top: 1%;    
+}
+  
+.location-list {
+    justify-content: space-between;
+    color: black;
+    background-color: #eeedec;
+    box-shadow: 0px 3px 5px 1px black;
+}
+
+.location-date {
+    width: 100%;
+    flex-flow: column;
+}
+
+#new-address, #new-date, #new-name, #starting-name, #starting-address, #starting-date{
+    width: 72%;
+}
+
+#new-price { 
+    width: 100%;
+}
+
+#price-and-transport {
+    flex-flow: row;
+    height: 4vh;
+}
+
+.currency-and-price, .delete-input, .location-date,  .location-list, #price-and-transport, {
+    display: flex;    
+}
+
+#currency-div, #transport-div, #new-currency, #new-transport, #new-price{
+    height: 100%;
+}
+
+#price-div {
+    width: 50.5%;
+    margin: 0 2% 0 1%;
+}
+
+#new-submit {
+    box-shadow: 0 0 0 0;
+    width: 100%;
+    margin-top: 5%;
+}
+
+.currency-and-price, .location-date {
+    justify-content: space-around;
+}
+
+.location-date > div {
+    padding: 1% 0;
+}
+
+.addCost, .deleteCost, .delete, .hidden-details, .location-list, #new-submit, {
+    border-radius: 5px;
+}
+
+.delete-input {
+    justify-content: center;
+    padding: 15% 5% 15% 0;
+}
+
+.delete, .deleteCost, .save {
+    background-color: red;
+}
+
+.deleteCost {
+    margin: 3% 0;
+}
+
+.delete {
+    height: 4vh;
+}
+
+.addCost {
+    background-color: #222061;
+    margin: 2% 0;
+}
+
+.days {
+    padding-top: 5%;
+}
+
+.total-days {
+    color: #879dc9;
+    box-shadow: 7px 2px 3px -1px #ccc;
+}
+
+.save {
+    border-radius: 0 0 5px 5px;
+    height: 4vh;
+}
+
+.days, .delete-input, .save, .currency-and-price, .location-date {
+    text-align: center;
+}
+
+.total-days, .save {
+    border: 1px solid #879dc9;
+    padding: 2%;    
+}
+
+.hidden-details {
+    margin: 2%;
+}
+
+.hidden-details, .save {
+    box-shadow: 3px 3px 3px 3px #ccc;    
+}
+
+.hidden-details, .itinerary-box, .total-days {
+    background-color: #fff;    
+}
+.space{
+    padding-right: 2%;
+}
+
+.white, .delete, .save, #new-submit, .addCost, .deleteCost {
+    color: #fff;
+}
