@@ -11,7 +11,7 @@ declare var google: any;
 @Component({
   selector: 'app-my-home',
   templateUrl: './my-home.component.html',
-  styleUrls: ['./my-home.component.css'],
+  styleUrls: ['./my-home.component.scss'],
   providers: [CountryService, WarningService, SessionService, UserService]
 })
 
@@ -28,26 +28,17 @@ export class MyHomeComponent implements OnInit {
   };
 
 
-  selectedNationalityId1: string;
-  selectedNationalityId2: string;
+  
   user;
   countries: any;
-  countries2: any;
-  warnings;
   nation;
-  nation2;
   countryName1: string;
   countryName2: string;
   freeLayer;
-  freeLayer2;
   address;
   flightPath;
-  totalItinerary;
   marker;
-  indexTarget;
-  locationIndex;
   locationView: string;
-  passableValue;
   currentCost: number = 0;
   arrow: string;
   checked: boolean = false;
@@ -61,6 +52,8 @@ export class MyHomeComponent implements OnInit {
   price: number = 0;
   newAddress: any;
   newPrice: any;
+  selectedNationalityId1: string;
+  selectedNationalityId2: string;
   newCurrency: string = '$';
   newTransport: string = 'plane';
   namePlaceholder: string = "Create an itinerary name"
@@ -92,14 +85,9 @@ export class MyHomeComponent implements OnInit {
     this.authorizeUser();
     this.getCountries();
     this.autoCompleteAddress();
-
-    this.countryName1 = !this.countryName1 ? (this.countryName1 = '') : this.countryName1;
-    this.countryName2 = !this.countryName2 ? (this.countryName2 = '') : this.countryName2;
     !this.isCollapsed ? this.arrow = ">" : this.arrow = "v";
     this.place = {};
   }
-
-
 
 
   authorizeUser() {
@@ -118,12 +106,10 @@ export class MyHomeComponent implements OnInit {
     this.country.getList()
       .subscribe((countries) => {
         this.countries = countries;
-        this.countries2 = countries;
       });
   }
   //**************** creates initial map *********
   initiateMap() {
-
     const myOptions = {
       zoom: 2,
       center: new google.maps.LatLng(10, 0),
@@ -189,14 +175,12 @@ export class MyHomeComponent implements OnInit {
         ]
       }
     ];
-
     this.map.setOptions({ styles: styles });
   }
 
-
   autoCompleteAddress() {
-    let input = document.getElementById('new-address');
-    let autocomplete = new google.maps.places.Autocomplete(input);
+    const input = document.getElementById('new-address');
+    const autocomplete = new google.maps.places.Autocomplete(input);
 
     autocomplete.addListener("place_changed", () => {
       this.place = autocomplete.getPlace()
@@ -207,10 +191,8 @@ export class MyHomeComponent implements OnInit {
 
   //**************** total days*********************
   totalDays() {
-    console.log("totalDays()", this.itineraryDays)
     const total = this.itineraryDays.reduce((a, b) => a + b, 0);
-    console.log("total", total)
-    isNaN(total) ? (this.sum = 0) : this.sum = total;
+    isNaN(total) ? this.sum = 0 : this.sum = total;
   }
 
   //********************* Create cost total *********************
@@ -223,64 +205,12 @@ export class MyHomeComponent implements OnInit {
     }
   }
 
-
-  //********************** shows country layers *************
-  loadCountries(selectedNationalityId1, selectedNationalityId2) {
-    const selectedCountries = [selectedNationalityId1, selectedNationalityId2]
-    const colors = {
-      visaFree: ['red', 'blue'],
-      visaOnArrival: ['yellow', 'green']
-    }
-    let index = 0
-    this.showCountries(selectedCountries, colors, index);
-  }
-
-
-  //********************   creates country data layers ***************
-  showCountries(selectedCountries, colors, index) {
-    if (index === 2) {
-      return
-    }
-    this.setDataLayersForSelectedCountry(selectedCountries, index, colors);
-  }
-
-  setDataLayersForSelectedCountry(selectedCountries, index, colors) {
-    this.country.get(selectedCountries[index])
-      .subscribe((nation) => {
-        this.nation = nation;
-        this.setDataLayers(this.nation, index, colors, selectedCountries);
-      })
-  }
-
-  setDataLayers(nation, index, colors, countries) {
-    const visaKindArray = ['visaFree', 'visaOnArrival'];
-    let visaKindIndex = 0;
-    let counter = 0;
-    index === 0 ? (this.countryName1 = nation) : (this.countryName2 = nation)
-
-    this.loadDataLayers(visaKindArray, visaKindIndex, nation, index, colors, counter, countries)
-  }
-
-  loadDataLayers(visaKindArray: any, visaKindIndex: number, nation: any, index: number, colors: any, counter: number, countries: any) {
-    let visaKind = visaKindArray[visaKindIndex];
-    this.createDataLayers(visaKind, nation, index, colors, counter);
-    counter++
-    console.log('counter', counter, 'this.nation[visaKind].length', this.nation[visaKind].length)
-    if (counter === this.nation[visaKind].length) {
-      counter = 0
-      if (visaKind === 'visaOnArrival') {
-        index++
-        this.showCountries(countries, colors, index);
-      } else {
-        visaKindIndex++
-        this.loadDataLayers(visaKindArray, visaKindIndex, nation, index, colors, counter, countries)
-      }
-    } else {
-      this.loadDataLayers(visaKindArray, visaKindIndex, nation, index, colors, counter, countries)
-    }
-  }
-
-  createDataLayers(visaKind: string, nation: any, index: number, colors: any, counter: number) {
+  createDataLayers(event: {visaKind: string, nation: any, index: number, colors: any, counter: number}) {
+    const visaKind = event.visaKind;
+    const nation = event.nation;
+    const index = event.index;
+    const colors = event.colors;
+    const counter = event.counter;
     const freeLayer = new google.maps.Data();
     freeLayer.loadGeoJson('https://raw.githubusercontent.com/johan/world.geo.json/master/countries/' + nation[visaKind][counter] + '.geo.json');
     freeLayer.setStyle({ fillColor: colors[visaKind][index], fillOpacity: 0.5, title: nation[visaKind][counter] });
@@ -464,31 +394,58 @@ export class MyHomeComponent implements OnInit {
 
 
   deletePoint(locationInput) {
-
-    // clear polylines and reset allFlightPaths array
     this.clearPolylines();
-
     this.clearMarkers();
-
     this.deleteLocation(locationInput);
+    this.adjustDates();
+    this.adjustItineraryCost();
+    this.resetPolylines();
+  }
 
-    this.resetDates();
+  clearPolylines() {
+    this.allFlightPaths.forEach((flightPath) => {
+      flightPath.setMap(null)
+    })
+    this.allFlightPaths = []
+  }
 
-    //reconfigures the total price of trip
+  clearMarkers() {
+    this.allMarkers.forEach((marker) => {
+      marker.setMap(null);
+    })
+    this.allMarkers = [];
+  }
+
+  deleteLocation(locationInput) {
+    this.locations = this.locations.filter((savedLocation) => {
+      return savedLocation.id != locationInput.value
+    })
+  }
+
+  adjustDates() {
+    this.dates = [];
+    this.itineraryDays = [];
+    this.locations.forEach((place) => {
+      this.dates.push(place.date);
+    })
+    this.updateTotalDays();
+    this.totalDays();
+  }
+
+  adjustItineraryCost() {
     this.itineraryPrice = [];
     this.locations.forEach((place) => {
       this.itineraryPrice.push(place.price);
     })
     this.totalPrice();
+  }
 
-    //creates new polyline path and markers
+  resetPolylines() {
     this.arrayOfTravel = [];
     this.locations.forEach((location) => {
-
-      var point = { lat: location.geometry.location.lat(), lng: location.geometry.location.lng() }
+      const point = { lat: location.geometry.location.lat(), lng: location.geometry.location.lng() }
 
       this.arrayOfTravel.push(point);
-
       this.flightPath = new google.maps.Polyline({
         path: this.arrayOfTravel,
         geodesic: true,
@@ -506,53 +463,15 @@ export class MyHomeComponent implements OnInit {
       this.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png')
       this.allMarkers.push(this.marker)
     })
-
   }
-
-  clearPolylines(){
-    this.allFlightPaths.forEach((flightPath) => {
-      flightPath.setMap(null)
-    })
-    this.allFlightPaths = []
-  }
-
-  clearMarkers() {
-    this.allMarkers.forEach((marker) => {
-      marker.setMap(null);
-    })
-    this.allMarkers = [];
-  }
-  
-  deleteLocation(locationInput) {
-    this.locations = this.locations.filter((savedLocation) => {
-      return savedLocation.id != locationInput.value
-    })
-  }
-  
-  resetDates() {
-    //reconfigures the total number of days
-  this.dates = [];
-  this.itineraryDays = [];
-  this.locations.forEach((place) => {
-    this.dates.push(place.date);
-  })
-  this.updateTotalDays();
-  this.totalDays();
-  }
-
-
   //*********** whenever a user deletes a value from the itinerary
   updateTotalDays() {
-
     this.dates.forEach((day) => {
-      console.log('day', day)
       let dayIndex = this.dates.indexOf(day);
-      console.log('dayIndex', dayIndex)
       this.diffDays = (Math.abs(new Date(this.dates[dayIndex]).getTime() - new Date(this.dates[dayIndex - 1]).getTime())) / (1000 * 3600 * 24);
       if (isNaN(this.diffDays)) {
         this.diffDays = 0;
       }
-      console.log('this.diffDays', this.diffDays);
       this.itineraryDays.push(this.diffDays);
     })
   }
@@ -560,87 +479,69 @@ export class MyHomeComponent implements OnInit {
 
   //toggles on and off note option for itinerary***********************
   toggleNote() {
-    if (this.checked === false) {
-      this.checked = true;
-    } else {
-      this.checked = false;
-    }
+    !this.checked ? this.checked = true : this.checked = false;
   }
 
 
   //adds expense to a single location in the itinerary*********************
   addExpense() {
+    const newTotalExpense = this.createNewExpense();
+    this.createCurrentCost(newTotalExpense);    
+  }
+
+  createNewExpense() {
     let newestExpense = {
       note: '',
-      expense: Number,
-      transport: ''
+      expense: document.getElementById('new-price')['valueAsNumber'],
+      transport: document.getElementById('new-transport')['value']
     };
-
-    newestExpense.expense = document.getElementById('new-price')['valueAsNumber'];
-    newestExpense.transport = document.getElementById('new-transport')['value']
-
-    if (document.getElementById('new-note') == null) {
+    if (!document.getElementById('new-note')) {
       newestExpense.note = '';
     } else {
       newestExpense.note = document.getElementById('new-note')['value'];
     }
     this.expenseArray.push(newestExpense);
-    console.log("after", this.expenseArray);
-
     this.totalCostArray.push(newestExpense.expense);
+    return this.totalCostArray.reduce((a, b) => a + b, 0);
+  }
 
-
-
-    let newTotalExpense = this.totalCostArray.reduce((a, b) => a + b, 0);
-
+  createCurrentCost(newTotalExpense) {
     if (document.getElementById("new-note") !== null) {
       document.getElementById("new-note")["value"] = '';
     }
     document.getElementById("new-price")["value"] = '';
-
-    if (newTotalExpense === 0 || newTotalExpense === NaN || newTotalExpense === undefined) {
-      this.currentCost === 0;
-      return this.currentCost;
+    if (!newTotalExpense || isNaN(newTotalExpense)) {
+      this.currentCost = 0;
     } else {
       this.currentCost = newTotalExpense;
-      return this.currentCost;
     }
-
   }
 
   //delete expense from list
   deleteExpense() {
     this.expenseArray.pop();
     this.totalCostArray.pop();
-
     let newTotalExpense = this.totalCostArray.reduce((a, b) => a + b, 0);
-    console.log("newTotalExpense", newTotalExpense);
-    if (document.getElementById("new-note") !== null) {
-      document.getElementById("new-note")["value"] = '';
-    }
-    document.getElementById("new-price")["value"] = '';
-
-    if (newTotalExpense == 0 || newTotalExpense === NaN || newTotalExpense === undefined) {
-      this.currentCost = 0;
-      return this.currentCost;
-    } else {
-      this.currentCost = newTotalExpense;
-      return this.currentCost;
-    }
+    this.createCurrentCost(newTotalExpense);
   }
+
   //saving to user profile in the database
   addItinerary() {
-    this.newItinerary.id = this.user._id
-    this.newItinerary.nationality1 = this.selectedNationalityId1;
-    this.newItinerary.nationality2 = this.selectedNationalityId2;
+    this.buildItinerary(this.newItinerary);
+    this.updateItinerary(this.newItinerary);
+  }
 
-    this.userService.editItinerary(this.newItinerary)
+  buildItinerary(newItinerary) {
+    newItinerary.id = this.user._id
+    newItinerary.nationality1 = this.selectedNationalityId1;
+    newItinerary.nationality2 = this.selectedNationalityId2;
+  }
+
+  updateItinerary(newItinerary) {
+    this.userService.editItinerary(newItinerary)
       .subscribe((user) => {
         this.user = user;
-        console.log("user", user);
         alert("Itinerary saved! View in your user profile.");
       })
   }
-
-
 }
