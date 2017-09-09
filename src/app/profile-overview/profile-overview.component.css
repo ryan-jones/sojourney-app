@@ -1,59 +1,60 @@
-.fluid-container, .row, .left-side, .right-side{
+.fluid-container,
+.row,
+.left-side,
+.right-side {
   margin: 0;
   padding: 0;
 }
 
-button{
+button {
   background-color: #879dc9;
   color: #fff;
   border-radius: 5px;
   box-shadow: 1px 3px 3px 1px #ccc;
-
 }
-#home-top{
+#home-top {
   box-shadow: inset 5px 0 5px #ccc;
-
 }
-.left-side, .right-side{
+.left-side,
+.right-side {
   height: 100vh;
   text-align: center;
 }
 
-.left-side{
+.left-side {
   background-color: #eeedec;
   box-shadow: inset -5px 5px 5px #ccc;
 }
 
-.left-side > div{
+.left-side > div {
   margin: 5% 2%;
 }
 
-.img-div{
+.img-div {
   height: 20vh;
   margin: 0 2%;
 }
-.img-circle{
+.img-circle {
   max-width: 100%;
   max-height: 100%;
 }
 
-.right-side > div{
+.right-side > div {
   margin: 5% 0;
-
 }
 
-.right-side{
+.right-side {
   background-image: url('http://www.getsready.com/wp-content/uploads/2016/09/wonderful-scenery-in-kyoto.jpg');
   background-size: cover;
 }
 
-#user-info{
+#user-info {
   background-color: #fff;
   border-radius: 5px;
   margin: 25%;
   padding: 5%;
 }
 
-#user-info > div{
+#user-info > div {
   margin: 5%;
 }

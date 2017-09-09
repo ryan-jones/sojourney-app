@@ -27,8 +27,7 @@ export class MyLoginComponent implements OnInit {
     login() {
       this.session.login(this.user)
         .subscribe(result => {
-            if (result === true) {
-
+            if (result) {
                 console.log('result', result)
               // login successful
               this.router.navigate(['user']);
