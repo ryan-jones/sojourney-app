@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {Router, ActivatedRoute} from '@angular/router';
-import {UserService} from '../user.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { UserService } from '../shared/services/user.service';
 
 @Component({
   selector: 'app-profile-edit',
@@ -9,7 +9,7 @@ import {UserService} from '../user.service';
   providers: [UserService]
 })
 export class ProfileEditComponent implements OnInit {
-  user: Object = {};
+  user: any;
 
   editUser = {
     _id: '',
@@ -17,53 +17,40 @@ export class ProfileEditComponent implements OnInit {
     username: '',
     password: '',
     nationality1: '',
-    nationality2: '',
-  } //shown to the user to edit
+    nationality2: ''
+  }; //shown to the user to edit
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService
-    ) { }
+  ) {}
 
   ngOnInit() {
-    let user = JSON.parse(localStorage.getItem("user"));
-    this.userService.get(user._id)
-      .subscribe((user)=> {
-
-        this.editUser = {
-          _id: user._id,
-          name: user.name,
-          username: user.username,
-          password: undefined,
-          nationality1: user.nationality,
-          nationality2: user.nationality2,
-        }
-        console.log('this.user', this.editUser);
-      });
-
-
-
+    let user = JSON.parse(localStorage.getItem('user'));
+    this.userService.get(user._id).subscribe(user => {
+      this.editUser = {
+        _id: user._id,
+        name: user.name,
+        username: user.username,
+        password: undefined,
+        nationality1: user.nationality,
+        nationality2: user.nationality2
+      };
+    });
   }
 
-  editUserInfo(){
-
-    console.log("this.editUser in editUserInfo", this.editUser._id);
-    this.userService.edit(this.editUser)
-      .subscribe((user)=>{
-        console.log('doing something');
-        alert('subscribed!')
-        this.user = user;
-        this.router.navigate(['user']);
-      })
+  editUserInfo() {
+    this.userService.edit(this.editUser).subscribe(user => {
+      this.user = user;
+      this.router.navigate(['user', this.user.id]);
+    });
   }
 
-  deleteUser(){
+  deleteUser() {
     if (window.confirm('Are you sure?')) {
-    	this.userService.remove(this.user)
-      .subscribe(() => {
-        alert('user deleted')
+      this.userService.remove(this.user).subscribe(() => {
         this.router.navigate(['']);
       });
-  	}
+    }
   }
 }

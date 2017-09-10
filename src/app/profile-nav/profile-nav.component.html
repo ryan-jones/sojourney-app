@@ -6,15 +6,15 @@
     <img class="img-circle" src="https://cdn4.iconfinder.com/data/icons/user-avatar-flat-icons/512/User_Avatar-35-512.png" />
   </div>
   <div>
-    <strong><button type="submit" (click)="goToOverview()">  User Overview  </button></strong>
+    <strong><button type="submit" (click)="goToOverview(user._id)">  User Overview  </button></strong>
   </div>
   <div>
-    <strong><button type="submit" (click)="goToEdit(user.id)"> Edit User </button></strong>
+    <strong><button type="submit" (click)="goToEdit(user._id)"> Edit User </button></strong>
   </div>
   <div>
-    <strong> <button ng-model="view" type="submit" (click)="goToItineraries(user.id)">View itineraries </button></strong>
+    <strong> <button ng-model="view" type="submit" (click)="goToItineraries(user._id)">View itineraries </button></strong>
   </div>
   <div>
-    <strong><button  ng-model="view" type="submit"  (click)="goToCountryView(user.id)" name="View countries visited" value="country">View countries visited</button></strong>
+    <strong><button  ng-model="view" type="submit"  (click)="goToCountriesView(user._id)" name="View countries visited" value="country">View countries visited</button></strong>
   </div>
 </div>

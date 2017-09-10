@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, Routes } from '@angular/router';
-import { SessionService } from '../session.service';
-import { UserService } from '../user.service';
+import { SessionService } from '../shared/services/session.service';
+import { UserService } from '../shared/services/user.service';
 
 @Component({
   selector: 'app-profile-nav',
@@ -28,19 +28,19 @@ export class ProfileNavComponent implements OnInit {
     }
   }
 
-  goToOverview() {
-    this.router.navigate(['/user']);
+  goToOverview(id: number) {
+    this.router.navigate(['/user', id ]);
   }
 
   goToEdit(id: number) {
     this.router.navigate(['/user', id, 'edit']);
   }
 
-  goToItinerary(id: number) {
-    this.router.navigate(['user', id, '/itineraries']);
+  goToItineraries(id: number) {
+    this.router.navigate(['/user', id, 'itineraries']);
   }
 
-  goToCountryView(id: number) {
-    this.router.navigate(['/user', id, '/countries_visited']);
+  goToCountriesView(id: number) {
+    this.router.navigate(['/user', id, 'countries_visited']);
   }
 }

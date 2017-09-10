@@ -1,29 +1,24 @@
-<div class="container-fluid" id="home-top">
-  <div class="col-md-2 left-side">
-    <app-profile-nav></app-profile-nav>
-  </div>
-
-  <div class="col-md-10 right-side">
-    <div id="user-info">
-      <div>
-          <strong> Name: </strong><input type="text" [(ngModel)]="editUser.name" placeholder="Enter new name" />
-
-      </div>
-      <div>
-        <strong> Username: </strong><input type="text" [(ngModel)]="editUser.username" placeholder="Enter new email address" />
-      </div>
-      <div>
-        <strong>Password: </strong><input type="password" [(ngModel)]="editUser.password" placeholder="Leave blank to keep old password"/>
-      </div>
-      <div>
-        <strong>Nationality: </strong><input type="text" [(ngModel)]="editUser.nationality1" placeholder="Enter new nationality" />
-      </div>
-      <div>
-        <strong>Second Nationality: </strong><input type="text" [(ngModel)]="editUser.nationality2" placeholder="Enter second new nationality" />
-      </div>
-      <button class="share" (click)="editUserInfo()"> Edit Details</button>
-      <button class="share blue" (click)="deleteUser()">Delete User</button>
-    </div>
+<div id="user-info">
+  <div>
+    <strong> Name: </strong><input type="text" [(ngModel)]="editUser.name" placeholder="Enter new name" />
 
   </div>
+  <div>
+    <strong> Username: </strong><input type="text" [(ngModel)]="editUser.username" placeholder="Enter new email address"
+    />
+  </div>
+  <div>
+    <strong>Password: </strong><input type="password" [(ngModel)]="editUser.password" placeholder="Leave blank to keep old password"
+    />
+  </div>
+  <div>
+    <strong>Nationality: </strong><input type="text" [(ngModel)]="editUser.nationality1" placeholder="Enter new nationality"
+    />
+  </div>
+  <div>
+    <strong>Second Nationality: </strong><input type="text" [(ngModel)]="editUser.nationality2" placeholder="Enter second new nationality"
+    />
+  </div>
+  <button class="share" (click)="editUserInfo()"> Edit Details</button>
+  <button class="share blue" (click)="deleteUser()">Delete User</button>
 </div>

@@ -3,41 +3,44 @@
 
   </div>
   <div class="col-md-6 form-box">
-    <form >
+    <form>
 
-          <p>
-            <input type="text" name="nationality" [(ngModel)]="newUser.name"  placeholder="Your name" required />
-          </p>
-          <p>
-            <input type="text" name="username" [(ngModel)]="newUser.username" #myUsername="ngModel" placeholder="Your email (your username)" required />
-          </p>
-              <div *ngIf="(myUsername.dirty || myUsername.touched)">
-                <p class="error" [hidden]="!myUsername.required">
-                  Oy! An email-based username is required.
-                </p>
-              </div>
-          <p>
-            <input type="password" name="password" [(ngModel)]="newUser.password" #myPassword="ngModel" required  minlength="6" placeholder="Your password (at least 6 characters)"/>
-          </p>
-              <div *ngIf="(myPassword.dirty || myPassword.touched)">
-                <p class="error" [hidden]="!myPassword.minlength">
-                  Sorry! Passwords are required and must be at least 6 characters long.
-                </p>
-              </div>
+      <p>
+        <input type="text" name="nationality" [(ngModel)]="newUser.name" placeholder="Your name" required />
+      </p>
+      <p>
+        <input type="text" name="username" [(ngModel)]="newUser.username" #myUsername="ngModel" placeholder="Your email (your username)"
+          required />
+      </p>
+      <div *ngIf="(myUsername.dirty || myUsername.touched)">
+        <p class="error" [hidden]="!myUsername.required">
+          Oy! An email-based username is required.
+        </p>
+      </div>
+      <p>
+        <input type="password" name="password" [(ngModel)]="newUser.password" #myPassword="ngModel" required minlength="6" placeholder="Your password (at least 6 characters)"
+        />
+      </p>
+      <div *ngIf="(myPassword.dirty || myPassword.touched)">
+        <p class="error" [hidden]="!myPassword.minlength">
+          Sorry! Passwords are required and must be at least 6 characters long.
+        </p>
+      </div>
 
-          <p> Nationality
-            <input type="text" name="nationality" [(ngModel)]="newUser.nationality"  placeholder="Your nationality"/>
-          </p>
-          <p> Second Nationality (optional)
-            <input type="text" name="nationality2" [(ngModel)]="newUser.nationality2"  />
-          </p>
-          <button type="submit" (click)="signup()"> signup </button>
-      </form>
+      <p> Nationality
+        <input type="text" name="nationality" [(ngModel)]="newUser.nationality" placeholder="Your nationality" />
+      </p>
+      <p> Second Nationality (optional)
+        <input type="text" name="nationality2" [(ngModel)]="newUser.nationality2" />
+      </p>
+      <button type="submit" (click)="signup()"> signup </button>
+      <h4 *ngIf="error"> {{ error }} </h4>
+    </form>
 
-      <div *ngIf="user">
-        <h2> You are now logged in as {{ user.username }}!! </h2>
-        <button (click)="logout()"> Want to logout? </button>
-     </div>
+    <div *ngIf="user">
+      <h2> You are now logged in as {{ user.username }}!! </h2>
+      <button (click)="logout()"> Want to logout? </button>
+    </div>
   </div>
   <div class="col-md-3">
 

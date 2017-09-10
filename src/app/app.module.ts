@@ -15,6 +15,7 @@ import { MyHomeComponent } from './my-home/my-home.component';
 import { MyAboutComponent } from './my-about/my-about.component';
 import { MyLoginComponent } from './my-login/my-login.component';
 import { MyNavComponent } from './my-nav/my-nav.component';
+import { ProfileComponent } from './containers/profile.component';
 import { ProfileOverviewComponent } from './profile-overview/profile-overview.component';
 import { ProfileEditComponent } from './profile-edit/profile-edit.component';
 import { MySignupFormComponent } from './my-signup-form/my-signup-form.component';
@@ -26,11 +27,10 @@ import { ItineraryPlannerComponent } from './itinerary-planner/itinerary-planner
 import { VisaCheckerComponent } from './visa-checker/visa-checker.component';
 
 //services
-import { CountryService } from './country.service';
-import { WarningService } from './warning.service';
-import { SessionService } from './session.service';
-import { UserService } from './user.service';
-
+import { CountryService } from './shared/services/country.service';
+import { WarningService } from './shared/services/warning.service';
+import { SessionService } from './shared/services/session.service';
+import { UserService } from './shared/services/user.service';
 
 const routes: Routes = [
   { path: '', component: MyHomeComponent },
@@ -38,11 +38,20 @@ const routes: Routes = [
   { path: 'about', component: MyAboutComponent },
   { path: 'signup', component: MySignupFormComponent },
   { path: 'login', component: MyLoginComponent },
-  { path: 'user', component: ProfileOverviewComponent },
-  { path: 'user/:id', component: ProfileOverviewComponent },
-  { path: 'user/:id/countries_visited', component: ProfileCountryVisitComponent },
-  { path: 'user/:id/itineraries', component: ProfileItinerariesComponent },
-  { path: 'user/:id/edit', component: ProfileEditComponent },
+  {
+    path: 'user',
+    component: ProfileComponent,
+    children: [
+      { path: ':id', component: ProfileOverviewComponent },
+      {
+        path: ':id/countries_visited',
+        component: ProfileCountryVisitComponent
+      },
+      { path: ':id/itineraries', component: ProfileItinerariesComponent },
+      { path: ':id/edit', component: ProfileEditComponent }
+    ]
+  },
+
   { path: 'flights', component: MyFlightsComponent }
 ];
 
@@ -56,6 +65,7 @@ const routes: Routes = [
     ProfileEditComponent,
     ProfileOverviewComponent,
     MySignupFormComponent,
+    ProfileComponent,
     ProfileCountryVisitComponent,
     ProfileItinerariesComponent,
     ProfileNavComponent,

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router, ActivatedRoute } from '@angular/router';
-import { SessionService } from '../session.service';
-import {UserService} from '../user.service';
+import { SessionService } from '../shared/services/session.service';
+import {UserService} from '../shared/services/user.service';
 
 declare var google: any;
 

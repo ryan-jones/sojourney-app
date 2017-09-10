@@ -13,8 +13,8 @@ export class SessionService implements CanActivate {
   public isAuth: boolean;
   public user: string;
 
-  // BASE_URL: string = 'https://sojourney.herokuapp.com';
-  BASE_URL: string = 'http://localhost:3000';
+  BASE_URL: string = 'https://sojourney.herokuapp.com';
+  // BASE_URL: string = 'http://localhost:3000';
   constructor(private router: Router, private http: Http) {
 
     // set token if saved in local storage

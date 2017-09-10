@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { CountryService } from '../country.service';
-import { SessionService } from '../session.service';
-import { UserService } from '../user.service';
+import { CountryService } from '../shared/services/country.service';
+import { SessionService } from '../shared/services/session.service';
+import { UserService } from '../shared/services/user.service';
 
 declare var google: any;
 
@@ -41,7 +41,6 @@ export class MyHomeComponent implements OnInit {
 
   constructor(
     private country: CountryService,
-    private status: WarningService,
     private session: SessionService,
     private userService: UserService
   ) {}

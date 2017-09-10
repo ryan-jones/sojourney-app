@@ -7,10 +7,8 @@ declare var google: any;
   templateUrl: './itinerary-planner.component.html',
   styleUrls: ['./itinerary-planner.component.scss']
 })
-
 export class ItineraryPlannerComponent {
-
-  constructor() { }
+  constructor() {}
 
   @Input() locations: any;
   @Input() place: any;
@@ -18,13 +16,12 @@ export class ItineraryPlannerComponent {
   @Output() createMarker: EventEmitter<any> = new EventEmitter();
   @Output() resetMapMarkers: EventEmitter<any> = new EventEmitter();
 
-
   newItinerary = {
     id: '',
     name: '',
     nationality1: '',
     nationality2: '',
-    placesAndDates: [],
+    placesAndDates: []
   };
 
   differenceBetweenDates: number;
@@ -38,8 +35,8 @@ export class ItineraryPlannerComponent {
   newAddress: string;
   selectedCurrency: string = '$';
   selectedTransport: string = 'plane';
-  namePlaceholder: string = "Create an itinerary name"
-  locationPlaceholder: string = "Enter a starting location";
+  namePlaceholder: string = 'Create an itinerary name';
+  locationPlaceholder: string = 'Enter a starting location';
 
   itineraryDays: Array<number> = [];
   displayableExpenses: Array<any> = [];
@@ -54,10 +51,10 @@ export class ItineraryPlannerComponent {
   autoCompleteAddress() {
     const input = document.getElementById('new-address');
     const autocomplete = new google.maps.places.Autocomplete(input);
-    autocomplete.addListener("place_changed", () => {
-      this.place = autocomplete.getPlace()
+    autocomplete.addListener('place_changed', () => {
+      this.place = autocomplete.getPlace();
       this.locationView = this.place.name;
-    })
+    });
   }
 
   //adds expense to a single location in the itinerary*********************
@@ -70,7 +67,10 @@ export class ItineraryPlannerComponent {
   deleteExpense() {
     this.displayableExpenses.pop();
     this.accumulatedDailyExpense.pop();
-    const newTotalExpense = this.accumulatedDailyExpense.reduce((a, b) => a + b, 0);
+    const newTotalExpense = this.accumulatedDailyExpense.reduce(
+      (a, b) => a + b,
+      0
+    );
     this.createCurrentCost(newTotalExpense);
   }
 
@@ -91,10 +91,10 @@ export class ItineraryPlannerComponent {
   }
 
   createCurrentCost(newTotalExpense) {
-    if (document.getElementById("new-note")) {
-      document.getElementById("new-note")["value"] = '';
+    if (document.getElementById('new-note')) {
+      document.getElementById('new-note')['value'] = '';
     }
-    document.getElementById("new-price")["value"] = '';
+    document.getElementById('new-price')['value'] = '';
     if (!newTotalExpense || isNaN(newTotalExpense)) {
       this.currentCost = 0;
     } else {
@@ -111,14 +111,19 @@ export class ItineraryPlannerComponent {
   }
 
   updateTotalDays() {
-    this.dates.forEach((day) => {
+    this.dates.forEach(day => {
       const dayIndex = this.dates.indexOf(day);
-      this.differenceBetweenDates = (Math.abs(new Date(this.dates[dayIndex]).getTime() - new Date(this.dates[dayIndex - 1]).getTime())) / (1000 * 3600 * 24);
+      this.differenceBetweenDates =
+        Math.abs(
+          new Date(this.dates[dayIndex]).getTime() -
+            new Date(this.dates[dayIndex - 1]).getTime()
+        ) /
+        (1000 * 3600 * 24);
       if (!this.differenceBetweenDates) {
         this.differenceBetweenDates = 0;
       }
       this.itineraryDays.push(this.differenceBetweenDates);
-    })
+    });
   }
 
   //**********************Create a new marker and flightPath******************* */
@@ -135,14 +140,15 @@ export class ItineraryPlannerComponent {
   }
 
   setPlaceDetails() {
-    this.place.details = this.displayableExpenses.length === 0 ? '' : this.displayableExpenses;
+    this.place.details =
+      this.displayableExpenses.length === 0 ? '' : this.displayableExpenses;
   }
 
   setCurrencyAndTransport() {
     this.place.currency = this.selectedCurrency;
     this.place.transport = this.selectedTransport;
     if (!this.place.transport) {
-      this.place.transport = "plane";
+      this.place.transport = 'plane';
     }
   }
 
@@ -171,9 +177,14 @@ export class ItineraryPlannerComponent {
   setDates() {
     const variableDate = document.getElementById('new-date')['valueAsDate'];
     const dateLength = variableDate.getMonth();
-    const digit = (dateLength <= 8) ? '-0' : '-';
+    const digit = dateLength <= 8 ? '-0' : '-';
 
-    this.place.date = variableDate.getFullYear() + `${digit}` + (variableDate.getMonth() + 1) + '-' + variableDate.getDate();
+    this.place.date =
+      variableDate.getFullYear() +
+      `${digit}` +
+      (variableDate.getMonth() + 1) +
+      '-' +
+      variableDate.getDate();
     this.place.date.autocomplete;
     this.dates.push(this.place.date);
   }
@@ -190,7 +201,13 @@ export class ItineraryPlannerComponent {
     let returnSecondDate;
 
     if (this.dates.length >= 0) {
-      this.differenceBetweenDates = Math.round(Math.abs(new Date(this.dates[this.dates.length - 1]).getTime() - new Date(this.dates[this.dates.length - 2]).getTime()) / (1000 * 3600 * 24));
+      this.differenceBetweenDates = Math.round(
+        Math.abs(
+          new Date(this.dates[this.dates.length - 1]).getTime() -
+            new Date(this.dates[this.dates.length - 2]).getTime()
+        ) /
+          (1000 * 3600 * 24)
+      );
       if (isNaN(this.differenceBetweenDates)) {
         this.differenceBetweenDates = 0;
       }
@@ -208,7 +225,13 @@ export class ItineraryPlannerComponent {
       }
       returnFirstDate = newFirstDate.join();
       returnSecondDate = newSecondDate.join();
-      this.differenceBetweenDates = Math.round(Math.abs(new Date(returnFirstDate).getTime() - new Date(returnSecondDate).getTime()) / (1000 * 3600 * 24));
+      this.differenceBetweenDates = Math.round(
+        Math.abs(
+          new Date(returnFirstDate).getTime() -
+            new Date(returnSecondDate).getTime()
+        ) /
+          (1000 * 3600 * 24)
+      );
     }
     this.itineraryDays.push(this.differenceBetweenDates);
     this.getTotalDays();
@@ -223,8 +246,11 @@ export class ItineraryPlannerComponent {
       transport: this.place.transport,
       country: this.place.country,
       price: this.place.price,
-      point: { lat: this.place.geometry.location.lat(), lng: this.place.geometry.location.lng() }
-    }
+      point: {
+        lat: this.place.geometry.location.lat(),
+        lng: this.place.geometry.location.lng()
+      }
+    };
     this.createMarker.emit(exportedValues);
   }
 
@@ -237,40 +263,38 @@ export class ItineraryPlannerComponent {
   adjustDates() {
     this.dates = [];
     this.itineraryDays = [];
-    this.locations.forEach((place) => {
+    this.locations.forEach(place => {
       this.dates.push(place.date);
-    })
+    });
     this.updateTotalDays();
     this.getTotalDays();
   }
 
   adjustItineraryCost() {
     this.costs = [];
-    this.locations.forEach((place) => {
+    this.locations.forEach(place => {
       this.costs.push(place.price);
-    })
+    });
     this.getTotalPrice();
   }
 
-
   resetValues() {
-    const note = document.getElementById("new-note");
+    const note = document.getElementById('new-note');
     if (note) {
-      document.getElementById("new-note")["value"] = '';
+      document.getElementById('new-note')['value'] = '';
     }
-    document.getElementById("new-price")["value"] = '';
+    document.getElementById('new-price')['value'] = '';
     this.newAddress = '';
     this.displayableExpenses = [];
     this.accumulatedDailyExpense = [];
-    this.namePlaceholder = "Edit itinerary name"
-    this.locationPlaceholder = "Add a location";
+    this.namePlaceholder = 'Edit itinerary name';
+    this.locationPlaceholder = 'Add a location';
     this.locationView = '';
     this.currentCost = 0;
   }
 
   //toggles on and off note option for itinerary***********************
   toggleNote() {
-    !this.checked ? this.checked = true : this.checked = false;
+    !this.checked ? (this.checked = true) : (this.checked = false);
   }
-
 }

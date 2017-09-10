@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { SessionService } from '../session.service';
+import { Component } from '@angular/core';
+import { SessionService } from '../shared/services/session.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import{ UserService} from '../user.service';
-
+import { UserService } from '../shared/services/user.service';
+import { User } from '../shared/user.model';
 
 @Component({
   selector: 'app-my-signup-form',
@@ -10,37 +10,20 @@ import{ UserService} from '../user.service';
   styleUrls: ['./my-signup-form.component.css'],
   providers: [SessionService]
 })
-export class MySignupFormComponent implements OnInit {
+export class MySignupFormComponent {
+  newUser = User;
 
-  newUser = {
-    name: '',
-    username: '',
-    password: '',
-    nationality: '',
-    nationality2: ''
-  };
-
-  user: any;
   error: string;
 
   constructor(
-  	private session: SessionService,
+    private session: SessionService,
     private userService: UserService,
     private router: Router
-  ) { }
-
-  ngOnInit() {
-    }
+  ) {}
 
   signup() {
-  	this.session.signup(this.newUser)
-      .subscribe(result => {
-          if (result === true) {
-            console.log('signed up')
-            this.router.navigate(['user'])
-          } else {
-              alert('Uh oh! Looks like something went wrong')
-          }
-      });
+    this.session.signup(this.newUser).subscribe(result => {
+      this.router.navigate(['user']);
+    }, error => (this.error = error));
   }
 }
