@@ -1,4 +1,5 @@
 export class NewUser {
+  
   name: string;
   username: string;
   password: string;

@@ -16,9 +16,9 @@ export class MyFlightsComponent implements OnInit {
 
   departureLocation: any;
   arrivalLocation: any;
-  departureView;
-  arrivalView;
-  searchResult;
+  departureView: string;
+  arrivalView: string;
+  searchResult: any;
   durations = ['result.fly_duration', 'result.return_duration'];
   checked: boolean = false;
   toggle: boolean = true;
@@ -105,7 +105,6 @@ export class MyFlightsComponent implements OnInit {
         returns: returnDates,
         type: 'return'
       };
-      let that = this;
       this.flightService.getFlights(flight).subscribe(result => {
         this.searchResult = result;
         this.checked = !this.checked;

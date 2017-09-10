@@ -11,7 +11,7 @@ import { NewUser } from '../shared/new-user.model';
   providers: [SessionService]
 })
 export class MySignupFormComponent {
-  newUser = NewUser;
+  newUser: NewUser = new NewUser;
 
   error: string;
 

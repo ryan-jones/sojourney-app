@@ -24,7 +24,6 @@ export class MyLoginComponent {
 
   login() {
     this.session.login(this.user).subscribe(result => {
-      console.log('result of login', result )
       if (result) {
         this.router.navigate(['user']);
       } else {

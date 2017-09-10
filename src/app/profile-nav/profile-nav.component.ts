@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, Routes } from '@angular/router';
 import { SessionService } from '../shared/services/session.service';
 import { UserService } from '../shared/services/user.service';
+import { User } from 'app/shared/user.model';
 
 @Component({
   selector: 'app-profile-nav',
@@ -9,21 +10,19 @@ import { UserService } from '../shared/services/user.service';
   styleUrls: ['./profile-nav.component.css']
 })
 export class ProfileNavComponent implements OnInit {
-  user: any;
+  
+  user: User = new User;
+
   constructor(
     private router: Router,
-    private session: SessionService,
     private userService: UserService
   ) {}
 
   ngOnInit() {
-    this.user = {};
-    let user = JSON.parse(localStorage.getItem('user'));
-    if (user === null) {
-      this.user = '';
-    } else {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
       this.userService.get(user._id).subscribe(user => {
-        this.user = user;
+        this.user = Object.assign({}, user);
       });
     }
   }

@@ -4,7 +4,7 @@ import {UserService} from '../shared/services/user.service';
 import { MapStyles, MapOptions } from '../shared/map.model';
 import { setMap } from 'app/shared/services/map.service';
 
-declare var google: any;
+declare const google: any;
 
 @Component({
   selector: 'app-profile-country-visit',
@@ -19,11 +19,6 @@ export class ProfileCountryVisitComponent implements OnInit {
   map: any;
 
   ngOnInit() {
-    // const user = JSON.parse(localStorage.getItem("user"))
-    // this.userService.get(user._id)
-    //   .subscribe((user)=> {
-    //     this.user = user
-    //   });
     this.initiateMap();
   }
 

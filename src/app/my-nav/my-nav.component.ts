@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SessionService } from '../shared/services/session.service';
 import { UserService } from '../shared/services/user.service';
+import { User } from 'app/shared/user.model';
 
 @Component({
   selector: 'app-my-nav',
@@ -9,7 +10,8 @@ import { UserService } from '../shared/services/user.service';
   styleUrls: ['./my-nav.component.css']
 })
 export class MyNavComponent implements OnInit {
-  user: any;
+
+  user: User;
 
   constructor(
     private router: Router,
@@ -18,42 +20,10 @@ export class MyNavComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const currentUser = JSON.parse(localStorage.getItem('user'));
-    if (!currentUser) {
-      this.user.name = '';
-    } else {
-      this.userService.get(currentUser._id).subscribe(user => {
-        this.user = user;
-        console.log('user', this.user);
-      });
-    }
+    this.user = JSON.parse(localStorage.getItem('user'));
   }
 
-  goToAbout() {
-    this.router.navigate(['about']);
-  }
-
-  goToLogin() {
-    this.router.navigate(['login']);
-  }
-
-  goToHome() {
-    this.router.navigate(['home']);
-  }
-
-  goToSignup() {
-    this.router.navigate(['signup']);
-  }
-
-  goToUser(id: number) {
-    this.router.navigate(['user', id]);
-  }
-
-  goToFlight() {
-    this.router.navigate(['flights']);
-  }
-
-  logout() {
-    this.session.logout();
+  navigateTo(route: string, id?: number) {
+    id ? this.router.navigate([route, id]) : this.router.navigate([route]);
   }
 }
