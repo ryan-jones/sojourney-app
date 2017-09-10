@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {Router, Routes} from '@angular/router';
-import { SessionService } from '../session.service';
-import {UserService} from '../user.service';
+import { Router, Routes } from '@angular/router';
+import { User } from 'app/shared/user.model';
 
 @Component({
   selector: 'app-profile-nav',
@@ -9,42 +8,17 @@ import {UserService} from '../user.service';
   styleUrls: ['./profile-nav.component.css']
 })
 export class ProfileNavComponent implements OnInit {
+  user: User;
 
-user: any;
-  constructor(
-    private router: Router,
-    private session: SessionService,
-    private userService: UserService,
-  ) { }
+  constructor(private router: Router) {}
 
   ngOnInit() {
-    this.user= {};
-    let user = JSON.parse(localStorage.getItem("user"))
-    console.log('THE ID', user)
-    if (user === null){
-      this.user = ''
-    } else {
-      this.userService.get(user._id)
-        .subscribe((user)=> {
-
-              this.user = user
-            });
-      }
+    this.user = JSON.parse(localStorage.getItem('user'));
   }
 
-  goToOverview(){
-    this.router.navigate(['/user']);
-  }
-
-  goToEdit(){
-    this.router.navigate(['/edit']);
-  }
-
-  goToItinerary(){
-    this.router.navigate(['/itineraries']);
-  }
-
-  goToCountryView(){
-    this.router.navigate(['/countries_visited']);
+  navigateTo(id: number, path?: string) {
+    path
+      ? this.router.navigate(['/user', id, path])
+      : this.router.navigate(['/user', id]);
   }
 }

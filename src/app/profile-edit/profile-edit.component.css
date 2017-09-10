@@ -1,69 +1,43 @@
-.fluid-container, .row, .left-side, .right-side{
+.overview {
   margin: 0;
   padding: 0;
-}
-
-button{
-  background-color: #879dc9;
-  color: #fff;
-  border-radius: 5px;
-  box-shadow: 1px 3px 3px 1px #ccc;
-
-}
-#home-top{
-  box-shadow: inset 5px 0 5px #ccc;
-
-}
-.left-side, .right-side{
-  height: 100vh;
-  text-align: center;
-}
-
-.left-side{
-  background-color: #eeedec;
-  box-shadow: inset -5px 5px 5px #ccc;
-}
-
-.left-side > div{
-  margin: 5% 2%;
-}
-
-.img-div{
-  height: 20vh;
-  margin: 0 2%;
-}
-.img-circle{
-  max-width: 100%;
-  max-height: 100%;
-}
-
-.right-side{
   background-image: url('https://fthmb.tqn.com/hJ15yQ7ljpj3Kuk9VZ-LbkMlOa0=/1500x1000/filters:no_upscale():fill(FFCC00,1)/about/SaharaDesert-58c1a5603df78c353c3d525d.jpg');
   background-image: cover;
 }
 
-#user-info{
-  background-color: #fff;
+button,
+.share {
+  color: #fff;
+}
+
+button,
+.share,
+#user-info {
   border-radius: 5px;
+}
+
+button {
+  background-color: #879dc9;
+  box-shadow: 1px 3px 3px 1px #ccc;
+}
+
+#user-info {
+  background-color: #fff;
   margin: 15% 25% 25%;
   padding: 5%;
 }
 
-#user-info > div{
+#user-info > div {
   margin: 5%;
 }
 
-.share{
-  text-align: center;
+.share {
   background-color: red;
-  color: #fff;
-  border-radius: 5px;
   border: 1px solid #879dc9;
-
   margin: 1% 0 2%;
   box-shadow: 0px 3px 3px 0px #ccc;
 }
 
-.blue{
+.blue {
   background-color: #222061;
 }

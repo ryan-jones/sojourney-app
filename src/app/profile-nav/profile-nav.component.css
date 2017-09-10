@@ -1,26 +1,22 @@
-
-button{
+button {
   background-color: #879dc9;
-  color: #fff;
   border-radius: 5px;
   box-shadow: 1px 3px 3px 1px #ccc;
-
 }
 
-
-.left-side > div{
+.left-side > div {
   margin: 5% 2%;
 }
 
-.img-div{
+.img-div {
   height: 20vh;
   margin: 0 2%;
 }
-.img-circle{
+.img-circle {
   max-width: 100%;
   max-height: 100%;
 }
 
-.white{
+.white, button {
   color: #fff;
 }

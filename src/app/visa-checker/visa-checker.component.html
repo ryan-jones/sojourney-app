@@ -1,0 +1,45 @@
+<div class="row color-row">
+    <div class="col-md-3 color-column">
+        <div class="col-md-3 red-box"></div>
+        <div class="col-md-9">
+            <strong>Visa-free:</strong><br />{{countryName1.name}}
+        </div>
+    </div>
+    <div class="col-md-3 color-column">
+        <div class="col-md-3 yellow-box"></div>
+        <div class="col-md-9">
+            <strong>VOA:</strong><br />{{countryName1.name}}
+        </div>
+    </div>
+    <div class="col-md-3 color-column">
+        <div class="col-md-3 blue-box"></div>
+        <div class="col-md-9">
+            <strong>Visa-free:</strong><br />{{countryName2.name}}
+        </div>
+    </div>
+    <div class="col-md-3 color-column">
+        <div class="col-md-3 green-box"></div>
+        <div class="col-md-9">
+            <strong>VOA:</strong><br />{{countryName2.name}}
+        </div>
+    </div>
+</div>
+<div class="row nation-row">
+    <div class="col-md-6 nation-box">
+        <div class="form-group">
+            <label for="nationalityInput"> Select Nationality 1</label>
+            <select [(ngModel)]="selectedNationalityId1" class="form-control" id="nationality" name="nationality">
+            <option value = {{country._id}} *ngFor="let country of countries">{{country.name}}</option>
+                    </select>
+        </div>
+    </div>
+    <div class="col-md-6 nation-box">
+        <div class="form-group">
+            <label for="nationalityInput2"> Select Nationality 2 (optional)</label>
+            <select [(ngModel)]="selectedNationalityId2" class="form-control" id="nationality2" name="nationality2">
+            <option value = {{country._id}} *ngFor="let country of countrySelector2">{{country.name}}</option>
+                    </select>
+        </div>
+    </div>
+</div>
+<button class="country-button" (click)="loadCountries(selectedNationalityId1, selectedNationalityId2)">Show Visa Requirements</button>

@@ -1,16 +1,15 @@
-*{
+* {
   font-family: 'Special Elite', cursive;
 }
 
-.navbar{
+.navbar {
   background-color: #222061;
-
 }
 
-.white{
+.white {
   color: #fff;
 }
 
-li{
+li {
   margin: 5% 0 0 0;
 }

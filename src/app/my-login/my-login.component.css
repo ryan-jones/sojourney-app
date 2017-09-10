@@ -1,4 +1,4 @@
-.fluid-container{
+.fluid-container {
   margin: 0;
   padding: 0;
   height: 100vh;
@@ -6,32 +6,34 @@
   background-size: cover;
 }
 
-
-.panel{
+.panel {
   margin-top: 10%;
 }
-.form-box{
+
+.form-box {
   margin: 5% 0;
   padding: 5%;
   text-align: center;
   background-color: #eeedec;
   border-top: 1px solid black;
-  border-radius: 5px;
   box-shadow: 1px 3px 3px 1px black;
-
 }
 
-input, button{
+.form-box, button {
+  border-radius: 5px;
+}
+
+input,
+button {
   width: 100%;
 }
 
-h4{
+h4 {
   margin: 5% 0 2%;
 }
 
-button{
+button {
   background-color: #222061;
-  border-radius: 5px;
   margin-top: 1%;
   color: #fff;
   padding: 1% 2%;
