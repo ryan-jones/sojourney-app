@@ -4,6 +4,8 @@ import { SessionService } from '../shared/services/session.service';
 import { UserService } from '../shared/services/user.service';
 import { User } from 'app/shared/user.model';
 import { Country } from 'app/shared/country.model';
+import { MapStyles, MapOptions } from 'app/shared/map.model';
+import { setMap } from 'app/shared/services/map.service';
 
 declare var google: any;
 
@@ -76,61 +78,7 @@ export class MyHomeComponent implements OnInit {
 
   //**************** creates initial map *********
   initiateMap() {
-    const myOptions = {
-      zoom: 2,
-      center: new google.maps.LatLng(10, 0),
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-
-    // initialize the map
-    this.map = new google.maps.Map(
-      document.getElementById('map-canvas'),
-      myOptions
-    );
-
-    const styles = [
-      {
-        featureType: 'landscape',
-        stylers: [{ hue: '#fff' }, { saturation: 100 }]
-      },
-      {
-        featureType: 'road',
-        stylers: [{ visibility: 'on' }]
-      },
-      {
-        featureType: 'administrative.land_parcel',
-        stylers: [{ visibility: 'off' }]
-      },
-      {
-        featureType: 'administrative.locality',
-        stylers: [{ visibility: 'on' }]
-      },
-      {
-        featureType: 'administrative.neighborhood',
-        stylers: [{ visibility: 'off' }]
-      },
-      {
-        featureType: 'administrative.province',
-        stylers: [{ visibility: 'on' }]
-      },
-      {
-        featureType: 'landscape.man_made',
-        stylers: [{ visibility: 'off' }]
-      },
-      {
-        featureType: 'landscape.natural',
-        stylers: [{ visibility: 'off' }]
-      },
-      {
-        featureType: 'poi',
-        stylers: [{ visibility: 'on' }]
-      },
-      {
-        featureType: 'transit',
-        stylers: [{ visibility: 'off' }]
-      }
-    ];
-    this.map.setOptions({ styles: styles });
+    this.map = setMap();
   }
 
   createDataLayers(event: {

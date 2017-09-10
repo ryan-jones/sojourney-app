@@ -17,7 +17,7 @@ export class ItineraryPlannerComponent {
   @Output() createMarker: EventEmitter<any> = new EventEmitter();
   @Output() resetMapMarkers: EventEmitter<any> = new EventEmitter();
 
-  newItinerary: Itinerary;
+  newItinerary: Itinerary = new Itinerary;
 
   differenceBetweenDates: number;
   currentCost: number = 0;
@@ -288,8 +288,7 @@ export class ItineraryPlannerComponent {
     this.currentCost = 0;
   }
 
-  //toggles on and off note option for itinerary***********************
   toggleNote() {
-    !this.checked ? (this.checked = true) : (this.checked = false);
+    this.checked = !this.checked;
   }
 }
