@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Itinerary } from 'app/shared/itinerary.model';
 
 declare var google: any;
 
@@ -16,13 +17,7 @@ export class ItineraryPlannerComponent {
   @Output() createMarker: EventEmitter<any> = new EventEmitter();
   @Output() resetMapMarkers: EventEmitter<any> = new EventEmitter();
 
-  newItinerary = {
-    id: '',
-    name: '',
-    nationality1: '',
-    nationality2: '',
-    placesAndDates: []
-  };
+  newItinerary: Itinerary;
 
   differenceBetweenDates: number;
   currentCost: number = 0;
@@ -38,11 +33,11 @@ export class ItineraryPlannerComponent {
   namePlaceholder: string = 'Create an itinerary name';
   locationPlaceholder: string = 'Enter a starting location';
 
-  itineraryDays: Array<number> = [];
-  displayableExpenses: Array<any> = [];
-  accumulatedDailyExpense: Array<number> = [];
-  dates: Array<any> = [];
-  costs: Array<number> = [];
+  itineraryDays: number[] = [];
+  displayableExpenses: any[] = [];
+  accumulatedDailyExpense: number[] = [];
+  dates: any[] = [];
+  costs: number[] = [];
 
   ngOnInit() {
     this.autoCompleteAddress();
