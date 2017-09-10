@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { SessionService } from '../shared/services/session.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../shared/services/user.service';
-import { User } from '../shared/user.model';
+import { NewUser } from '../shared/new-user.model';
 
 @Component({
   selector: 'app-my-signup-form',
@@ -11,7 +11,7 @@ import { User } from '../shared/user.model';
   providers: [SessionService]
 })
 export class MySignupFormComponent {
-  newUser = User;
+  newUser = NewUser;
 
   error: string;
 

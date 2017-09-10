@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CountryService } from '../shared/services/country.service';
 import { SessionService } from '../shared/services/session.service';
 import { UserService } from '../shared/services/user.service';
+import { User } from 'app/shared/user.model';
+import { Country } from 'app/shared/country.model';
 
 declare var google: any;
 
@@ -12,9 +14,9 @@ declare var google: any;
   providers: [CountryService, SessionService, UserService]
 })
 export class MyHomeComponent implements OnInit {
-  user: any;
-  countries: any;
-  flightPath: any;
+  user = new User;
+  countries: Country[];
+  flightPathData: any;
   marker: any;
   newItinerary: any;
   map: any;
@@ -31,13 +33,11 @@ export class MyHomeComponent implements OnInit {
   selectedNationalityId1: string;
   selectedNationalityId2: string;
 
-  colorLayers: Array<any> = [];
-  layers: Array<any> = [];
-  allMarkers: Array<any> = [];
-  allFlightPaths: Array<any> = [];
-  allTravelArray: Array<any> = [];
-  locations: Array<any> = [];
-  arrayOfTravel: Array<any> = [];
+  layers: any[] = [];
+  mapMarkers: any[] = [];
+  itineraryPath: any[] = [];
+  locations: any[] = [];
+  destinationCoordinates: any[] = [];
 
   constructor(
     private country: CountryService,
@@ -58,8 +58,8 @@ export class MyHomeComponent implements OnInit {
   }
 
   authorizeUser() {
-    let user = JSON.parse(localStorage.getItem('user'));
-    !user ? (this.user = '') : this.getUser(this.user);
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    if (currentUser) this.getUser(this.user);
   }
 
   getUser(user) {
@@ -73,6 +73,7 @@ export class MyHomeComponent implements OnInit {
       this.countries = countries;
     });
   }
+
   //**************** creates initial map *********
   initiateMap() {
     const myOptions = {
@@ -161,10 +162,10 @@ export class MyHomeComponent implements OnInit {
 
   geocodeMarker(data) {
     const geocoder = new google.maps.Geocoder();
-    this.buildFlightPath(geocoder, data);
+    this.buildflightPath(geocoder, data);
   }
 
-  buildFlightPath(geocoder, data) {
+  buildflightPath(geocoder, data) {
     const that = this;
     const name = data.name;
     const date = data.date;
@@ -176,7 +177,7 @@ export class MyHomeComponent implements OnInit {
     geocoder.geocode({ address: data.address }, function(results, status) {
       if (status === 'OK') {
         const infowindow = new google.maps.InfoWindow();
-        that.createFlightPath(point);
+        that.createflightPath(point);
         that.setMarker(
           point,
           name,
@@ -191,18 +192,18 @@ export class MyHomeComponent implements OnInit {
     });
   }
 
-  createFlightPath(point) {
-    this.arrayOfTravel.push(point);
-    this.allTravelArray.push(this.arrayOfTravel);
-    this.flightPath = new google.maps.Polyline({
-      path: this.arrayOfTravel,
+  createflightPath(point) {
+    this.destinationCoordinates.push(point);
+
+    this.flightPathData = new google.maps.Polyline({
+      path: this.destinationCoordinates,
       geodesic: true,
       strokeColor: 'yellow',
       strokeOpacity: 1.0,
       strokeWeight: 4
     });
-    this.allFlightPaths.push(this.flightPath);
-    this.flightPath.setMap(this.map);
+    this.itineraryPath.push(this.flightPathData);
+    this.flightPathData.setMap(this.map);
   }
 
   setMarker(
@@ -228,7 +229,7 @@ export class MyHomeComponent implements OnInit {
     this.marker.setIcon(
       'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
     );
-    this.allMarkers.push(this.marker);
+    this.mapMarkers.push(this.marker);
     this.setWindowContent(
       name,
       country,
@@ -274,36 +275,36 @@ export class MyHomeComponent implements OnInit {
   }
 
   clearPolylines() {
-    this.allFlightPaths.forEach(flightPath => {
-      flightPath.setMap(null);
+    this.itineraryPath.forEach(flightPathData => {
+      flightPathData.setMap(null);
     });
-    this.allFlightPaths = [];
+    this.itineraryPath = [];
   }
 
   clearMarkers() {
-    this.allMarkers.forEach(marker => {
+    this.mapMarkers.forEach(marker => {
       marker.setMap(null);
     });
-    this.allMarkers = [];
+    this.mapMarkers = [];
   }
 
   resetPolylines() {
-    this.arrayOfTravel = [];
+    this.destinationCoordinates = [];
     this.locations.forEach(location => {
       const point = {
         lat: location.geometry.location.lat(),
         lng: location.geometry.location.lng()
       };
-      this.arrayOfTravel.push(point);
-      this.flightPath = new google.maps.Polyline({
-        path: this.arrayOfTravel,
+      this.destinationCoordinates.push(point);
+      this.flightPathData = new google.maps.Polyline({
+        path: this.destinationCoordinates,
         geodesic: true,
         strokeColor: 'yellow',
         strokeOpacity: 1.0,
         strokeWeight: 4
       });
-      this.flightPath.setMap(this.map);
-      this.allFlightPaths.push(this.flightPath);
+      this.flightPathData.setMap(this.map);
+      this.itineraryPath.push(this.flightPathData);
       this.marker = new google.maps.Marker({
         position: point,
         map: this.map
@@ -311,7 +312,7 @@ export class MyHomeComponent implements OnInit {
       this.marker.setIcon(
         'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
       );
-      this.allMarkers.push(this.marker);
+      this.mapMarkers.push(this.marker);
     });
   }
 
