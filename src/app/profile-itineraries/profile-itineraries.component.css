@@ -1,160 +1,114 @@
-.fluid-container, .row, .left-side, .right-side{
-  margin: 0;
+.overview {
   padding: 0;
 }
 
-button{
-  background-color: #879dc9;
-  color: #fff;
-  border-radius: 5px;
+.overview, .itinerary-box, .blue-text {
+  margin: 0;
+}
+
+button {
   box-shadow: 1px 3px 3px 1px #ccc;
-
-}
-#home-top{
-  box-shadow: inset 5px 0 5px #ccc;
-
-}
-.left-side, .right-side{
-  height: 100vh;
-
 }
 
-.left-side{
-  background-color: #eeedec;
-  box-shadow: inset -5px 5px 5px #ccc;
-  text-align: center;
-}
-
-.left-side > div{
-  margin: 5% 2%;
-}
-
-.img-div{
-  height: 20vh;
-  margin: 0 2%;
-}
-.img-circle{
-  max-width: 100%;
-  max-height: 100%;
-}
-
-
-.map-view{
-  height: 60vh;
-
-}
-
-.map-canvas {
-    height: 100%;
-
-  }
-
-.country-button{
-  background-color: #222061;
+button, .country-button, .location-list-details, .delete, .share {
   border-radius: 5px;
-  margin-top: 1%;
+}
+
+button, .location-box {
+  background-color: #879dc9;
+}
+
+.map-view {
+  height: 60vh;
+}
+
+.map-canvas, .profile-itinerary, .total-days {
+  height: 100%;
+}
+
+button, .country-button, .white, .delete, .share {
   color: #fff;
+}
+
+.country-button, .blue {
+  background-color: #222061;
+}
+
+.country-button {
   padding: 1% 2%;
   box-shadow: 3px 3px 3px 1px #ccc;
 }
 
-
-.itinerary-box{
+.itinerary-box {
   background-color: #ccc;
-  margin: 0;
   height: 34vh;
   padding-top: 2%;
 }
 
-.profile-itinerary{
-  height: 100%;
-}
-
-.location-box, .location-list, .list-row{
+.location-box,
+.location-list,
+.list-row {
   display: flex;
 }
 
-
-
-.location-box{
-
-  background-color: #879dc9;
+.location-box {
   border-radius: 5px 5px 0 0;
   padding: 0 5%;
-
 }
 
-.location-list{
-  width:100%;
+.location-list, .location-list-details {
+  width: 100%;
 }
 
 .location-list-details {
   text-align: center;
   background-color: #eeedec;
   border-bottom: 1px solid black;
-  border-radius: 5px;
-  width:100%;
-  margin: 10% 0 ;
+  margin: 10% 0;
 }
 
-.location-list-days{
-  /*text-align: center;*/
+.location-list-days {
   margin: 20% 20% 5% 5%;
   padding-right: 5%;
 }
 
 
-.white{
-  color: #fff;
-}
-
-.blue-text{
+.blue-text {
   color: #879dc9;
-  margin: 0;
 }
 
-
-.delete{
+.delete, .share {
   background-color: red;
-  border-radius: 5px;
+}
+
+.delete, .total-days, .country-button {
   margin-top: 1%;
-  color: #fff;
+}
+
+.delete {
   padding: 0 2%;
   box-shadow: 3px 3px 3px 1px #ccc;
 }
 
-.days{
-  /*text-align: center;*/
+.total-days, .share {
+  border: 1px solid #879dc9;
 }
 
-.total-days{
+.total-days {
   background-color: #fff;
   color: #879dc9;
-  border: 1px solid #879dc9;
-  margin-top:1%;
-  height: 100%;
   border-radius: 0 5px 5px 0;
   padding: 2%;
   box-shadow: 3px 3px 3px 3px #ccc;
 }
 
-.share{
+.share {
   text-align: center;
-  background-color: red;
-  color: #fff;
-  border-radius: 5px;
-  border: 1px solid #879dc9;
-
   margin: 1% 0 2%;
   box-shadow: 0px 3px 3px 0px #ccc;
 }
 
-.blue{
-  background-color: #222061;
-}
-
-.green-box{
+.green-box {
   border: 1px solid #ccc;
   background-color: green;
-
 }
