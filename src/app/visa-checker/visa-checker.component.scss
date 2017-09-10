@@ -1,68 +1,69 @@
 .row {
-    margin: 0;
+  margin: 0;
 }
 
-.visa-view{
-    height: 35vh;
-    background-color: #fff;
-    text-align: center;
-  }
-  
-  .color-row{
-    background-color: #fff;
-  }
-  
-  .color-column{
-    height: 100%;
-    margin-bottom: 1%;
-  }
-  
-  .yellow-box, .red-box, .blue-box, .green-box{
-    height: 2vh;
-    margin-top: 1%;
-    width: auto;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    box-shadow: 1px 3px 3px 1px #ccc;
-  }
-  
-  .yellow-box{
-    background-color: yellow;
-  }
-  
-  .red-box{
-    background-color: red;
-  }
-  
-  .blue-box{
-    background-color: blue;
-  }
-  
-  .green-box{
-    background-color: green;
-  }
+.visa-view {
+  height: 35vh;
+  text-align: center;
+}
 
-  .nation-row{
-    /*margin-top: 2%;*/
-  }
-  
-  .nation-box{
-    background-color: #879dc9;
-    padding-top: 1%;
-    border-radius: 5px;
-    width:46%;
-    margin: 0 2% 0 2%;;
-    box-shadow: 3px 3px 3px 3px #ccc;
-  }
-  .country-button {
-    background-color: #222061;
-    border-radius: 5px;
-    margin-top: 1%;
-    padding: 1% 2%;
-    box-shadow: 3px 3px 3px 1px #ccc;
-  }
+.visa-view,
+.color-row {
+  background-color: #fff;
+}
 
-  .country-button, .nation-box {
-      color: #fff;
-  }
-  
+.color-column {
+  height: 100%;
+  margin-bottom: 1%;
+}
+
+.yellow-box,
+.red-box,
+.blue-box,
+.green-box {
+  height: 2vh;
+  margin-top: 1%;
+  width: auto;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 1px 3px 3px 1px #ccc;
+}
+
+.yellow-box {
+  background-color: yellow;
+}
+
+.red-box {
+  background-color: red;
+}
+
+.blue-box {
+  background-color: blue;
+}
+
+.green-box {
+  background-color: green;
+}
+
+.nation-box, .country-button {
+  border-radius: 5px;
+}
+
+.nation-box {
+  background-color: #879dc9;
+  padding-top: 1%;
+  width: 46%;
+  margin: 0 2% 0 2%;
+  box-shadow: 3px 3px 3px 3px #ccc;
+}
+.country-button {
+  background-color: #222061;
+  margin-top: 1%;
+  padding: 1% 2%;
+  box-shadow: 3px 3px 3px 1px #ccc;
+}
+
+.country-button,
+.nation-box {
+  color: #fff;
+}
