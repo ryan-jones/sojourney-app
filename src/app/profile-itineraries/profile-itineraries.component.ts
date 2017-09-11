@@ -74,6 +74,7 @@ export class ProfileItinerariesComponent implements OnInit {
       this.userService.getTest(user._id)
         .subscribe((user)=> {
           this.user = user
+          console.log('this.user', this.user)
 
           let arr = []
           this.user.arr.forEach((item, index)=>{
