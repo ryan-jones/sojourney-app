@@ -3,6 +3,7 @@ import {UserService} from '../shared/services/user.service';
 
 import { MapStyles, MapOptions } from '../shared/map.model';
 import { setMap } from 'app/shared/services/map.service';
+import { User } from 'app/shared/user.model';
 
 declare const google: any;
 
@@ -16,9 +17,11 @@ export class ProfileCountryVisitComponent implements OnInit {
   constructor(
     private userService: UserService, ) { }
 
+  user: User;
   map: any;
 
   ngOnInit() {
+    this.user = JSON.parse(localStorage.getItem('user'))
     this.initiateMap();
   }
 

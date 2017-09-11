@@ -11,11 +11,11 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 
 //components
 import { AppComponent } from './app.component';
-import { MyHomeComponent } from './my-home/my-home.component';
+import { MyHomeViewComponent } from './my-home/my-home.component';
 import { MyAboutComponent } from './my-about/my-about.component';
 import { MyLoginComponent } from './my-login/my-login.component';
 import { MyNavComponent } from './my-nav/my-nav.component';
-import { ProfileComponent } from './containers/profile.component';
+import { ProfileComponent } from './containers/profile/profile.component';
 import { ProfileOverviewComponent } from './profile-overview/profile-overview.component';
 import { ProfileEditComponent } from './profile-edit/profile-edit.component';
 import { MySignupFormComponent } from './my-signup-form/my-signup-form.component';
@@ -25,6 +25,8 @@ import { ProfileNavComponent } from './profile-nav/profile-nav.component';
 import { MyFlightsComponent } from './my-flights/my-flights.component';
 import { ItineraryPlannerComponent } from './itinerary-planner/itinerary-planner.component';
 import { VisaCheckerComponent } from './visa-checker/visa-checker.component';
+import { HomeComponent } from './containers/home/home.component';
+
 
 //services
 import { CountryService } from './shared/services/country.service';
@@ -33,8 +35,8 @@ import { SessionService } from './shared/services/session.service';
 import { UserService } from './shared/services/user.service';
 
 const routes: Routes = [
-  { path: '', component: MyHomeComponent },
-  { path: 'home', component: MyHomeComponent },
+  { path: '', component: HomeComponent },
+  { path: 'home', component: HomeComponent },
   { path: 'about', component: MyAboutComponent },
   { path: 'signup', component: MySignupFormComponent },
   { path: 'login', component: MyLoginComponent },
@@ -58,7 +60,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    MyHomeComponent,
+    MyHomeViewComponent,
     MyAboutComponent,
     MyLoginComponent,
     MyNavComponent,
@@ -71,7 +73,8 @@ const routes: Routes = [
     ProfileNavComponent,
     MyFlightsComponent,
     ItineraryPlannerComponent,
-    VisaCheckerComponent
+    VisaCheckerComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

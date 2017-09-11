@@ -16,6 +16,7 @@ export class ItineraryPlannerComponent {
   @Output() changeAddress: EventEmitter<any> = new EventEmitter();
   @Output() createMarker: EventEmitter<any> = new EventEmitter();
   @Output() resetMapMarkers: EventEmitter<any> = new EventEmitter();
+  @Output() onAddItinerary: EventEmitter<any> = new EventEmitter();
 
   newItinerary: Itinerary = new Itinerary;
 
@@ -136,15 +137,13 @@ export class ItineraryPlannerComponent {
 
   setPlaceDetails() {
     this.place.details =
-      this.displayableExpenses.length === 0 ? '' : this.displayableExpenses;
+      !this.displayableExpenses.length ? '' : this.displayableExpenses;
   }
 
   setCurrencyAndTransport() {
     this.place.currency = this.selectedCurrency;
     this.place.transport = this.selectedTransport;
-    if (!this.place.transport) {
-      this.place.transport = 'plane';
-    }
+    if (!this.place.transport) this.place.transport = 'plane';  
   }
 
   setCountryName() {
@@ -290,5 +289,10 @@ export class ItineraryPlannerComponent {
 
   toggleNote() {
     this.checked = !this.checked;
+  }
+
+  addItinerary() {
+    this.newItinerary.placesAndDates.push(this.place); 
+    this.onAddItinerary.emit(this.newItinerary);
   }
 }

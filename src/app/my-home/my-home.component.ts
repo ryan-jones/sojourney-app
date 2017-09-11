@@ -5,18 +5,18 @@ import { UserService } from '../shared/services/user.service';
 import { User } from 'app/shared/user.model';
 import { Country } from 'app/shared/country.model';
 import { MapStyles, MapOptions } from 'app/shared/map.model';
-import { setMap } from 'app/shared/services/map.service';
+import { setMap, createDataLayers } from 'app/shared/services/map.service';
 
 declare var google: any;
 
 @Component({
-  selector: 'app-my-home',
+  selector: 'my-home',
   templateUrl: './my-home.component.html',
   styleUrls: ['./my-home.component.scss'],
   providers: [CountryService, SessionService, UserService]
 })
-export class MyHomeComponent implements OnInit {
-  user = new User;
+export class MyHomeViewComponent implements OnInit {
+  user: User;
   countries: Country[];
   flightPathData: any;
   marker: any;
@@ -56,18 +56,12 @@ export class MyHomeComponent implements OnInit {
 
   checkCollapsed() {
     this.isCollapsed = !this.isCollapsed;
-    !this.isCollapsed ? (this.arrow = '>') : (this.arrow = 'v');
+    this.arrow = (!this.isCollapsed ? '>': 'v');
   }
 
   authorizeUser() {
     const currentUser = JSON.parse(localStorage.getItem('user'));
-    if (currentUser) this.getUser(this.user);
-  }
-
-  getUser(user) {
-    this.userService.get(user._id).subscribe(user => {
-      this.user = user;
-    });
+    this.user = (currentUser ? currentUser : new User);
   }
 
   getCountries() {
@@ -81,31 +75,15 @@ export class MyHomeComponent implements OnInit {
     this.map = setMap();
   }
 
-  createDataLayers(event: {
+  loadDataLayers(event: {
     visaKind: string;
     nation: any;
     index: number;
     colors: any;
     counter: number;
   }) {
-    const visaKind = event.visaKind;
-    const nation = event.nation;
-    const index = event.index;
-    const colors = event.colors;
-    const counter = event.counter;
-    const freeLayer = new google.maps.Data();
-    freeLayer.loadGeoJson(
-      'https://raw.githubusercontent.com/johan/world.geo.json/master/countries/' +
-        nation[visaKind][counter] +
-        '.geo.json'
-    );
-    freeLayer.setStyle({
-      fillColor: colors[visaKind][index],
-      fillOpacity: 0.5,
-      title: nation[visaKind][counter]
-    });
-    freeLayer.setMap(this.map);
-    this.layers.push(freeLayer);
+    const layer = createDataLayers(event);
+    this.layers.push(layer);
   }
 
   geocodeMarker(data) {
@@ -272,7 +250,7 @@ export class MyHomeComponent implements OnInit {
 
   //saving to user profile in the database
   addItinerary(event) {
-    this.newItinerary = event;
+    this.newItinerary = Object.assign({}, event);
     this.buildItinerary(this.newItinerary);
     this.updateItinerary(this.newItinerary);
   }

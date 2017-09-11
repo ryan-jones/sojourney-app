@@ -5,11 +5,11 @@
         <div id="map-canvas"></div>
       </div>
       <div class="row visa-view">
-        <visa-checker [countries]="countries" (createDataLayers)="createDataLayers($event)"></visa-checker>
+        <visa-checker [countries]="countries" (createDataLayers)="loadDataLayers($event)"></visa-checker>
       </div>
     </div>
     <div class="col-md-3 right-side">
-      <itinerary-planner (createMarker)="geocodeMarker($event)" (resetMapMarkers)="resetMapValues($event)" [locations]="locations" [place]="place"></itinerary-planner>
+      <itinerary-planner (createMarker)="geocodeMarker($event)" (resetMapMarkers)="resetMapValues($event)" (onAddItinerary)="addItinerary($event)" [locations]="locations" [place]="place"></itinerary-planner>
     </div>
   </div>
 </div>

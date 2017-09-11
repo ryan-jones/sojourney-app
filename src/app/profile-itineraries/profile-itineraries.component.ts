@@ -11,6 +11,7 @@ import { UserService } from '../shared/services/user.service';
 import { CountryService } from '../shared/services/country.service';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TabsetComponent } from 'ngx-bootstrap';
+import { setMap } from 'app/shared/services/map.service';
 
 declare var google: any;
 
@@ -31,6 +32,7 @@ export class ProfileItinerariesComponent implements OnInit {
     private userService: UserService,
     private country: CountryService
   ) {}
+
   selectedNationalityId1;
   selectedNationalityId2;
   countries;
@@ -47,132 +49,76 @@ export class ProfileItinerariesComponent implements OnInit {
   place: any;
   diffDays: number;
   totalItinerary;
-  sum: any;
+  sum: number;
   deleteLocation;
   marker;
   indexTarget;
   locationIndex;
-  locations: Array<any> = [];
-  itineraryDays: Array<any> = [];
-  loopTravelArray: Array<any> = [];
-  loopDatesArray: Array<any> = [];
+  locations: any[] = [];
+  itineraryDays: any[] = [];
+  loopTravelArray: any[] = [];
+  loopDatesArray: any[] = [];
   dates = [];
   arrayOfTravel = [];
-  allTravelArray: Array<any> = [];
-  allMarkers: Array<any> = [];
-  allFlightPaths: Array<any> = [];
-  allItinerariesArray: Array<any> = [];
-  colorLayers: Array<any> = [];
-  layers: Array<any> = [];
-  coordinates: Array<any> = [];
-  indexProvider: Array<any> = [];
+  allTravelArray: any[] = [];
+  allMarkers: any[] = [];
+  allFlightPaths: any[] = [];
+  allItinerariesArray: any[] = [];
+  colorLayers: any[] = [];
+  layers: any[] = [];
+  coordinates: any[] = [];
+  indexProvider: any[] = [];
 
   ngOnInit() {
-    let user = JSON.parse(localStorage.getItem('user'));
-    if (user === null) {
-      this.user = '';
-    } else {
-      this.userService.getTest(user._id).subscribe(user => {
-        this.user = user;
+    const user = JSON.parse(localStorage.getItem('user'));
 
-        let arr = [];
-        this.user.arr.forEach((item, index) => {
-          this.selectedNationalityId1 = !item.nationality1 ? '' : item.nationality1
-          this.selectedNationalityId2 = !item.nationality3 ? '' : item.nationality2
+    this.userService.getTest(user._id).subscribe(user => {
+      this.user = user;
+      console.log('user itinerary', this.user);
+      const date = [];
+      const arr = [];
 
-          this.locations.push(item.placesAndDates);
+      this.user.arr.forEach((item, index) => {
+        this.selectedNationalityId1 = !item.nationality1
+          ? ''
+          : item.nationality1;
+        this.selectedNationalityId2 = !item.nationality3
+          ? ''
+          : item.nationality2;
 
-          this.coordinates = [];
-          const date = [];
+        this.locations.push(item.placesAndDates);
 
-          item.placesAndDates.forEach(place => {
-            this.coordinates.push(place.geometry.location);
-            date.push(place.date);
-          });
-
-          this.arrayOfTravel.push(this.coordinates);
-          this.dates.push(date);
-
-          arr.push(item);
-
-          this.initiateMap();
-          // this.loadCountries(this.selectedNationalityId1, this.selectedNationalityId2)
-          // this.loadPolylines(this.coordinates);
-          // this.differenceInDays();
+        item.placesAndDates.forEach(place => {
+          this.coordinates.push(place.geometry.location);
+          date.push(place.date);
         });
-        this.allItinerariesArray = arr;
+
+        this.arrayOfTravel.push(this.coordinates);
+        this.dates.push(date);
+
+        arr.push(item);
+
+        this.initiateMap();
+        // this.loadCountries(this.selectedNationalityId1, this.selectedNationalityId2)
+        // this.loadPolylines(this.coordinates);
+        // this.differenceInDays();
       });
-    }
+      this.allItinerariesArray = arr;
+    });
 
     this.country.getList().subscribe(countries => {
       this.countries = countries;
       this.countries2 = countries;
     });
 
-    
-
     this.countryName1 = !this.countryName1 ? '' : this.countryName1;
     this.countryName2 = !this.countryName2 ? '' : this.countryName2;
 
     this.sum = 0;
-  } 
+  }
 
   initiateMap() {
-    var myOptions = {
-      zoom: 2,
-      center: new google.maps.LatLng(10, 0),
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    // initialize the map
-
-    this.map = new google.maps.Map(
-      document.getElementsByClassName('map-canvas'),
-      myOptions
-    );
-    var styles = [
-      {
-        featureType: 'landscape',
-        stylers: [{ hue: '#fff' }, { saturation: 100 }]
-      },
-      {
-        featureType: 'road',
-        stylers: [{ visibility: 'on' }]
-      },
-      {
-        featureType: 'administrative.land_parcel',
-        stylers: [{ visibility: 'off' }]
-      },
-      {
-        featureType: 'administrative.locality',
-        stylers: [{ visibility: 'on' }]
-      },
-      {
-        featureType: 'administrative.neighborhood',
-        stylers: [{ visibility: 'off' }]
-      },
-      {
-        featureType: 'administrative.province',
-        stylers: [{ visibility: 'on' }]
-      },
-      {
-        featureType: 'landscape.man_made',
-        stylers: [{ visibility: 'off' }]
-      },
-      {
-        featureType: 'landscape.natural',
-        stylers: [{ visibility: 'off' }]
-      },
-      {
-        featureType: 'poi',
-        stylers: [{ visibility: 'on' }]
-      },
-      {
-        featureType: 'transit',
-        stylers: [{ visibility: 'off' }]
-      }
-    ];
-
-    this.map.setOptions({ styles: styles });
+    this.map = setMap();
   }
 
   //************* load itineraries on the map **************
@@ -278,18 +224,6 @@ export class ProfileItinerariesComponent implements OnInit {
       }
     });
   }
-
-  //turns dates into numerical values for comparison
-  // differenceInDays(){
-  //   this.diffDays = (Math.abs(new Date(this.dates[this.dates.length-1]).getTime() - new Date(this.dates[this.dates.length - 2]).getTime())) / (1000 * 3600 * 24);
-  //   if(isNaN(this.diffDays)===true){
-  //     this.diffDays = 0;
-  //   }
-  //
-  //
-  // //array of differences between dates to be loaded on the view
-  //   this.itineraryDays.push(this.diffDays);
-  // }
 
   selectTab(tab_id: number) {
     this.staticTabs.tabs[tab_id].active = true;
