@@ -39,30 +39,29 @@ export class VisaCheckerComponent implements OnChanges {
       visaOnArrival: ['yellow', 'green']
     };
     let index = 0;
-    this.showCountries(selectedCountries, colors, index, createDataLayers);
+    this.showCountries(selectedCountries, colors, index);
   }
 
   //********************   creates country data layers ***************
-  showCountries(selectedCountries, colors, index, createDataLayers) {
+  showCountries(selectedCountries, colors, index) {
     if (index === 2) {
       return;
     }
-    this.setDataLayersForSelectedCountry(selectedCountries, index, colors, createDataLayers);
+    this.setDataLayersForSelectedCountry(selectedCountries, index, colors);
   }
 
-  setDataLayersForSelectedCountry(selectedCountries, index, colors, createDataLayers) {
-    this.countryService.get(selectedCountries[index]).subscribe(nation => {
+  setDataLayersForSelectedCountry(selectedCountries, index, colors) {
+    this.countryService.getCountry(selectedCountries[index]).subscribe(nation => {
       this.setDataLayers(
         nation,
         index,
         colors,
         selectedCountries,
-        createDataLayers
       );
     });
   }
 
-  setDataLayers(nation, index, colors, countries, createDataLayers) {
+  setDataLayers(nation, index, colors, countries) {
     const visaKindArray = ['visaFree', 'visaOnArrival'];
     let visaKindIndex = 0;
     let counter = 0;
@@ -76,7 +75,6 @@ export class VisaCheckerComponent implements OnChanges {
       colors,
       counter,
       countries,
-      createDataLayers
     );
   }
 
@@ -88,7 +86,6 @@ export class VisaCheckerComponent implements OnChanges {
     colors: any,
     counter: number,
     countries: any,
-    createDataLayers: EventEmitter<any>
   ) {
     const visaKind = visaKindArray[visaKindIndex];
     let dataLayerData = {
@@ -98,13 +95,13 @@ export class VisaCheckerComponent implements OnChanges {
       colors,
       counter
     };
-    createDataLayers.emit(dataLayerData);
+    this.createDataLayers.emit(dataLayerData);
     counter++;
     if (counter === nation[visaKind].length) {
       counter = 0;
       if (visaKind === 'visaOnArrival') {
         index++;
-        this.showCountries(countries, colors, index, createDataLayers);
+        this.showCountries(countries, colors, index);
       } else {
         visaKindIndex++;
         this.loadDataLayers(
@@ -115,7 +112,6 @@ export class VisaCheckerComponent implements OnChanges {
           colors,
           counter,
           countries,
-          createDataLayers
         );
       }
     } else {
@@ -127,7 +123,6 @@ export class VisaCheckerComponent implements OnChanges {
         colors,
         counter,
         countries,
-        createDataLayers
       );
     }
   }

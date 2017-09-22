@@ -12,33 +12,32 @@ export class ItineraryPlannerComponent {
   constructor() {}
 
   @Input() locations: any;
-  @Input() place: any;
   @Output() changeAddress: EventEmitter<any> = new EventEmitter();
   @Output() createMarker: EventEmitter<any> = new EventEmitter();
   @Output() resetMapMarkers: EventEmitter<any> = new EventEmitter();
   @Output() onAddItinerary: EventEmitter<any> = new EventEmitter();
 
-  newItinerary: Itinerary = new Itinerary;
+  private itineraryDestination: any;
+  private newItinerary: Itinerary = new Itinerary;
+  private differenceBetweenDates: number;
+  private currentCost: number = 0;
+  private totalPrice: number = 0;
+  private totalTripDuration: number = 0;
 
-  differenceBetweenDates: number;
-  currentCost: number = 0;
-  totalPrice: number = 0;
-  totalTripDuration: number = 0;
+  private checked: boolean = false;
 
-  checked: boolean = false;
+  private locationView: string;
+  private newAddress: string;
+  private selectedCurrency: string = '$';
+  private selectedTransport: string = 'plane';
+  private namePlaceholder: string = 'Create an itinerary name';
+  private locationPlaceholder: string = 'Enter a starting location';
 
-  locationView: string;
-  newAddress: string;
-  selectedCurrency: string = '$';
-  selectedTransport: string = 'plane';
-  namePlaceholder: string = 'Create an itinerary name';
-  locationPlaceholder: string = 'Enter a starting location';
-
-  itineraryDays: number[] = [];
-  displayableExpenses: any[] = [];
-  accumulatedDailyExpense: number[] = [];
-  dates: any[] = [];
-  costs: number[] = [];
+  private itineraryDays: number[] = [];
+  private displayableExpenses: any[] = [];
+  private accumulatedDailyExpense: number[] = [];
+  private dates: any[] = [];
+  private costs: number[] = [];
 
   ngOnInit() {
     this.autoCompleteAddress();
@@ -48,8 +47,8 @@ export class ItineraryPlannerComponent {
     const input = document.getElementById('new-address');
     const autocomplete = new google.maps.places.Autocomplete(input);
     autocomplete.addListener('place_changed', () => {
-      this.place = autocomplete.getPlace();
-      this.locationView = this.place.name;
+      this.itineraryDestination = autocomplete.getPlace();
+      this.locationView = this.itineraryDestination.name;
     });
   }
 
@@ -136,35 +135,35 @@ export class ItineraryPlannerComponent {
   }
 
   setPlaceDetails() {
-    this.place.details =
+    this.itineraryDestination.details =
       !this.displayableExpenses.length ? '' : this.displayableExpenses;
   }
 
   setCurrencyAndTransport() {
-    this.place.currency = this.selectedCurrency;
-    this.place.transport = this.selectedTransport;
-    if (!this.place.transport) this.place.transport = 'plane';  
+    this.itineraryDestination.currency = this.selectedCurrency;
+    this.itineraryDestination.transport = this.selectedTransport;
+    if (!this.itineraryDestination.transport) this.itineraryDestination.transport = 'plane';  
   }
 
   setCountryName() {
-    const countryStringSplit = this.place.formatted_address.split(',');
-    this.place.country = countryStringSplit[countryStringSplit.length - 1];
+    const countryStringSplit = this.itineraryDestination.formatted_address.split(',');
+    this.itineraryDestination.country = countryStringSplit[countryStringSplit.length - 1];
   }
 
   setPrice() {
     if (this.accumulatedDailyExpense.length === 0) {
-      this.place.price = document.getElementById('new-price')['valueAsNumber'];
-      this.currentCost = this.place.price;
+      this.itineraryDestination.price = document.getElementById('new-price')['valueAsNumber'];
+      this.currentCost = this.itineraryDestination.price;
     } else {
-      this.place.price = this.currentCost;
+      this.itineraryDestination.price = this.currentCost;
     }
-    if (isNaN(this.place.price)) {
-      this.place.price = 0;
+    if (isNaN(this.itineraryDestination.price)) {
+      this.itineraryDestination.price = 0;
     }
     if (isNaN(this.currentCost)) {
       this.currentCost = 0;
     }
-    this.costs.push(this.place.price);
+    this.costs.push(this.itineraryDestination.price);
     this.getTotalPrice();
   }
 
@@ -173,19 +172,19 @@ export class ItineraryPlannerComponent {
     const dateLength = variableDate.getMonth();
     const digit = dateLength <= 8 ? '-0' : '-';
 
-    this.place.date =
+    this.itineraryDestination.date =
       variableDate.getFullYear() +
       `${digit}` +
       (variableDate.getMonth() + 1) +
       '-' +
       variableDate.getDate();
-    this.place.date.autocomplete;
-    this.dates.push(this.place.date);
+    this.itineraryDestination.date.autocomplete;
+    this.dates.push(this.itineraryDestination.date);
   }
 
   setLocations() {
-    this.locations.push(this.place);
-    this.newItinerary.placesAndDates.push(this.place);
+    this.locations.push(this.itineraryDestination);
+    this.newItinerary.placesAndDates.push(this.itineraryDestination);
   }
 
   setItineraryLength() {
@@ -234,15 +233,15 @@ export class ItineraryPlannerComponent {
   sendMarker(address) {
     const exportedValues = {
       address: address,
-      name: this.place.name,
-      date: this.place.date,
-      days: this.place.date,
-      transport: this.place.transport,
-      country: this.place.country,
-      price: this.place.price,
+      name: this.itineraryDestination.name,
+      date: this.itineraryDestination.date,
+      days: this.itineraryDestination.date,
+      transport: this.itineraryDestination.transport,
+      country: this.itineraryDestination.country,
+      price: this.itineraryDestination.price,
       point: {
-        lat: this.place.geometry.location.lat(),
-        lng: this.place.geometry.location.lng()
+        lat: this.itineraryDestination.geometry.location.lat(),
+        lng: this.itineraryDestination.geometry.location.lng()
       }
     };
     this.createMarker.emit(exportedValues);
@@ -292,7 +291,7 @@ export class ItineraryPlannerComponent {
   }
 
   addItinerary() {
-    this.newItinerary.placesAndDates.push(this.place); 
+    this.newItinerary.placesAndDates.push(this.itineraryDestination); 
     this.onAddItinerary.emit(this.newItinerary);
   }
 }

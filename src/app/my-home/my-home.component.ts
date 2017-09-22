@@ -6,6 +6,7 @@ import { User } from 'app/shared/user.model';
 import { Country } from 'app/shared/country.model';
 import { MapStyles, MapOptions } from 'app/shared/map.model';
 import { setMap, createDataLayers } from 'app/shared/services/map.service';
+import { Itinerary } from 'app/shared/itinerary.model';
 
 declare var google: any;
 
@@ -16,30 +17,27 @@ declare var google: any;
   providers: [CountryService, SessionService, UserService]
 })
 export class MyHomeViewComponent implements OnInit {
-  user: User;
-  countries: Country[];
-  flightPathData: any;
-  marker: any;
-  newItinerary: any;
-  map: any;
-  place: any;
-  selectedAddress: any;
+  //google properties
+  private marker: any;
+  private map: any;
+  private flightPathData: any;
+  private layers: any[] = [];
+  private mapMarkers: any[] = [];
+  private itineraryPath: any[] = [];
+  private locations: any[] = [];
+  private destinationCoordinates: any[] = [];
 
-  nation;
-  address;
-  locationView: string;
-  arrow: string;
-  checked: boolean = false;
-  isCollapsed: boolean = false;
+//Defined properties
+  private user: User;
+  private countries: Country[];
+  private newItinerary: Itinerary;
 
-  selectedNationalityId1: string;
-  selectedNationalityId2: string;
+  private arrow: string;
+  private checked: boolean = false;
+  private isCollapsed: boolean = false;
 
-  layers: any[] = [];
-  mapMarkers: any[] = [];
-  itineraryPath: any[] = [];
-  locations: any[] = [];
-  destinationCoordinates: any[] = [];
+  private selectedNationalityId1: string;
+  private selectedNationalityId2: string;
 
   constructor(
     private country: CountryService,
@@ -56,12 +54,12 @@ export class MyHomeViewComponent implements OnInit {
 
   checkCollapsed() {
     this.isCollapsed = !this.isCollapsed;
-    this.arrow = (!this.isCollapsed ? '>': 'v');
+    this.arrow = !this.isCollapsed ? '>' : 'v';
   }
 
   authorizeUser() {
     const currentUser = JSON.parse(localStorage.getItem('user'));
-    this.user = (currentUser ? currentUser : new User);
+    this.user = currentUser ? currentUser : new User();
   }
 
   getCountries() {
@@ -176,6 +174,7 @@ export class MyHomeViewComponent implements OnInit {
     transport: string,
     price: number
   ) {
+    console.log('location', this.locations);
     if (this.locations.length === 1) {
       google.maps.event.addListener(this.marker, 'click', function() {
         infowindow.setContent(

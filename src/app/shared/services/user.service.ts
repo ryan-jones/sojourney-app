@@ -34,13 +34,10 @@ export class UserService {
       .get(`${this.BASE_URL}/users/${id}`, this.options)
       .map(res => res.json())
       .map(data => {
-        console.log('data', data)
         const arr = [];
         data.itineraries.forEach((item, index) => {
-          console.log('item: ', item.flightPaths);
           arr.push(item);
         });
-        console.log('user service ', arr);
         return {
           arr: arr
         };

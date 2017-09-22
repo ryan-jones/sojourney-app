@@ -4,9 +4,9 @@ import { NgModule, ApplicationRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { RouterModule, Routes } from '@angular/router';
 import { AgmCoreModule } from 'angular2-google-maps/core';
 import { AlertModule, CollapseModule } from 'ngx-bootstrap';
+import { RoutingModule } from 'app/app-routing.module';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 
 //components
@@ -33,29 +33,7 @@ import { CountryService } from './shared/services/country.service';
 import { WarningService } from './shared/services/warning.service';
 import { SessionService } from './shared/services/session.service';
 import { UserService } from './shared/services/user.service';
-
-const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'home', component: HomeComponent },
-  { path: 'about', component: MyAboutComponent },
-  { path: 'signup', component: MySignupFormComponent },
-  { path: 'login', component: MyLoginComponent },
-  {
-    path: 'user',
-    component: ProfileComponent,
-    children: [
-      { path: ':id', component: ProfileOverviewComponent },
-      {
-        path: ':id/countries_visited',
-        component: ProfileCountryVisitComponent
-      },
-      { path: ':id/itineraries', component: ProfileItinerariesComponent },
-      { path: ':id/edit', component: ProfileEditComponent }
-    ]
-  },
-
-  { path: 'flights', component: MyFlightsComponent }
-];
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -74,14 +52,15 @@ const routes: Routes = [
     MyFlightsComponent,
     ItineraryPlannerComponent,
     VisaCheckerComponent,
-    HomeComponent
+    HomeComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     CommonModule,
-    RouterModule.forRoot(routes),
+    RoutingModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyD0I9Hi4pdArBe7w4bxrZfLTTKfFKp64nw',
       libraries: ['places']

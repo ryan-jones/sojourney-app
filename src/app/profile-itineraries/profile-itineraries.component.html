@@ -1,8 +1,8 @@
 <div class="container-fluid overview">
-  <div *ngIf="allItinerariesArray.length > 0">
+  <div *ngIf="allItineraries.length > 0">
     <tabset>
-      <tab heading="{{allItinerariesArray[0].name}}"></tab>
-      <tab #map *ngFor="let itinerary of allItinerariesArray, let i = index" [heading]="itinerary.name" [active]="itinerary.active"
+      <tab heading="{{allItineraries[0].name}}"></tab>
+      <tab #map *ngFor="let itinerary of allItineraries, let i = index" [heading]="itinerary.name" [active]="itinerary.active"
         (select)="itinerary.active = true" (deselect)="itinerary.active = false" [disabled]="itinerary.disabled" [removable]="itinerary.removable"
         (removed)="removeTabHandler(itinerary)" [customClass]="itinerary.customClass">
         <div class="row map-view">

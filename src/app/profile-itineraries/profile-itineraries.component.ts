@@ -11,7 +11,7 @@ import { UserService } from '../shared/services/user.service';
 import { CountryService } from '../shared/services/country.service';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TabsetComponent } from 'ngx-bootstrap';
-import { setMap } from 'app/shared/services/map.service';
+import { setMap, createDataLayers } from 'app/shared/services/map.service';
 
 declare var google: any;
 
@@ -24,205 +24,174 @@ export class ProfileItinerariesComponent implements OnInit {
   @ViewChild('staticTabs') staticTabs: TabsetComponent;
 
   user: any;
+  userItineraries: any;
   map: any;
+  nation;
 
   constructor(
     private router: Router,
     private session: SessionService,
     private userService: UserService,
-    private country: CountryService
+    private countryService: CountryService
   ) {}
 
   selectedNationalityId1;
   selectedNationalityId2;
   countries;
   countries2;
-  nation;
-  nation2;
   countryName1;
   countryName2;
-  address;
+  address: any;
   newAddress: any;
   geocoder;
-  flightPath;
+  flightPathData;
 
   place: any;
-  diffDays: number;
+  differenceBetweenDates: number;
   totalItinerary;
-  sum: number;
+  totalPrice: number;
   deleteLocation;
   marker;
-  indexTarget;
-  locationIndex;
   locations: any[] = [];
   itineraryDays: any[] = [];
-  loopTravelArray: any[] = [];
-  loopDatesArray: any[] = [];
   dates = [];
-  arrayOfTravel = [];
-  allTravelArray: any[] = [];
-  allMarkers: any[] = [];
-  allFlightPaths: any[] = [];
-  allItinerariesArray: any[] = [];
+  destinationCoordinates = [];
+  itineraryPath: any[] = [];
+  mapMarkers: any[] = [];
+  allItineraries: any[] = [];
   colorLayers: any[] = [];
   layers: any[] = [];
   coordinates: any[] = [];
-  indexProvider: any[] = [];
 
   ngOnInit() {
     const user = JSON.parse(localStorage.getItem('user'));
 
     this.userService.getTest(user._id).subscribe(user => {
-      this.user = user;
-      console.log('user itinerary', this.user);
+      this.userItineraries = user;
+      console.log('user itinerary', this.userItineraries);
       const date = [];
-      const arr = [];
 
-      this.user.arr.forEach((item, index) => {
-        this.selectedNationalityId1 = !item.nationality1
+      this.userItineraries.arr.forEach((itinerary, index) => {
+        this.selectedNationalityId1 = !itinerary.nationality1
           ? ''
-          : item.nationality1;
-        this.selectedNationalityId2 = !item.nationality3
+          : itinerary.nationality1;
+        this.selectedNationalityId2 = !itinerary.nationality3
           ? ''
-          : item.nationality2;
+          : itinerary.nationality2;
 
-        this.locations.push(item.placesAndDates);
+        this.locations.push(itinerary.placesAndDates);
 
-        item.placesAndDates.forEach(place => {
+        itinerary.placesAndDates.forEach(place => {
           this.coordinates.push(place.geometry.location);
           date.push(place.date);
         });
 
-        this.arrayOfTravel.push(this.coordinates);
+        this.destinationCoordinates.push(this.coordinates);
         this.dates.push(date);
 
-        arr.push(item);
+        this.allItineraries.push(itinerary);
+        console.log('allItineraries', this.allItineraries)
+        console.log('destinationCoordinates', this.destinationCoordinates)
+        console.log('dates', this.dates);
 
         this.initiateMap();
         // this.loadCountries(this.selectedNationalityId1, this.selectedNationalityId2)
         // this.loadPolylines(this.coordinates);
         // this.differenceInDays();
       });
-      this.allItinerariesArray = arr;
     });
 
-    this.country.getList().subscribe(countries => {
+    this.countryService.getList().subscribe(countries => {
       this.countries = countries;
       this.countries2 = countries;
     });
-
     this.countryName1 = !this.countryName1 ? '' : this.countryName1;
     this.countryName2 = !this.countryName2 ? '' : this.countryName2;
 
-    this.sum = 0;
+    this.totalPrice = 0;
   }
 
   initiateMap() {
     this.map = setMap();
   }
 
-  //************* load itineraries on the map **************
-  loadCountries(selectedNationalityId1, selectedNationalityId2) {
-    const countriesArray = [selectedNationalityId1, selectedNationalityId2];
-
-    const colorsArray = {
-      visaFree: ['red', 'blue'],
-      visaOnArrival: ['yellow', 'green']
-    };
-
-    let index = 0;
-    this.showCountries(countriesArray, colorsArray, index);
-  }
-
-  //********************   creates country data layers ***************
-  showCountries(countriesArray, colorsArray, index) {
+  showCountries(selectedCountries, colors, index) {
     if (index === 2) {
       return;
     }
+    this.setDataLayersForSelectedCountry(selectedCountries, index, colors);
+  }
 
-    this.country.get(countriesArray[index]).subscribe(nation => {
-      this.nation = nation;
-
-      this.countryName1 = this.nation;
-
-      var self = this;
-
-      let visaKindArray = ['visaFree', 'visaOnArrival'];
-      let visaKindIndex = 0;
-
-      let counter = 0;
-
-      var test = 0;
-
-      function starter(visaKind) {
-        let freeLayer = new google.maps.Data();
-
-        freeLayer.loadGeoJson(
-          'https://raw.githubusercontent.com/johan/world.geo.json/master/countries/' +
-            self.nation[visaKind][counter] +
-            '.geo.json'
-        );
-        freeLayer.setStyle({
-          fillColor: colorsArray[visaKind][index],
-          fillOpacity: 0.5,
-          title: self.nation[visaKind][counter]
-        });
-
-        freeLayer.setMap(self.map);
-        counter++;
-
-        self.layers.push(freeLayer);
-
-        if (counter == self.nation[visaKind].length) {
-          counter = 0;
-          if (visaKind == 'visaOnArrival') {
-            index++;
-            self.showCountries(countriesArray, colorsArray, index);
-          } else {
-            visaKindIndex++;
-
-            starter(visaKindArray[visaKindIndex]);
-          }
-        } else {
-          starter(visaKindArray[visaKindIndex]);
-        }
-      }
-
-      starter(visaKindArray[visaKindIndex]);
+  setDataLayersForSelectedCountry(selectedCountries, index, colors) {
+    this.countryService.getCountry(selectedCountries[index]).subscribe(nation => {
+      this.setDataLayers(nation, index, colors, selectedCountries);
     });
-  } //showCountries
+  }
 
-  loadPolylines(any) {
-    //geocodes the address, creates a marker and polyline segment
-    this.geocoder = new google.maps.Geocoder();
-    var that = this;
-    this.address = this.newAddress;
+  setDataLayers(nation, index, colors, countries) {
+    const visaKindArray = ['visaFree', 'visaOnArrival'];
+    let visaKindIndex = 0;
+    let counter = 0;
+    index === 0 ? (this.countryName1 = nation) : (this.countryName2 = nation);
 
-    this.geocoder.geocode({ address: this.address }, function(results, status) {
-      if (status === 'OK') {
-        that.flightPath = new google.maps.Polyline({
-          path: any,
-          geodesic: true,
-          strokeColor: 'yellow',
-          strokeOpacity: 1.0,
-          strokeWeight: 4
-        });
+    this.loadDataLayers(
+      visaKindArray,
+      visaKindIndex,
+      nation,
+      index,
+      colors,
+      counter,
+      countries
+    );
+  }
 
-        that.flightPath.setMap(that.map);
-
-        that.coordinates.forEach(coordinates => {
-          that.marker = new google.maps.Marker({
-            position: coordinates,
-            map: that.map
-          });
-          that.marker.setIcon(
-            'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
-          );
-        });
+  loadDataLayers(
+    visaKindArray: any[],
+    visaKindIndex: number,
+    nation: any,
+    index: number,
+    colors: any,
+    counter: number,
+    countries: any
+  ) {
+    const visaKind = visaKindArray[visaKindIndex];
+    let dataLayerData = {
+      visaKind,
+      nation,
+      index,
+      colors,
+      counter
+    };
+    const layer = createDataLayers(dataLayerData);
+    counter++;
+    if (counter === nation[visaKind].length) {
+      counter = 0;
+      if (visaKind === 'visaOnArrival') {
+        index++;
+        this.showCountries(countries, colors, index);
       } else {
-        alert('Geocode was not successful for the following reason: ' + status);
+        visaKindIndex++;
+        this.loadDataLayers(
+          visaKindArray,
+          visaKindIndex,
+          nation,
+          index,
+          colors,
+          counter,
+          countries
+        );
       }
-    });
+    } else {
+      this.loadDataLayers(
+        visaKindArray,
+        visaKindIndex,
+        nation,
+        index,
+        colors,
+        counter,
+        countries
+      );
+    }
   }
 
   selectTab(tab_id: number) {

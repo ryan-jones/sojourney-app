@@ -13,3 +13,11 @@ export class Itinerary {
       (this.placesAndDates = []);
   }
 }
+
+export class NewItinerary {
+  name: string;
+  nationality1: string;
+  nationality2: string;
+  placesAndDates: any[];
+
+}
