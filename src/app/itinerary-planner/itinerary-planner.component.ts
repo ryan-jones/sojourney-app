@@ -7,7 +7,7 @@ import {
   AfterViewInit,
   ViewChild
 } from '@angular/core';
-import { Itinerary } from 'app/shared/itinerary.model';
+import { Itinerary, Destination } from 'app/shared/itinerary.model';
 import {
   Expense,
   ItineraryService
@@ -30,7 +30,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   @Output() resetMapMarkers: EventEmitter<any> = new EventEmitter();
   @Output() onAddItinerary: EventEmitter<any> = new EventEmitter();
 
-  private itineraryDestination: any;
+  private itineraryDestination: Destination = new Destination;
   private newItinerary: Itinerary = new Itinerary();
   private differenceBetweenDates: number;
   private currentCost: number = 0;
@@ -39,7 +39,6 @@ export class ItineraryPlannerComponent implements AfterViewInit {
 
   private checked: boolean = false;
 
-  private locationView: string;
 
   private namePlaceholder: string = 'Create an itinerary name';
   private locationPlaceholder: string = 'Enter a starting location';
@@ -53,14 +52,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   //itinerary planner inputs
   private newPrice: number;
   private newAddress: string;
-  private newDate: string;
   private newNote: string = '';
-  private selectedCurrency: string = '$';
-  private selectedTransport: string = 'plane';
-
-  ngOnInit() {
-    this.autoCompleteAddress();
-  }
 
   ngAfterViewInit() {
     this.autoCompleteAddress();
@@ -70,8 +62,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
     const input = this.addressInput.nativeElement;
     const autocomplete = new google.maps.places.Autocomplete(input);
     autocomplete.addListener('place_changed', () => {
-      this.itineraryDestination = autocomplete.getPlace();
-      this.locationView = this.itineraryDestination.name;
+      this.itineraryDestination.geoLocation = autocomplete.getPlace();
     });
   }
 
@@ -92,33 +83,28 @@ export class ItineraryPlannerComponent implements AfterViewInit {
     this.createCurrentCost(newTotalExpense);
   }
 
-  createNewExpense() {
-    let newestExpense: Expense = {
+  createNewExpense():number {
+    const newestExpense: Expense = {
       note: this.newNote,
       expense: this.newPrice,
-      transport: this.selectedTransport
+      transport: this.itineraryDestination.transport
     };
-
     this.displayableExpenses.push(newestExpense);
     this.accumulatedDailyExpense.push(newestExpense.expense);
     return this.accumulatedDailyExpense.reduce((a, b) => a + b, 0);
   }
 
-  createCurrentCost(newTotalExpense) {
+  createCurrentCost(newTotalExpense):void {
     this.newNote = '';
     this.newPrice = null;
-    if (!newTotalExpense || isNaN(newTotalExpense)) {
-      this.currentCost = 0;
-    } else {
-      this.currentCost = newTotalExpense;
-    }
+    this.currentCost = (!newTotalExpense ? 0 : newTotalExpense)
   }
 
-  getTotalPrice() {
+  getTotalPrice():void {
     this.totalPrice = this.costs.reduce((a, b) => a + b, 0);
   }
 
-  getTotalDays() {
+  getTotalDays():void {
     this.totalTripDuration = this.itineraryDays.reduce((a, b) => a + b, 0);
   }
 
@@ -141,7 +127,6 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   //**********************Create a new marker and flightPath******************* */
   createPoint() {
     this.setPlaceDetails();
-    this.setCurrencyAndTransport();
     this.setCountryName();
     this.setPrice();
     this.setLocations();
@@ -157,15 +142,9 @@ export class ItineraryPlannerComponent implements AfterViewInit {
       : this.displayableExpenses;
   }
 
-  setCurrencyAndTransport() {
-    this.itineraryDestination.currency = this.selectedCurrency;
-    this.itineraryDestination.transport = this.selectedTransport;
-    if (!this.itineraryDestination.transport)
-      this.itineraryDestination.transport = 'plane';
-  }
 
   setCountryName() {
-    const countryStringSplit = this.itineraryDestination.formatted_address.split(
+    const countryStringSplit = this.itineraryDestination.geoLocation.formatted_address.split(
       ','
     );
     this.itineraryDestination.country =
@@ -190,7 +169,6 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   }
 
   setDates() {
-    this.itineraryDestination.date = this.newDate
     this.dates.push(this.itineraryDestination.date);
   }
 
@@ -209,7 +187,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
       this.differenceBetweenDates = this.itineraryService.calculateDateRange(
         this.dates
       );
-      if (isNaN(this.differenceBetweenDates)) {
+      if (!this.differenceBetweenDates) {
         this.differenceBetweenDates = 0;
       }
     } else {
@@ -272,14 +250,14 @@ export class ItineraryPlannerComponent implements AfterViewInit {
 
   resetValues() {
     this.newNote = '';
-    this.newPrice = 0;
+    this.newPrice = null;
     this.newAddress = '';
     this.displayableExpenses = [];
     this.accumulatedDailyExpense = [];
     this.namePlaceholder = 'Edit itinerary name';
     this.locationPlaceholder = 'Add a location';
-    this.locationView = '';
     this.currentCost = 0;
+    this.itineraryDestination = new Destination;
   }
 
   toggleNote() {

@@ -32,8 +32,8 @@ export class ItineraryService {
       country: itineraryDestination.country,
       price: itineraryDestination.price,
       point: {
-        lat: itineraryDestination.geometry.location.lat(),
-        lng: itineraryDestination.geometry.location.lng()
+        lat: itineraryDestination.geoLocation.geometry.location.lat(),
+        lng: itineraryDestination.geoLocation.geometry.location.lng()
       }
     };
   }

@@ -7,11 +7,11 @@
           <h4><span class="white">{{newItinerary.name}}</span></h4>
           <input id="new-name" [(ngModel)]="newItinerary.name" type="text" [placeholder]="namePlaceholder" />
           <input id="new-address" #address [(ngModel)]="newAddress" type="text" name="address" [placeholder]="locationPlaceholder">
-          <input id="new-date" [(ngModel)]="newDate" value="" type="date" name="date" />
+          <input id="new-date" [(ngModel)]="itineraryDestination.date" value="" type="date" name="date" />
         </div>
         <section id="price-and-transport">
           <div id="currency-div">
-            <select id="new-currency" [(ngModel)]="selectedCurrency" class="form-control" name="currency">
+            <select id="new-currency" [(ngModel)]="itineraryDestination.currency" class="form-control" name="currency">
                 <option value="$"><span class="currency-type">USD</span></option>
                 <option value="£">GBP</option>
                 <option value="€">EUR</option>
@@ -23,7 +23,7 @@
             <input id="new-price" [(ngModel)]="newPrice" type="number" name="price" value="" placeholder="Add an expense" />
           </div>
           <div id="transport-div">
-            <select id="new-transport" [(ngModel)]="selectedTransport" class="form-control" name="transport">
+            <select id="new-transport" [(ngModel)]="itineraryDestination.transport" class="form-control" name="transport">
                 <option value="plane">Plane</option>
                 <option value="train">Train</option>
                 <option value="bus">Bus</option>

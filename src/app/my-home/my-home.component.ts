@@ -174,7 +174,6 @@ export class MyHomeViewComponent implements OnInit {
     transport: string,
     price: number
   ) {
-    console.log('location', this.locations);
     if (this.locations.length === 1) {
       google.maps.event.addListener(this.marker, 'click', function() {
         infowindow.setContent(
