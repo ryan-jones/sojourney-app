@@ -30,7 +30,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   @Output() resetMapMarkers: EventEmitter<any> = new EventEmitter();
   @Output() onAddItinerary: EventEmitter<any> = new EventEmitter();
 
-  private itineraryDestination: Destination = new Destination;
+  private itineraryDestination: Destination = new Destination();
   private newItinerary: Itinerary = new Itinerary();
   private differenceBetweenDates: number;
   private currentCost: number = 0;
@@ -38,7 +38,6 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   private totalTripDuration: number = 0;
 
   private checked: boolean = false;
-
 
   private namePlaceholder: string = 'Create an itinerary name';
   private locationPlaceholder: string = 'Enter a starting location';
@@ -83,7 +82,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
     this.createCurrentCost(newTotalExpense);
   }
 
-  createNewExpense():number {
+  createNewExpense(): number {
     const newestExpense: Expense = {
       note: this.newNote,
       expense: this.newPrice,
@@ -94,29 +93,28 @@ export class ItineraryPlannerComponent implements AfterViewInit {
     return this.accumulatedDailyExpense.reduce((a, b) => a + b, 0);
   }
 
-  createCurrentCost(newTotalExpense):void {
+  createCurrentCost(newTotalExpense): void {
     this.newNote = '';
     this.newPrice = null;
-    this.currentCost = (!newTotalExpense ? 0 : newTotalExpense)
+    this.currentCost = !newTotalExpense ? 0 : newTotalExpense;
   }
 
-  getTotalPrice():void {
+  getTotalPrice(): void {
     this.totalPrice = this.costs.reduce((a, b) => a + b, 0);
   }
 
-  getTotalDays():void {
+  getTotalDays(): void {
     this.totalTripDuration = this.itineraryDays.reduce((a, b) => a + b, 0);
   }
 
   updateTotalDays() {
     this.dates.forEach(day => {
       const dayIndex = this.dates.indexOf(day);
-      this.differenceBetweenDates =
-        Math.abs(
-          new Date(this.dates[dayIndex]).getTime() -
-            new Date(this.dates[dayIndex - 1]).getTime()
-        ) /
-        (1000 * 3600 * 24);
+
+      //LAST CHANGE
+      this.differenceBetweenDates = this.itineraryService.updateDateRange(this.dates, dayIndex)
+        
+        
       if (!this.differenceBetweenDates) {
         this.differenceBetweenDates = 0;
       }
@@ -142,27 +140,18 @@ export class ItineraryPlannerComponent implements AfterViewInit {
       : this.displayableExpenses;
   }
 
-
   setCountryName() {
-    const countryStringSplit = this.itineraryDestination.geoLocation.formatted_address.split(
-      ','
+    this.itineraryDestination.country = this.itineraryService.createCountryName(
+      this.itineraryDestination
     );
-    this.itineraryDestination.country =
-      countryStringSplit[countryStringSplit.length - 1];
   }
 
   setPrice() {
     if (this.accumulatedDailyExpense.length === 0) {
-      this.itineraryDestination.price = this.newPrice;
-      this.currentCost = this.newPrice;
+      this.itineraryDestination.price = this.newPrice ? this.newPrice : 0;
+      this.currentCost = this.itineraryDestination.price;
     } else {
       this.itineraryDestination.price = this.currentCost;
-    }
-    if (isNaN(this.itineraryDestination.price)) {
-      this.itineraryDestination.price = 0;
-    }
-    if (isNaN(this.currentCost)) {
-      this.currentCost = 0;
     }
     this.costs.push(this.itineraryDestination.price);
     this.getTotalPrice();
@@ -178,40 +167,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   }
 
   setItineraryLength() {
-    const newFirstDate = [];
-    const newSecondDate = [];
-    let returnFirstDate;
-    let returnSecondDate;
-
-    if (this.dates.length >= 0) {
-      this.differenceBetweenDates = this.itineraryService.calculateDateRange(
-        this.dates
-      );
-      if (!this.differenceBetweenDates) {
-        this.differenceBetweenDates = 0;
-      }
-    } else {
-      let firstDate = this.dates[this.dates.length - 1].split('/');
-      let secondDate = this.dates[this.dates.length - 2].split('/');
-      if (!secondDate) {
-        secondDate = 0;
-      }
-      for (let i = firstDate.length - 1; i >= 0; i--) {
-        newFirstDate.push(firstDate[i]);
-      }
-      for (var x = secondDate.length - 1; x >= 0; x--) {
-        newSecondDate.push(secondDate[x]);
-      }
-      returnFirstDate = newFirstDate.join();
-      returnSecondDate = newSecondDate.join();
-      this.differenceBetweenDates = Math.round(
-        Math.abs(
-          new Date(returnFirstDate).getTime() -
-            new Date(returnSecondDate).getTime()
-        ) /
-          (1000 * 3600 * 24)
-      );
-    }
+    this.differenceBetweenDates = this.itineraryService.calculateDateRange(this.dates)
     this.itineraryDays.push(this.differenceBetweenDates);
     this.getTotalDays();
   }
@@ -257,7 +213,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
     this.namePlaceholder = 'Edit itinerary name';
     this.locationPlaceholder = 'Add a location';
     this.currentCost = 0;
-    this.itineraryDestination = new Destination;
+    this.itineraryDestination = new Destination();
   }
 
   toggleNote() {

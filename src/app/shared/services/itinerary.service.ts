@@ -22,6 +22,13 @@ export interface Export {
 
 @Injectable()
 export class ItineraryService {
+  createCountryName(itineraryDestination) {
+    const countryStringSplit = itineraryDestination.geoLocation.formatted_address.split(
+      ','
+    );
+    return countryStringSplit[countryStringSplit.length - 1];
+  }
+
   buildExportValue(address, itineraryDestination): Export {
     return {
       address: address,
@@ -39,12 +46,23 @@ export class ItineraryService {
   }
 
   calculateDateRange(dates) {
-    return Math.round(
+    const range = Math.round(
       Math.abs(
         new Date(dates[dates.length - 1]).getTime() -
           new Date(dates[dates.length - 2]).getTime()
       ) /
         (1000 * 3600 * 24)
     );
+    return (!range ? 0 : range);
+  }
+
+  updateDateRange(dates, dayIndex) {
+    const range =
+      Math.abs(
+        new Date(dates[dayIndex]).getTime() -
+          new Date(dates[dayIndex - 1]).getTime()
+      ) /
+      (1000 * 3600 * 24);
+      return (!range ? 0 : range);
   }
 }
