@@ -6,8 +6,8 @@
         <div>
           <h4><span class="white">{{newItinerary.name}}</span></h4>
           <input id="new-name" [(ngModel)]="newItinerary.name" type="text" [placeholder]="namePlaceholder" />
-          <input id="new-address" [(ngModel)]="newAddress" type="text" name="address" [placeholder]="locationPlaceholder">
-          <input id="new-date" value="" type="date" name="date" />
+          <input id="new-address" #address [(ngModel)]="newAddress" type="text" name="address" [placeholder]="locationPlaceholder">
+          <input id="new-date" [(ngModel)]="newDate" value="" type="date" name="date" />
         </div>
         <section id="price-and-transport">
           <div id="currency-div">
@@ -42,12 +42,12 @@
           <section class="notes">
             <input type="checkbox" (click)="toggleNote()" /> <span class="white"> Add a note </span>
             <div class="form-group" *ngIf="checked == true">
-              <input id="new-note" type="text" />
+              <input id="new-note"  [(ngModel)]="newNote" type="text" />
             </div>
           </section>
           <div class="white">
             <input class="addCost" (click)="addExpense()" type="submit" value="+" /> <span class="space">Add Expense</span>
-            <input class="deleteCost" (click)="deleteExpense()" type="submit" value="-" /> Delete Expense {{locationView}}
+            <input class="deleteCost" (click)="deleteExpense()" type="submit" value="-" /> Delete Expense
             Expenditures: {{selectedCurrency}}{{currentCost}}
           </div>
         </section>

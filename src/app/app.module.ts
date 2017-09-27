@@ -26,6 +26,8 @@ import { MyFlightsComponent } from './my-flights/my-flights.component';
 import { ItineraryPlannerComponent } from './itinerary-planner/itinerary-planner.component';
 import { VisaCheckerComponent } from './visa-checker/visa-checker.component';
 import { HomeComponent } from './containers/home/home.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+
 
 
 //services
@@ -33,7 +35,8 @@ import { CountryService } from './shared/services/country.service';
 import { WarningService } from './shared/services/warning.service';
 import { SessionService } from './shared/services/session.service';
 import { UserService } from './shared/services/user.service';
-import { NotFoundComponent } from './not-found/not-found.component';
+import { ItineraryService } from 'app/shared/services/itinerary.service';
+
 
 @NgModule({
   declarations: [
@@ -69,7 +72,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
     TabsModule.forRoot(),
     CollapseModule.forRoot()
   ],
-  providers: [CountryService, WarningService, SessionService, UserService],
+  providers: [CountryService, WarningService, SessionService, UserService, ItineraryService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

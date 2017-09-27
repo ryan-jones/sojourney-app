@@ -1,5 +1,17 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  AfterViewInit,
+  ViewChild
+} from '@angular/core';
 import { Itinerary } from 'app/shared/itinerary.model';
+import {
+  Expense,
+  ItineraryService
+} from 'app/shared/services/itinerary.service';
 
 declare var google: any;
 
@@ -8,9 +20,10 @@ declare var google: any;
   templateUrl: './itinerary-planner.component.html',
   styleUrls: ['./itinerary-planner.component.scss']
 })
-export class ItineraryPlannerComponent {
-  constructor() {}
+export class ItineraryPlannerComponent implements AfterViewInit {
+  constructor(private itineraryService: ItineraryService) {}
 
+  @ViewChild('address') addressInput;
   @Input() locations: any;
   @Output() changeAddress: EventEmitter<any> = new EventEmitter();
   @Output() createMarker: EventEmitter<any> = new EventEmitter();
@@ -18,7 +31,7 @@ export class ItineraryPlannerComponent {
   @Output() onAddItinerary: EventEmitter<any> = new EventEmitter();
 
   private itineraryDestination: any;
-  private newItinerary: Itinerary = new Itinerary;
+  private newItinerary: Itinerary = new Itinerary();
   private differenceBetweenDates: number;
   private currentCost: number = 0;
   private totalPrice: number = 0;
@@ -27,24 +40,34 @@ export class ItineraryPlannerComponent {
   private checked: boolean = false;
 
   private locationView: string;
-  private newAddress: string;
-  private selectedCurrency: string = '$';
-  private selectedTransport: string = 'plane';
+
   private namePlaceholder: string = 'Create an itinerary name';
   private locationPlaceholder: string = 'Enter a starting location';
 
   private itineraryDays: number[] = [];
-  private displayableExpenses: any[] = [];
+  private displayableExpenses: Expense[] = [];
   private accumulatedDailyExpense: number[] = [];
   private dates: any[] = [];
   private costs: number[] = [];
+
+  //itinerary planner inputs
+  private newPrice: number;
+  private newAddress: string;
+  private newDate: string;
+  private newNote: string = '';
+  private selectedCurrency: string = '$';
+  private selectedTransport: string = 'plane';
 
   ngOnInit() {
     this.autoCompleteAddress();
   }
 
+  ngAfterViewInit() {
+    this.autoCompleteAddress();
+  }
+
   autoCompleteAddress() {
-    const input = document.getElementById('new-address');
+    const input = this.addressInput.nativeElement;
     const autocomplete = new google.maps.places.Autocomplete(input);
     autocomplete.addListener('place_changed', () => {
       this.itineraryDestination = autocomplete.getPlace();
@@ -70,26 +93,20 @@ export class ItineraryPlannerComponent {
   }
 
   createNewExpense() {
-    let newestExpense = {
-      note: '',
-      expense: document.getElementById('new-price')['valueAsNumber'],
-      transport: document.getElementById('new-transport')['value']
+    let newestExpense: Expense = {
+      note: this.newNote,
+      expense: this.newPrice,
+      transport: this.selectedTransport
     };
-    if (!document.getElementById('new-note')) {
-      newestExpense.note = '';
-    } else {
-      newestExpense.note = document.getElementById('new-note')['value'];
-    }
+
     this.displayableExpenses.push(newestExpense);
     this.accumulatedDailyExpense.push(newestExpense.expense);
     return this.accumulatedDailyExpense.reduce((a, b) => a + b, 0);
   }
 
   createCurrentCost(newTotalExpense) {
-    if (document.getElementById('new-note')) {
-      document.getElementById('new-note')['value'] = '';
-    }
-    document.getElementById('new-price')['value'] = '';
+    this.newNote = '';
+    this.newPrice = null;
     if (!newTotalExpense || isNaN(newTotalExpense)) {
       this.currentCost = 0;
     } else {
@@ -135,25 +152,30 @@ export class ItineraryPlannerComponent {
   }
 
   setPlaceDetails() {
-    this.itineraryDestination.details =
-      !this.displayableExpenses.length ? '' : this.displayableExpenses;
+    this.itineraryDestination.details = !this.displayableExpenses.length
+      ? ''
+      : this.displayableExpenses;
   }
 
   setCurrencyAndTransport() {
     this.itineraryDestination.currency = this.selectedCurrency;
     this.itineraryDestination.transport = this.selectedTransport;
-    if (!this.itineraryDestination.transport) this.itineraryDestination.transport = 'plane';  
+    if (!this.itineraryDestination.transport)
+      this.itineraryDestination.transport = 'plane';
   }
 
   setCountryName() {
-    const countryStringSplit = this.itineraryDestination.formatted_address.split(',');
-    this.itineraryDestination.country = countryStringSplit[countryStringSplit.length - 1];
+    const countryStringSplit = this.itineraryDestination.formatted_address.split(
+      ','
+    );
+    this.itineraryDestination.country =
+      countryStringSplit[countryStringSplit.length - 1];
   }
 
   setPrice() {
     if (this.accumulatedDailyExpense.length === 0) {
-      this.itineraryDestination.price = document.getElementById('new-price')['valueAsNumber'];
-      this.currentCost = this.itineraryDestination.price;
+      this.itineraryDestination.price = this.newPrice;
+      this.currentCost = this.newPrice;
     } else {
       this.itineraryDestination.price = this.currentCost;
     }
@@ -168,17 +190,7 @@ export class ItineraryPlannerComponent {
   }
 
   setDates() {
-    const variableDate = document.getElementById('new-date')['valueAsDate'];
-    const dateLength = variableDate.getMonth();
-    const digit = dateLength <= 8 ? '-0' : '-';
-
-    this.itineraryDestination.date =
-      variableDate.getFullYear() +
-      `${digit}` +
-      (variableDate.getMonth() + 1) +
-      '-' +
-      variableDate.getDate();
-    this.itineraryDestination.date.autocomplete;
+    this.itineraryDestination.date = this.newDate
     this.dates.push(this.itineraryDestination.date);
   }
 
@@ -194,12 +206,8 @@ export class ItineraryPlannerComponent {
     let returnSecondDate;
 
     if (this.dates.length >= 0) {
-      this.differenceBetweenDates = Math.round(
-        Math.abs(
-          new Date(this.dates[this.dates.length - 1]).getTime() -
-            new Date(this.dates[this.dates.length - 2]).getTime()
-        ) /
-          (1000 * 3600 * 24)
+      this.differenceBetweenDates = this.itineraryService.calculateDateRange(
+        this.dates
       );
       if (isNaN(this.differenceBetweenDates)) {
         this.differenceBetweenDates = 0;
@@ -231,19 +239,10 @@ export class ItineraryPlannerComponent {
   }
 
   sendMarker(address) {
-    const exportedValues = {
-      address: address,
-      name: this.itineraryDestination.name,
-      date: this.itineraryDestination.date,
-      days: this.itineraryDestination.date,
-      transport: this.itineraryDestination.transport,
-      country: this.itineraryDestination.country,
-      price: this.itineraryDestination.price,
-      point: {
-        lat: this.itineraryDestination.geometry.location.lat(),
-        lng: this.itineraryDestination.geometry.location.lng()
-      }
-    };
+    const exportedValues = this.itineraryService.buildExportValue(
+      address,
+      this.itineraryDestination
+    );
     this.createMarker.emit(exportedValues);
   }
 
@@ -272,11 +271,8 @@ export class ItineraryPlannerComponent {
   }
 
   resetValues() {
-    const note = document.getElementById('new-note');
-    if (note) {
-      document.getElementById('new-note')['value'] = '';
-    }
-    document.getElementById('new-price')['value'] = '';
+    this.newNote = '';
+    this.newPrice = 0;
     this.newAddress = '';
     this.displayableExpenses = [];
     this.accumulatedDailyExpense = [];
@@ -291,7 +287,7 @@ export class ItineraryPlannerComponent {
   }
 
   addItinerary() {
-    this.newItinerary.placesAndDates.push(this.itineraryDestination); 
+    this.newItinerary.placesAndDates.push(this.itineraryDestination);
     this.onAddItinerary.emit(this.newItinerary);
   }
 }
