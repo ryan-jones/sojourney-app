@@ -216,8 +216,8 @@ export class MyHomeViewComponent implements OnInit {
     this.destinationCoordinates = [];
     this.locations.forEach(location => {
       const point = {
-        lat: location.geometry.location.lat(),
-        lng: location.geometry.location.lng()
+        lat: location.geoLocation.geometry.location.lat(),
+        lng: location.geoLocation.geometry.location.lng()
       };
       this.destinationCoordinates.push(point);
       this.flightPathData = new google.maps.Polyline({
@@ -241,9 +241,12 @@ export class MyHomeViewComponent implements OnInit {
   }
 
   deleteLocation(locationInput) {
+    console.log('locationInput', locationInput)
+    console.log('locations', this.locations)
     this.locations = this.locations.filter(savedLocation => {
-      return savedLocation.id != locationInput.value;
+      return savedLocation !== locationInput;
     });
+    console.log('after filter', this.locations)
   }
 
   //saving to user profile in the database

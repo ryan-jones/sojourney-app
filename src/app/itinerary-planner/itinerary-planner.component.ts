@@ -163,6 +163,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
 
   setLocations() {
     this.locations.push(this.itineraryDestination);
+    console.log('add locations', this.locations)
     this.newItinerary.placesAndDates.push(this.itineraryDestination);
   }
 
@@ -181,6 +182,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   }
 
   deletePoint(locationInput) {
+    console.log('deletePoint', locationInput)
     this.resetMapMarkers.emit(locationInput);
     this.adjustDates();
     this.adjustItineraryCost();
