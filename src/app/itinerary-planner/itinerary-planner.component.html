@@ -33,26 +33,27 @@
           </div>
         </section>
         <section>
-          <div *ngFor="let expense of displaybleExpenses">
-            <div class="white" *ngIf="displaybleExpenses.length !==0">
+          <div *ngFor="let expense of displayableExpenses">
+            <div class="white" *ngIf="displayableExpenses.length">
               {{selectedCurrency}}{{expense.expense}} <i>Via</i> {{expense.transport}} <br />
               <i>Note: {{expense.note}}</i>
             </div>
           </div>
           <section class="notes">
             <input type="checkbox" (click)="toggleNote()" /> <span class="white"> Add a note </span>
-            <div class="form-group" *ngIf="checked == true">
+            <div class="form-group" *ngIf="checked">
               <input id="new-note"  [(ngModel)]="newNote" type="text" />
             </div>
           </section>
           <div class="white">
-            <input class="addCost" (click)="addExpense()" type="submit" value="+" /> <span class="space">Add Expense</span>
-            <input class="deleteCost" (click)="deleteExpense()" type="submit" value="-" /> Delete Expense
+            <button class="btn btn-default addCost" (click)="addExpense()"> + </button><span class="space">Add Expense</span>
+            <button class="btn btn-default deleteCost" (click)="deleteExpense()"> - </button>  Delete Expense
             Expenditures: {{selectedCurrency}}{{currentCost}}
           </div>
         </section>
       </section>
       <input id="new-submit" (click)="createPoint()" type="submit" name="" value="Add to itinerary">
+
       <div class="location-box">
         <div *ngFor="let location of locations, let i = index">
           <div *ngIf="i === 0">
@@ -63,7 +64,7 @@
               <div class="col-md-11">
                 <div class="location-date">
                   <div class="col-md-12">
-                    <strong>{{location.name}}</strong>, <strong>{{location.country}}</strong>
+                    <strong>{{location.geoLocation.name}}</strong>, <strong>{{location.country}}</strong>
                   </div>
                   <div class="col-md-12">
                     <p> {{location.date}}</p>
@@ -83,7 +84,7 @@
                 </div>
               </div>
               <div class="col-md-1 delete-input">
-                <input class="delete" type="submit" value="-" (click)="deletePoint(location)" />
+                <button class="btn btn-default delete" (click)="deletePoint(location)"> - </button>
               </div>
             </div>
           </div>
@@ -105,7 +106,7 @@
                   </div>
                 </div>
                 <button type="button" (click)="isCollapsed = !isCollapsed">{{arrow}}</button>
-                <div class="col-md-12 hidden-details" (collapsed)="collapsed($event)" (expanded)="expanded($event)" [collapse]="!isCollapsed"
+                <div class="col-md-12 hidden-details" [collapse]="!isCollapsed"
                   *ngFor="let detail of location.details">
                   <div>
                     <div>
@@ -116,7 +117,7 @@
                 </div>
               </div>
               <div class="col-md-1 delete-input">
-                <input class="delete" type="submit" value="-" (click)="deletePoint(location)" />
+                <button class="btn btn-default delete" (click)="deletePoint(location)"> - </button>
               </div>
             </div>
           </div>

@@ -1,12 +1,12 @@
-.ng-touched {
+input.ng-touched {
   border-color: blue;
 }
 
-.ng-touched.ng-invalid {
-  border-color: red;
+input.ng-invalid.ng-touched {
+  border: 1px solid red;
 }
 
-.ng-touched.ng-valid {
+input.ng-touched.ng-valid {
   border-color: green;
 }
 
@@ -48,3 +48,5 @@ button {
   padding: 1% 2%;
   box-shadow: 3px 3px 3px 1px #ccc;
 }
+
+

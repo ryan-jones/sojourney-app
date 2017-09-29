@@ -20,7 +20,7 @@
           <li> <a (click)="navigateTo('flights')"><span class="white"> Flights </span></a></li>
           <li *ngIf="!this.session.isAuth"> <a (click)="navigateTo('login')"> <span class="white"> Login </span> </a> </li>
           <li *ngIf="!this.session.isAuth"> <a (click)="navigateTo('signup')"> <span class="white"> Signup </span> </a> </li>
-          <li *ngIf="this.session.isAuth"> <a (click)="navigateTo('logout')"> <span class="white"> Logout </span> </a> </li>
+          <li *ngIf="this.session.isAuth"> <a (click)="logout()"> <span class="white"> Logout </span> </a> </li>
         </ul>
       </div>
     </div>

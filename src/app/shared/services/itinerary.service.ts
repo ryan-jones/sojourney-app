@@ -53,7 +53,7 @@ export class ItineraryService {
       ) /
         (1000 * 3600 * 24)
     );
-    return (!range ? 0 : range);
+    return !range ? 0 : range;
   }
 
   updateDateRange(dates, dayIndex) {
@@ -63,6 +63,10 @@ export class ItineraryService {
           new Date(dates[dayIndex - 1]).getTime()
       ) /
       (1000 * 3600 * 24);
-      return (!range ? 0 : range);
+    return !range ? 0 : range;
+  }
+
+  aggregate(input) {
+    return input.reduce((a, b) => a + b, 0);
   }
 }

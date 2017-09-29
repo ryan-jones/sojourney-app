@@ -26,4 +26,8 @@ export class MyNavComponent implements OnInit {
   navigateTo(route: string, id?: number) {
     id ? this.router.navigate([route, id]) : this.router.navigate([route]);
   }
+
+  logout(){
+    this.session.logout();
+  }
 }

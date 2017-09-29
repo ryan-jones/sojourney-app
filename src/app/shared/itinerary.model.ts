@@ -23,7 +23,6 @@ export class NewItinerary {
 
 export class Destination {
   geoLocation: any;
-  name: string;
   date: string;
   transport: string;
   country: string;
@@ -33,7 +32,6 @@ export class Destination {
 
   constructor() {
     this.geoLocation = '',
-    this.name = '',
     this.date = '',
     this.transport = 'plane',
     this.country = '',

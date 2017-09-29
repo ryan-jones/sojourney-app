@@ -32,9 +32,6 @@ export class MyHomeViewComponent implements OnInit {
   private countries: Country[];
   private newItinerary: Itinerary;
 
-  private arrow: string;
-  private checked: boolean = false;
-  private isCollapsed: boolean = false;
 
   private selectedNationalityId1: string;
   private selectedNationalityId2: string;
@@ -49,13 +46,8 @@ export class MyHomeViewComponent implements OnInit {
     this.initiateMap();
     this.authorizeUser();
     this.getCountries();
-    this.checkCollapsed();
   }
 
-  checkCollapsed() {
-    this.isCollapsed = !this.isCollapsed;
-    this.arrow = !this.isCollapsed ? '>' : 'v';
-  }
 
   authorizeUser() {
     const currentUser = JSON.parse(localStorage.getItem('user'));
@@ -241,8 +233,6 @@ export class MyHomeViewComponent implements OnInit {
   }
 
   deleteLocation(locationInput) {
-    console.log('locationInput', locationInput)
-    console.log('locations', this.locations)
     this.locations = this.locations.filter(savedLocation => {
       return savedLocation !== locationInput;
     });

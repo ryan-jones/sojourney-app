@@ -3,44 +3,41 @@
 
   </div>
   <div class="col-md-6 form-box">
-    <form>
-
-      <p>
-        <input type="text" name="nationality" [(ngModel)]="newUser.name" placeholder="Your name" required />
-      </p>
-      <p>
-        <input type="text" name="username" [(ngModel)]="newUser.username" #myUsername="ngModel" placeholder="Your email (your username)"
-          required />
-      </p>
-      <div *ngIf="(myUsername.dirty || myUsername.touched)">
-        <p class="error" [hidden]="!myUsername.required">
-          Oy! An email-based username is required.
-        </p>
-      </div>
-      <p>
-        <input type="password" name="password" [(ngModel)]="newUser.password" #myPassword="ngModel" required minlength="6" placeholder="Your password (at least 6 characters)"
-        />
-      </p>
-      <div *ngIf="(myPassword.dirty || myPassword.touched)">
-        <p class="error" [hidden]="!myPassword.minlength">
-          Sorry! Passwords are required and must be at least 6 characters long.
-        </p>
+    <form (ngSubmit)="signup()" #f="ngForm">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input id="name" type="text" class="form-control" name="name" #name="ngModel" ngModel placeholder="Your name" required />
+        <span class="help-block" *ngIf="!name.valid && name.touched"> How can we greet you if you don't have a name?</span>
       </div>
 
-      <p> Nationality
-        <input type="text" name="nationality" [(ngModel)]="newUser.nationality" placeholder="Your nationality" />
-      </p>
-      <p> Second Nationality (optional)
-        <input type="text" name="nationality2" [(ngModel)]="newUser.nationality2" />
-      </p>
-      <button type="submit" (click)="signup()"> signup </button>
+      <div class="form-group">
+        <label for="email">Username</label>
+        <input id="email" type="email" class="form-control" name="username" #username="ngModel" ngModel placeholder="Your email (this will be your username)"
+          required email />
+        <span class="help-block" *ngIf="!username.valid && username.touched"> Oy! An email-based username is required.</span>
+
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" type="password" class="form-control" name="password" ngModel #password="ngModel" placeholder="Your password (at least 6 characters)"
+          required minlength="6" />
+        <span class="help-block" *ngIf="!password.valid && password.touched">Sorry! Passwords are required and must be at least 6 characters long.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="nationality1">Nationality</label>
+        <input id="nationality1" type="text" class="form-control" name="nationality" ngModel placeholder="Your nationality" />
+      </div>
+
+      <div class="form-group">
+        <label for="nationality2">Second Nationality (optional)</label>
+        <input id="nationality2" type="text" class="form-control" name="nationality2" ngModel />
+      </div>
+
+      <button class="btn btn default" type="submit" [disabled]="!f.valid"> signup </button>
       <h4 *ngIf="error"> {{ error }} </h4>
     </form>
-
-    <div *ngIf="user">
-      <h2> You are now logged in as {{ user.username }}!! </h2>
-      <button (click)="logout()"> Want to logout? </button>
-    </div>
   </div>
   <div class="col-md-3">
 

@@ -1,6 +1,5 @@
 import {
   Component,
-  OnInit,
   Input,
   Output,
   EventEmitter,
@@ -38,14 +37,17 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   private totalTripDuration: number = 0;
 
   private checked: boolean = false;
+  private isCollapsed: boolean = false;
 
   private namePlaceholder: string = 'Create an itinerary name';
   private locationPlaceholder: string = 'Enter a starting location';
+  private arrow: string;
+
 
   private itineraryDays: number[] = [];
   private displayableExpenses: Expense[] = [];
   private accumulatedDailyExpense: number[] = [];
-  private dates: any[] = [];
+  private dates: string[] = [];
   private costs: number[] = [];
 
   //itinerary planner inputs
@@ -55,6 +57,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.autoCompleteAddress();
+    this.checkCollapsed();
   }
 
   autoCompleteAddress() {
@@ -65,20 +68,17 @@ export class ItineraryPlannerComponent implements AfterViewInit {
     });
   }
 
-  //adds expense to a single location in the itinerary*********************
+  //adds expense to a single destination in the itinerary
   addExpense() {
     const newTotalExpense = this.createNewExpense();
     this.createCurrentCost(newTotalExpense);
   }
 
-  //delete expense from list
+  //deletes expense from current destination
   deleteExpense() {
     this.displayableExpenses.pop();
     this.accumulatedDailyExpense.pop();
-    const newTotalExpense = this.accumulatedDailyExpense.reduce(
-      (a, b) => a + b,
-      0
-    );
+    const newTotalExpense = this.itineraryService.aggregate(this.accumulatedDailyExpense);
     this.createCurrentCost(newTotalExpense);
   }
 
@@ -89,8 +89,9 @@ export class ItineraryPlannerComponent implements AfterViewInit {
       transport: this.itineraryDestination.transport
     };
     this.displayableExpenses.push(newestExpense);
+    console.log('displayableExpense', this.displayableExpenses);
     this.accumulatedDailyExpense.push(newestExpense.expense);
-    return this.accumulatedDailyExpense.reduce((a, b) => a + b, 0);
+    return this.itineraryService.aggregate(this.accumulatedDailyExpense)
   }
 
   createCurrentCost(newTotalExpense): void {
@@ -100,21 +101,20 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   }
 
   getTotalPrice(): void {
-    this.totalPrice = this.costs.reduce((a, b) => a + b, 0);
+    this.totalPrice = this.itineraryService.aggregate(this.costs);
   }
 
   getTotalDays(): void {
-    this.totalTripDuration = this.itineraryDays.reduce((a, b) => a + b, 0);
+    this.totalTripDuration = this.itineraryService.aggregate(this.itineraryDays);
   }
 
   updateTotalDays() {
     this.dates.forEach(day => {
       const dayIndex = this.dates.indexOf(day);
-
-      //LAST CHANGE
-      this.differenceBetweenDates = this.itineraryService.updateDateRange(this.dates, dayIndex)
-        
-        
+      this.differenceBetweenDates = this.itineraryService.updateDateRange(
+        this.dates,
+        dayIndex
+      );
       if (!this.differenceBetweenDates) {
         this.differenceBetweenDates = 0;
       }
@@ -163,12 +163,13 @@ export class ItineraryPlannerComponent implements AfterViewInit {
 
   setLocations() {
     this.locations.push(this.itineraryDestination);
-    console.log('add locations', this.locations)
     this.newItinerary.placesAndDates.push(this.itineraryDestination);
   }
 
   setItineraryLength() {
-    this.differenceBetweenDates = this.itineraryService.calculateDateRange(this.dates)
+    this.differenceBetweenDates = this.itineraryService.calculateDateRange(
+      this.dates
+    );
     this.itineraryDays.push(this.differenceBetweenDates);
     this.getTotalDays();
   }
@@ -182,7 +183,6 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   }
 
   deletePoint(locationInput) {
-    console.log('deletePoint', locationInput)
     this.resetMapMarkers.emit(locationInput);
     this.adjustDates();
     this.adjustItineraryCost();
@@ -225,5 +225,10 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   addItinerary() {
     this.newItinerary.placesAndDates.push(this.itineraryDestination);
     this.onAddItinerary.emit(this.newItinerary);
+  }
+
+  checkCollapsed() {
+    this.isCollapsed = !this.isCollapsed;
+    this.arrow = !this.isCollapsed ? '>' : 'v';
   }
 }

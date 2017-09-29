@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { SessionService } from '../shared/services/session.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../shared/services/user.service';
 import { NewUser } from '../shared/new-user.model';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-my-signup-form',
@@ -11,8 +12,7 @@ import { NewUser } from '../shared/new-user.model';
   providers: [SessionService]
 })
 export class MySignupFormComponent {
-  newUser: NewUser = new NewUser;
-
+  @ViewChild('f') signupForm: NgForm
   error: string;
 
   constructor(
@@ -22,8 +22,9 @@ export class MySignupFormComponent {
   ) {}
 
   signup() {
-    this.session.signup(this.newUser).subscribe(result => {
-      this.router.navigate(['user']);
-    }, error => (this.error = error));
+    console.log('form', this.signupForm)
+    // this.session.signup(this.newUser).subscribe(result => {
+    //   this.router.navigate(['user']);
+    // }, error => (this.error = error));
   }
 }
