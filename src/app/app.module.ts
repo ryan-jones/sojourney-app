@@ -2,7 +2,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ApplicationRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AgmCoreModule } from 'angular2-google-maps/core';
 import { AlertModule, CollapseModule } from 'ngx-bootstrap';
@@ -37,6 +37,9 @@ import { SessionService } from './shared/services/session.service';
 import { UserService } from './shared/services/user.service';
 import { ItineraryService } from 'app/shared/services/itinerary.service';
 
+//pipes
+import { SearchFilterPipe } from 'app/shared/pipes/search-filter.pipe';
+
 
 @NgModule({
   declarations: [
@@ -56,11 +59,15 @@ import { ItineraryService } from 'app/shared/services/itinerary.service';
     ItineraryPlannerComponent,
     VisaCheckerComponent,
     HomeComponent,
-    NotFoundComponent
+    NotFoundComponent,
+
+    //pipes
+    SearchFilterPipe,
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule,
     CommonModule,
     RoutingModule,

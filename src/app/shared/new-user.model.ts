@@ -1,16 +1,17 @@
+import { FormControl } from '@angular/forms';
+
 export class NewUser {
-  
-  name: string;
-  username: string;
-  password: string;
-  nationality: string;
-  nationality2: string;
+  name: FormControl;
+  username: FormControl;
+  password: FormControl;
+  nationality: FormControl;
+  nationality2: FormControl;
 
   constructor() {
-    (this.name = ''),
-      (this.username = ''),
-      (this.password = ''),
-      (this.nationality = ''),
-      (this.nationality2 = '');
+    (this.name = new FormControl('')),
+      (this.username = new FormControl('')),
+      (this.password = new FormControl('')),
+      (this.nationality = new FormControl('')),
+      (this.nationality2 = new FormControl(''));
   }
 }

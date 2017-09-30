@@ -1,0 +1,19 @@
+import { Injectable, Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+  name: 'searchFilter'
+})
+@Injectable()
+export class SearchFilterPipe implements PipeTransform {
+  transform(inputs: any, searchTerm: any): any {
+    console.log('inputs and searchterm', inputs, searchTerm)
+    if (inputs) {
+      if (inputs.length === 0 || !searchTerm) {
+        return inputs;
+      }
+      return inputs.filter(input => {
+        return input.toLowerCase().includes(searchTerm.toLowerCase());
+      });
+    }
+  }
+}
