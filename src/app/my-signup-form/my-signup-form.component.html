@@ -27,8 +27,9 @@
 
       <div formArrayName="nationality" class="btn-group dropdown form-group nationality-input">
         <label for="nationality1">Nationality</label>
-        <input id="nationality1" type="text" class="form-control dropdown-toggle" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true"
-          placeholder="Your nationality" (keyup)="filterNationalities($event.target.value)" />
+        <input #nationality id="nationality1" type="text" class="form-control dropdown-toggle" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true"
+          placeholder="Select as many nationalities as you want" (keyup)="filterNationalities($event.target.value)" />
+        <span class="help-block" *ngFor="let nationality of selectedNationalities"> {{ nationality}} <i (click)="onDeleteNationalityFromList(nationality)" class="fa fa-times" aria-hidden="true"></i></span>
         <ul class="dropdown-menu nationality-dropdown-menu">
           <li *ngFor="let nationality of nationalities | searchFilter: searchterm" (click)="onAddNationality(nationality)">{{ nationality }}</li>
         </ul>

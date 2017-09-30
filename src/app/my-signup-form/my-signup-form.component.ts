@@ -17,6 +17,7 @@ import {
   providers: [SessionService]
 })
 export class MySignupFormComponent {
+  @ViewChild('nationality') nationalityInput
   error: string;
   searchterm: string = '';
   newUser: FormGroup = new FormGroup({
@@ -29,6 +30,7 @@ export class MySignupFormComponent {
     nationality: new FormArray([])
   });
   nationalities = ['United States', 'Taiwan', 'United Kingdom'];
+  selectedNationalities: string[] = [];
 
   constructor(private session: SessionService, private router: Router) {}
 
@@ -40,14 +42,28 @@ export class MySignupFormComponent {
   }
 
   onAddNationality(input) {
-    console.log('input', input);
     const nationality = new FormControl(input);
     (<FormArray>this.newUser.get('nationality')).push(nationality);
-    console.log('form', this.newUser);
+    this.selectedNationalities.push(input);
+    this.resetValues();
   }
 
   filterNationalities(input) {
-    console.log('nationalities', input);
     this.searchterm = input;
+  }
+
+  resetValues(){
+    this.nationalityInput.nativeElement.value = '';
+    this.searchterm = '';
+  }
+
+  onDeleteNationalityFromList(nationality) {
+    const nationalities = <FormArray>this.newUser.controls['nationality'];
+    nationalities.controls = nationalities.controls.filter(control => {
+      return control.value !== nationality
+    })
+    this.selectedNationalities = this.selectedNationalities.filter(country => {
+      return country !== nationality
+    })
   }
 }

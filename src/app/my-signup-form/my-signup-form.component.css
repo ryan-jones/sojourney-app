@@ -58,10 +58,13 @@ button {
   text-align: center;
 }
 
+i, li:hover {
+  cursor: pointer;
+}
+
 li:hover {
   background-color: blue;
   color: white;
-  cursor: pointer;
 }
 
 
