@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SessionService } from '../shared/services/session.service';
 import { UserService } from '../shared/services/user.service';
 import { User } from 'app/shared/user.model';
+import { SessionService } from 'app/shared/services/session.service';
 
 @Component({
   selector: 'app-my-nav',
@@ -15,12 +15,14 @@ export class MyNavComponent implements OnInit {
 
   constructor(
     private router: Router,
-    public session: SessionService,
-    private userService: UserService
+    public userService: UserService,
+    public sessionService: SessionService
   ) {}
 
   ngOnInit() {
+    console.log('isAuth?', this.sessionService.isAuth)
     this.user = JSON.parse(localStorage.getItem('user'));
+    console.log('nav user', this.user)
   }
 
   navigateTo(route: string, id?: number) {
@@ -28,6 +30,6 @@ export class MyNavComponent implements OnInit {
   }
 
   logout(){
-    this.session.logout();
+    this.userService.logout();
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../shared/services/user.service';
 import { User } from 'app/shared/user.model';
+import { SessionService } from 'app/shared/services/session.service';
 
 @Component({
   selector: 'app-profile-edit',
@@ -15,7 +16,8 @@ export class ProfileEditComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private sessionService: SessionService
   ) {}
 
   ngOnInit() {
@@ -26,14 +28,16 @@ export class ProfileEditComponent implements OnInit {
 
   editUserInfo() {
     this.userService.editUser(this.user).subscribe(user => {
+      console.log('new user', user)
       this.user = user;
-      this.router.navigate(['user', this.user._id]);
     });
   }
 
   deleteUser() {
     if (window.confirm('Are you sure?')) {
-      this.userService.deleteUser(this.user).subscribe(() => {
+      this.userService.deleteUser(this.user._id).subscribe(res => {
+        if(res)
+        this.sessionService.resetTokens();
         this.router.navigate(['']);
       });
     }

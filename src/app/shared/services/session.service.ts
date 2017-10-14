@@ -35,22 +35,6 @@ export class SessionService implements CanActivate {
     return this.token ? true : false;
   }
 
-  signup(user) {
-    return this.http
-      .post(`${this.BASE_URL}/signup`, user._value)
-      .map((response: Response) => {
-        return this.mapResponse(response);
-      });
-  }
-
-  login(user) {
-    return this.http
-      .post(`${this.BASE_URL}/login`, user)
-      .map((response: Response) => {
-        return this.mapResponse(response);
-      });
-  }
-
   mapResponse(response) {
     const token = response.json() && response.json().token;
     const user = response.json() && response.json().user;
@@ -58,16 +42,18 @@ export class SessionService implements CanActivate {
   }
 
   checkForToken(token, user) {
-    if (token) {
-      this.token = token;
-      this.isAuth = true;
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
-      return user;
-    }
+    if (token) this.token = token;
+    this.setLocalStorage(token, user);
+    this.isAuth = true;
+    return user;
   }
 
-  logout() {
+  setLocalStorage(token, user) {
+    if (token) localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+  }
+
+  resetTokens() {
     this.token = null;
     this.user = null;
     this.isAuth = false;

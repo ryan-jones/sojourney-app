@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { SessionService } from '../shared/services/session.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../shared/services/user.service';
 import {
@@ -14,7 +13,6 @@ import {
   selector: 'app-my-signup-form',
   templateUrl: './my-signup-form.component.html',
   styleUrls: ['./my-signup-form.component.css'],
-  providers: [SessionService]
 })
 export class MySignupFormComponent {
   @ViewChild('nationality') nationalityInput;
@@ -32,7 +30,7 @@ export class MySignupFormComponent {
   nationalities = ['United States', 'Taiwan', 'United Kingdom'];
   selectedNationalities: string[] = [];
 
-  constructor(private session: SessionService, private router: Router) {}
+  constructor(private session: UserService, private router: Router) {}
 
   signup() {
     this.session.signup(this.newUser).subscribe(
