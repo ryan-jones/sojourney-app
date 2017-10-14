@@ -8,7 +8,6 @@ export function setMap() {
   map = new google.maps.Map(document.getElementById('map-canvas'), myOptions);
   const styles = new MapStyles();
   map.setOptions({ styles: styles });
-
   return map;
 }
 
@@ -37,7 +36,3 @@ export function createDataLayers(event: {
   });
   return freeLayer.setMap(map);
 }
-
-
-
-

@@ -68,7 +68,6 @@ export class ProfileItinerariesComponent implements OnInit {
 
     this.userService.getTest(user._id).subscribe(user => {
       this.userItineraries = user;
-      console.log('user itinerary', this.userItineraries);
       const date = [];
 
       this.userItineraries.arr.forEach((itinerary, index) => {
@@ -90,9 +89,7 @@ export class ProfileItinerariesComponent implements OnInit {
         this.dates.push(date);
 
         this.allItineraries.push(itinerary);
-        console.log('allItineraries', this.allItineraries)
-        console.log('destinationCoordinates', this.destinationCoordinates)
-        console.log('dates', this.dates);
+       
 
         this.initiateMap();
         // this.loadCountries(this.selectedNationalityId1, this.selectedNationalityId2)

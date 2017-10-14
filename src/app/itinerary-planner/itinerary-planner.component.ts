@@ -89,7 +89,6 @@ export class ItineraryPlannerComponent implements AfterViewInit {
       transport: this.itineraryDestination.transport
     };
     this.displayableExpenses.push(newestExpense);
-    console.log('displayableExpense', this.displayableExpenses);
     this.accumulatedDailyExpense.push(newestExpense.expense);
     return this.itineraryService.aggregate(this.accumulatedDailyExpense)
   }

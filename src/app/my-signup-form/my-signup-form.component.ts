@@ -17,7 +17,7 @@ import {
   providers: [SessionService]
 })
 export class MySignupFormComponent {
-  @ViewChild('nationality') nationalityInput
+  @ViewChild('nationality') nationalityInput;
   error: string;
   searchterm: string = '';
   newUser: FormGroup = new FormGroup({
@@ -27,7 +27,7 @@ export class MySignupFormComponent {
       Validators.required,
       Validators.minLength(6)
     ]),
-    nationality: new FormArray([])
+    nationalities: new FormArray([])
   });
   nationalities = ['United States', 'Taiwan', 'United Kingdom'];
   selectedNationalities: string[] = [];
@@ -35,15 +35,19 @@ export class MySignupFormComponent {
   constructor(private session: SessionService, private router: Router) {}
 
   signup() {
-    console.log('form', this.newUser);
-    // this.session.signup(this.newUser).subscribe(result => {
-    //   this.router.navigate(['user']);
-    // }, error => (this.error = error));
+    this.session.signup(this.newUser).subscribe(
+      result => {
+        if (result) this.router.navigate(['user', result._id]);
+      },
+      error => {
+        this.error = error;
+      }
+    );
   }
 
   onAddNationality(input) {
     const nationality = new FormControl(input);
-    (<FormArray>this.newUser.get('nationality')).push(nationality);
+    (<FormArray>this.newUser.get('nationalities')).push(nationality);
     this.selectedNationalities.push(input);
     this.resetValues();
   }
@@ -52,18 +56,18 @@ export class MySignupFormComponent {
     this.searchterm = input;
   }
 
-  resetValues(){
+  resetValues() {
     this.nationalityInput.nativeElement.value = '';
     this.searchterm = '';
   }
 
   onDeleteNationalityFromList(nationality) {
-    const nationalities = <FormArray>this.newUser.controls['nationality'];
+    const nationalities = <FormArray>this.newUser.controls['nationalities'];
     nationalities.controls = nationalities.controls.filter(control => {
-      return control.value !== nationality
-    })
+      return control.value !== nationality;
+    });
     this.selectedNationalities = this.selectedNationalities.filter(country => {
-      return country !== nationality
-    })
+      return country !== nationality;
+    });
   }
 }

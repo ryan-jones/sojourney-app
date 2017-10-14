@@ -8,8 +8,7 @@
       <strong>Username: </strong>{{user.username}}
     </div>
     <div>
-      <strong>Nationality: </strong>{{user.nationality}}
+      <strong>Nationalities: </strong> <p *ngFor="let nationality of user.nationalities"> {{nationality}}</p>
     </div>
   </div>
-
 </div>

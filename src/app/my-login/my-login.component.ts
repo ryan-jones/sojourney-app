@@ -25,7 +25,8 @@ export class MyLoginComponent {
   login() {
     this.session.login(this.user).subscribe(result => {
       if (result) {
-        this.router.navigate(['user']);
+        console.log('result', result)
+        this.router.navigate(['user', result._id],);
       } else {
         this.error = 'Username or password is incorrect';
       }

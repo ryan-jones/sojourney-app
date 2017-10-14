@@ -236,7 +236,6 @@ export class MyHomeViewComponent implements OnInit {
     this.locations = this.locations.filter(savedLocation => {
       return savedLocation !== locationInput;
     });
-    console.log('after filter', this.locations)
   }
 
   //saving to user profile in the database
