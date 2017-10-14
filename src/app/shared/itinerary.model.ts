@@ -13,3 +13,30 @@ export class Itinerary {
       (this.placesAndDates = []);
   }
 }
+
+export class NewItinerary {
+  name: string;
+  nationality1: string;
+  nationality2: string;
+  placesAndDates: any[];
+}
+
+export class Destination {
+  geoLocation: any;
+  date: string;
+  transport: string;
+  country: string;
+  currency: string;
+  details: any;
+  price: number;
+
+  constructor() {
+    this.geoLocation = '',
+    this.date = '',
+    this.transport = 'plane',
+    this.country = '',
+    this.currency = '$',
+    this.details = '',
+    this.price = null
+  }
+}

@@ -1,77 +1,86 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers,Response, RequestOptions} from '@angular/http';
-import { SessionService } from './session.service'
+import { Http, Headers, Response, RequestOptions } from '@angular/http';
+import { SessionService } from './session.service';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
 @Injectable()
-
 export class UserService {
-  BASE_URL: string = 'https://sojourney.herokuapp.com/api';
-  // BASE_URL: string = 'http://localhost:3000/api';
+  // BASE_URL: string = 'https://sojourney.herokuapp.com/api';
+  BASE_URL: string = 'http://localhost:3000';
 
-  constructor(
-    private http: Http,
-    private SessionService: SessionService
-  ) {
+  constructor(private http: Http, private sessionService: SessionService) {}
 
-  }
+  headers = new Headers({
+    Authorization: 'JWT ' + this.sessionService.token
+  });
 
-  getList() {
+  options = new RequestOptions({ headers: this.headers });
 
-    let headers = new Headers({ 'Authorization': 'JWT ' + this.SessionService.token });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.get(`${this.BASE_URL}/users`, options)
-      .map((res) => res.json());
-  }
+  // getList() {
+  //   return this.http
+  //     .get(`${this.BASE_URL}/users`, this.options)
+  //     .map(res => res.json());
+  // }
 
-  get(id) {
-    let headers = new Headers({ 'Authorization': 'JWT ' + this.SessionService.token });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.get(`${this.BASE_URL}/users/${id}`, options)
-      .map((res) => res.json());
-  }
+  // getUser(id) {
+  //   return this.http
+  //     .get(`${this.BASE_URL}/users/${id}`, this.options)
+  //     .map(res => res.json());
+  // }
 
   getTest(id) {
-    let headers = new Headers({ 'Authorization': 'JWT ' + this.SessionService.token });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.get(`${this.BASE_URL}/users/${id}`, options)
-      .map((res) => res.json())
-      .map((data) => {
-        let arr = [];
-        data.itineraries.forEach((item, index)=>{
-          console.log('item: ', item.flightPaths)
+    return this.http
+      .get(`${this.BASE_URL}/api/users/${id}`, this.options)
+      .map(res => res.json())
+      .map(data => {
+        const arr = [];
+        data.itineraries.forEach((item, index) => {
           arr.push(item);
-        })
-        console.log('user service ', arr)
+        });
         return {
           arr: arr
         };
       });
   }
 
-
-  edit(id) {
-    let headers = new Headers({ 'Authorization': 'JWT ' + this.SessionService.token });
-    let options = new RequestOptions({ headers: headers });
-
-    console.log("before put");
-    console.log('id', id);
-    return this.http.put(`${this.BASE_URL}/users`, id, options )
-      .map((res) => res.json());
+  signup(user) {
+    return this.http
+      .post(`${this.BASE_URL}/signup`, user._value)
+      .map((response: Response) => {
+        return this.sessionService.mapResponse(response);
+      });
   }
 
-  editItinerary(it) {
-    let headers = new Headers({ 'Authorization': 'JWT ' + this.SessionService.token });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.post(`${this.BASE_URL}/itinerary`, it)
-      .map((res) => res.json());
+  login(user) {
+    return this.http
+      .post(`${this.BASE_URL}/login`, user)
+      .map((response: Response) => {
+        return this.sessionService.mapResponse(response);
+      });
   }
 
-  remove(id) {
-    let headers = new Headers({ 'Authorization': 'JWT ' + this.SessionService.token });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.delete(`${this.BASE_URL}/users/${id}`, options)
-      .map((res) => res.json());
+  logout() {
+    this.sessionService.resetTokens();
+  }
+
+  editUser(id) {
+    return this.http
+      .put(`${this.BASE_URL}/api/users`, id, this.options)
+      .map((response: Response) => 
+        this.sessionService.mapResponse(response)
+      );
+  }
+
+  editItinerary(id) {
+    return this.http
+      .post(`${this.BASE_URL}/api/itinerary`, id, this.options)
+      .map(res => res.json());
+  }
+
+  deleteUser(id) {
+    return this.http
+      .delete(`${this.BASE_URL}/api/users/${id}`, this.options)
+      .map(res => res.json());
   }
 }

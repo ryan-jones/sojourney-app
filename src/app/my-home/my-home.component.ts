@@ -5,41 +5,36 @@ import { UserService } from '../shared/services/user.service';
 import { User } from 'app/shared/user.model';
 import { Country } from 'app/shared/country.model';
 import { MapStyles, MapOptions } from 'app/shared/map.model';
-import { setMap } from 'app/shared/services/map.service';
+import { setMap, createDataLayers } from 'app/shared/services/map.service';
+import { Itinerary } from 'app/shared/itinerary.model';
 
 declare var google: any;
 
 @Component({
-  selector: 'app-my-home',
+  selector: 'my-home',
   templateUrl: './my-home.component.html',
   styleUrls: ['./my-home.component.scss'],
   providers: [CountryService, SessionService, UserService]
 })
-export class MyHomeComponent implements OnInit {
-  user = new User;
-  countries: Country[];
-  flightPathData: any;
-  marker: any;
-  newItinerary: any;
-  map: any;
-  place: any;
-  selectedAddress: any;
+export class MyHomeViewComponent implements OnInit {
+  //google properties
+  private marker: any;
+  private map: any;
+  private flightPathData: any;
+  private layers: any[] = [];
+  private mapMarkers: any[] = [];
+  private itineraryPath: any[] = [];
+  private locations: any[] = [];
+  private destinationCoordinates: any[] = [];
 
-  nation;
-  address;
-  locationView: string;
-  arrow: string;
-  checked: boolean = false;
-  isCollapsed: boolean = false;
+//Defined properties
+  private user: User;
+  private countries: Country[];
+  private newItinerary: Itinerary;
 
-  selectedNationalityId1: string;
-  selectedNationalityId2: string;
 
-  layers: any[] = [];
-  mapMarkers: any[] = [];
-  itineraryPath: any[] = [];
-  locations: any[] = [];
-  destinationCoordinates: any[] = [];
+  private selectedNationalityId1: string;
+  private selectedNationalityId2: string;
 
   constructor(
     private country: CountryService,
@@ -51,23 +46,12 @@ export class MyHomeComponent implements OnInit {
     this.initiateMap();
     this.authorizeUser();
     this.getCountries();
-    this.checkCollapsed();
   }
 
-  checkCollapsed() {
-    this.isCollapsed = !this.isCollapsed;
-    !this.isCollapsed ? (this.arrow = '>') : (this.arrow = 'v');
-  }
 
   authorizeUser() {
     const currentUser = JSON.parse(localStorage.getItem('user'));
-    if (currentUser) this.getUser(this.user);
-  }
-
-  getUser(user) {
-    this.userService.get(user._id).subscribe(user => {
-      this.user = user;
-    });
+    this.user = currentUser ? currentUser : new User();
   }
 
   getCountries() {
@@ -81,31 +65,15 @@ export class MyHomeComponent implements OnInit {
     this.map = setMap();
   }
 
-  createDataLayers(event: {
+  loadDataLayers(event: {
     visaKind: string;
     nation: any;
     index: number;
     colors: any;
     counter: number;
   }) {
-    const visaKind = event.visaKind;
-    const nation = event.nation;
-    const index = event.index;
-    const colors = event.colors;
-    const counter = event.counter;
-    const freeLayer = new google.maps.Data();
-    freeLayer.loadGeoJson(
-      'https://raw.githubusercontent.com/johan/world.geo.json/master/countries/' +
-        nation[visaKind][counter] +
-        '.geo.json'
-    );
-    freeLayer.setStyle({
-      fillColor: colors[visaKind][index],
-      fillOpacity: 0.5,
-      title: nation[visaKind][counter]
-    });
-    freeLayer.setMap(this.map);
-    this.layers.push(freeLayer);
+    const layer = createDataLayers(event);
+    this.layers.push(layer);
   }
 
   geocodeMarker(data) {
@@ -240,8 +208,8 @@ export class MyHomeComponent implements OnInit {
     this.destinationCoordinates = [];
     this.locations.forEach(location => {
       const point = {
-        lat: location.geometry.location.lat(),
-        lng: location.geometry.location.lng()
+        lat: location.geoLocation.geometry.location.lat(),
+        lng: location.geoLocation.geometry.location.lng()
       };
       this.destinationCoordinates.push(point);
       this.flightPathData = new google.maps.Polyline({
@@ -266,13 +234,13 @@ export class MyHomeComponent implements OnInit {
 
   deleteLocation(locationInput) {
     this.locations = this.locations.filter(savedLocation => {
-      return savedLocation.id != locationInput.value;
+      return savedLocation !== locationInput;
     });
   }
 
   //saving to user profile in the database
   addItinerary(event) {
-    this.newItinerary = event;
+    this.newItinerary = Object.assign({}, event);
     this.buildItinerary(this.newItinerary);
     this.updateItinerary(this.newItinerary);
   }

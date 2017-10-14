@@ -3,44 +3,48 @@
 
   </div>
   <div class="col-md-6 form-box">
-    <form>
-
-      <p>
-        <input type="text" name="nationality" [(ngModel)]="newUser.name" placeholder="Your name" required />
-      </p>
-      <p>
-        <input type="text" name="username" [(ngModel)]="newUser.username" #myUsername="ngModel" placeholder="Your email (your username)"
-          required />
-      </p>
-      <div *ngIf="(myUsername.dirty || myUsername.touched)">
-        <p class="error" [hidden]="!myUsername.required">
-          Oy! An email-based username is required.
-        </p>
+    <form (ngSubmit)="signup()" [formGroup]="newUser">
+      <div class="form-group">
+        <div class="input-group input-group-unstyled">
+          <input id="name" type="text" class="form-control" formControlName="name" placeholder="Your name" />
+          <span class="input-group-addon"><i *ngIf="newUser.get('name').valid && newUser.get('name').touched" class="fa fa-check" aria-hidden="true"></i></span>
+        </div>
+        <span class="help-block" *ngIf="!newUser.get('name').valid && newUser.get('name').touched"> How can we greet you if you don't have a name?</span>
       </div>
-      <p>
-        <input type="password" name="password" [(ngModel)]="newUser.password" #myPassword="ngModel" required minlength="6" placeholder="Your password (at least 6 characters)"
+
+      <div class="form-group ">
+        <div class="input-group input-group-unstyled">
+          <input id="email" type="email" class="form-control" formControlName="username" placeholder="Your email (this will be your username)"
+          />
+          <span class="input-group-addon"><i *ngIf="newUser.get('username').valid && newUser.get('username').touched" class="fa fa-check" aria-hidden="true"></i></span>
+        </div>
+        <span class="help-block" *ngIf="!newUser.get('username').valid && newUser.get('username').touched"> Oy! An email-based username is required.</span>
+
+      </div>
+
+      <div class="form-group oi">
+        <div class="input-group input-group-unstyled">
+          <input id="password" type="password" class="form-control" formControlName="password" placeholder="Your password (at least 6 characters)"
+            minlength="6" />
+          <span class="input-group-addon"><i *ngIf="newUser.get('password').valid && newUser.get('password').touched" class="fa fa-check" aria-hidden="true"></i></span>
+        </div>
+        <span class="help-block" *ngIf="!newUser.get('password').valid && newUser.get('password').touched">Sorry! Passwords are required and must be at least 6 characters long.</span>
+      </div>
+
+      <div formArrayName="nationalities" class="btn-group dropdown form-group nationality-input">
+        <label for="nationality1">Nationality</label>
+        <input #nationality id="nationality1" type="text" class="form-control dropdown-toggle" data-toggle="dropdown" aria-expanded="false"
+          aria-haspopup="true" placeholder="Select as many nationalities as you want" (keyup)="filterNationalities($event.target.value)"
         />
-      </p>
-      <div *ngIf="(myPassword.dirty || myPassword.touched)">
-        <p class="error" [hidden]="!myPassword.minlength">
-          Sorry! Passwords are required and must be at least 6 characters long.
-        </p>
+        <span class="help-block" *ngFor="let nationality of selectedNationalities"> {{ nationality}} <i (click)="onDeleteNationalityFromList(nationality)" class="fa fa-times" aria-hidden="true"></i></span>
+        <ul class="dropdown-menu nationality-dropdown-menu">
+          <li *ngFor="let nationality of nationalities | searchFilter: searchterm" (click)="onAddNationality(nationality)">{{ nationality }}</li>
+        </ul>
       </div>
 
-      <p> Nationality
-        <input type="text" name="nationality" [(ngModel)]="newUser.nationality" placeholder="Your nationality" />
-      </p>
-      <p> Second Nationality (optional)
-        <input type="text" name="nationality2" [(ngModel)]="newUser.nationality2" />
-      </p>
-      <button type="submit" (click)="signup()"> signup </button>
+      <button class="btn btn default" [disabled]="!newUser.valid" type="submit"> signup </button>
       <h4 *ngIf="error"> {{ error }} </h4>
     </form>
-
-    <div *ngIf="user">
-      <h2> You are now logged in as {{ user.username }}!! </h2>
-      <button (click)="logout()"> Want to logout? </button>
-    </div>
   </div>
   <div class="col-md-3">
 

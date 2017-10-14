@@ -1,117 +1,64 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Router, CanActivate } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
-import {jwtDecode} from 'jwt-decode';
+import * as jwtDecode from 'jwt-decode';
 
 @Injectable()
 export class SessionService implements CanActivate {
-
   public token: string;
   public isAuth: boolean;
   public user: string;
 
-  BASE_URL: string = 'https://sojourney.herokuapp.com';
-  // BASE_URL: string = 'http://localhost:3000';
+  // BASE_URL: string = 'https://sojourney.herokuapp.com';
+  BASE_URL: string = 'http://localhost:3000';
   constructor(private router: Router, private http: Http) {
-
-    // set token if saved in local storage
-      this.token = localStorage.getItem('token');
-      if (this.token != null) {
-        this.isAuth = true;
-      } else {
-        this.isAuth = false;
-      }
+    this.token = localStorage.getItem('token');
+    this.isAuth = this.token ? true : false;
   }
 
   canActivate(): Observable<boolean> | Promise<boolean> | boolean {
     if (localStorage.getItem('token')) {
-      // logged in so return true\
       this.token = localStorage.getItem('token');
       this.user = jwtDecode(this.token).user;
       this.isAuth = true;
       return true;
     }
-    // not logged in so redirect to login page
     this.router.navigate(['/login']);
     this.isAuth = false;
     return false;
   }
 
   isAuthenticated() {
-    return this.token != null ? true : false;
+    return this.token ? true : false;
   }
 
-  signup(user) {
-  	return this.http.post(`${this.BASE_URL}/signup`, user)
-      .map((response: Response) => {
-          // login successful if there's a jwt token in the response
-          let token = response.json() && response.json().token;
-          console.log('token', token);
-          console.log('there was a response');
-          let user = response.json() && response.json().user;
-
-          if (token) {
-            // set token property
-            this.token = token;
-            // this.user = jwtDecode(token).user;
-
-            this.isAuth = true;
-            // store username and jwt token in local storage to keep user logged in between page refreshes
-            localStorage.setItem('token', token );
-            localStorage.setItem('user', JSON.stringify(user) );
-            // return true to indicate successful login
-            return true;
-          } else {
-            // return false to indicate failed login
-            return false;
-          }
-      });
-
+  mapResponse(response) {
+    const token = response.json() && response.json().token;
+    const user = response.json() && response.json().user;
+    return this.checkForToken(token, user);
   }
 
-  login(user) {
-    return this.http.post(`${this.BASE_URL}/login`, user)
-        .map((response: Response) => {
-            // login successful if there's a jwt token in the response
-            let token = response.json() && response.json().token;
-
-
-            //let user = response.json() && response.json().id;
-
-            console.log('token', token);
-            let user = response.json() && response.json().user;
-
-
-
-            if (token) {
-              // set token property
-              this.token = token;
-              // this.user = jwtDecode(token).user;
-
-              this.isAuth = true;
-              // store username and jwt token in local storage to keep user logged in between page refreshes
-              localStorage.setItem('token', token );
-              localStorage.setItem('user', JSON.stringify(user) );
-              // return true to indicate successful login
-              return true;
-            } else {
-              // return false to indicate failed login
-              return false;
-            }
-        });
+  checkForToken(token, user) {
+    if (token) this.token = token;
+    this.setLocalStorage(token, user);
+    this.isAuth = true;
+    return user;
   }
 
-  logout() {
-      // clear token remove user from local storage to log user out
-      this.token = null;
-      this.user = null;
-      this.isAuth = false;
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+  setLocalStorage(token, user) {
+    if (token) localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+  }
 
-      this.router.navigate(['']);
+  resetTokens() {
+    this.token = null;
+    this.user = null;
+    this.isAuth = false;
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.router.navigate(['']);
   }
 }

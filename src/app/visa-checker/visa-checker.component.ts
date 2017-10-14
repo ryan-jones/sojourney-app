@@ -22,7 +22,6 @@ export class VisaCheckerComponent implements OnChanges {
   countrySelector2: any;
   countryName1: string;
   countryName2: string;
-  selectedNationLayer: any;
   selectedNationalityId1: string;
   selectedNationalityId2: string;
 
@@ -33,7 +32,7 @@ export class VisaCheckerComponent implements OnChanges {
   }
 
   //********************** shows country layers *************
-  loadCountries(selectedNationalityId1, selectedNationalityId2) {
+  selectCountries(selectedNationalityId1, selectedNationalityId2, createDataLayers) {
     const selectedCountries = [selectedNationalityId1, selectedNationalityId2];
     const colors = {
       visaFree: ['red', 'blue'],
@@ -52,13 +51,12 @@ export class VisaCheckerComponent implements OnChanges {
   }
 
   setDataLayersForSelectedCountry(selectedCountries, index, colors) {
-    this.countryService.get(selectedCountries[index]).subscribe(nation => {
-      this.selectedNationLayer = nation;
+    this.countryService.getCountry(selectedCountries[index]).subscribe(nation => {
       this.setDataLayers(
-        this.selectedNationLayer,
+        nation,
         index,
         colors,
-        selectedCountries
+        selectedCountries,
       );
     });
   }
@@ -76,7 +74,7 @@ export class VisaCheckerComponent implements OnChanges {
       index,
       colors,
       counter,
-      countries
+      countries,
     );
   }
 
@@ -87,7 +85,7 @@ export class VisaCheckerComponent implements OnChanges {
     index: number,
     colors: any,
     counter: number,
-    countries: any
+    countries: any,
   ) {
     const visaKind = visaKindArray[visaKindIndex];
     let dataLayerData = {
@@ -113,7 +111,7 @@ export class VisaCheckerComponent implements OnChanges {
           index,
           colors,
           counter,
-          countries
+          countries,
         );
       }
     } else {
@@ -124,7 +122,7 @@ export class VisaCheckerComponent implements OnChanges {
         index,
         colors,
         counter,
-        countries
+        countries,
       );
     }
   }

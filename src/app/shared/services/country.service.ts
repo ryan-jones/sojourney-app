@@ -14,7 +14,7 @@ export class CountryService {
       .map((res) => res.json());
   }
 
-  get(id) {
+  getCountry(id) {
   return this.http.get(`${this.BASE_URL}/api/countries/${id}`)
     .map((res) => res.json());
   }

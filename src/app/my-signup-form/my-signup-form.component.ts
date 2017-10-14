@@ -1,29 +1,71 @@
-import { Component } from '@angular/core';
-import { SessionService } from '../shared/services/session.service';
+import { Component, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../shared/services/user.service';
-import { NewUser } from '../shared/new-user.model';
+import {
+  NgForm,
+  FormGroup,
+  FormControl,
+  Validators,
+  FormArray
+} from '@angular/forms';
 
 @Component({
   selector: 'app-my-signup-form',
   templateUrl: './my-signup-form.component.html',
   styleUrls: ['./my-signup-form.component.css'],
-  providers: [SessionService]
 })
 export class MySignupFormComponent {
-  newUser: NewUser = new NewUser;
-
+  @ViewChild('nationality') nationalityInput;
   error: string;
+  searchterm: string = '';
+  newUser: FormGroup = new FormGroup({
+    name: new FormControl('', Validators.required),
+    username: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6)
+    ]),
+    nationalities: new FormArray([])
+  });
+  nationalities = ['United States', 'Taiwan', 'United Kingdom'];
+  selectedNationalities: string[] = [];
 
-  constructor(
-    private session: SessionService,
-    private userService: UserService,
-    private router: Router
-  ) {}
+  constructor(private session: UserService, private router: Router) {}
 
   signup() {
-    this.session.signup(this.newUser).subscribe(result => {
-      this.router.navigate(['user']);
-    }, error => (this.error = error));
+    this.session.signup(this.newUser).subscribe(
+      result => {
+        if (result) this.router.navigate(['user', result._id]);
+      },
+      error => {
+        this.error = error;
+      }
+    );
+  }
+
+  onAddNationality(input) {
+    const nationality = new FormControl(input);
+    (<FormArray>this.newUser.get('nationalities')).push(nationality);
+    this.selectedNationalities.push(input);
+    this.resetValues();
+  }
+
+  filterNationalities(input) {
+    this.searchterm = input;
+  }
+
+  resetValues() {
+    this.nationalityInput.nativeElement.value = '';
+    this.searchterm = '';
+  }
+
+  onDeleteNationalityFromList(nationality) {
+    const nationalities = <FormArray>this.newUser.controls['nationalities'];
+    nationalities.controls = nationalities.controls.filter(control => {
+      return control.value !== nationality;
+    });
+    this.selectedNationalities = this.selectedNationalities.filter(country => {
+      return country !== nationality;
+    });
   }
 }
