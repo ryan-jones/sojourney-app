@@ -4,7 +4,13 @@ import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
 import { AgmCoreModule } from 'angular2-google-maps/core';
 
+import { SearchFilterPipe } from 'app/shared/pipes/search-filter.pipe';
+
 @NgModule({
+  declarations: [
+    //pipes
+    SearchFilterPipe
+  ],
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -15,6 +21,13 @@ import { AgmCoreModule } from 'angular2-google-maps/core';
       libraries: ['places']
     })
   ],
-  exports: [FormsModule, ReactiveFormsModule, HttpModule, CommonModule, AgmCoreModule]
+  exports: [
+    FormsModule,
+    ReactiveFormsModule,
+    HttpModule,
+    CommonModule,
+    AgmCoreModule,
+    SearchFilterPipe
+  ]
 })
 export class SharedModule {}

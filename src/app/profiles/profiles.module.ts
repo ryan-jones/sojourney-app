@@ -12,8 +12,6 @@ import { ProfileCountryVisitComponent } from '../profiles/components/profile-cou
 import { ProfileItinerariesComponent } from '../profiles/containers/profile-itineraries/profile-itineraries.component';
 import { ProfileNavComponent } from '../profiles/components/profile-nav/profile-nav.component';
 
-//pipes
-import { SearchFilterPipe } from 'app/shared/pipes/search-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -23,9 +21,6 @@ import { SearchFilterPipe } from 'app/shared/pipes/search-filter.pipe';
     ProfileCountryVisitComponent,
     ProfileItinerariesComponent,
     ProfileNavComponent,
-
-    //pipes
-    SearchFilterPipe
   ],
   imports: [ProfileRoutingModule, TabsModule, SharedModule],
 })

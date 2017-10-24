@@ -6,11 +6,11 @@ import { UserService } from '../shared/services/user.service';
 
 
 @Component({
-  selector: 'app-my-nav',
-  templateUrl: './my-nav.component.html',
-  styleUrls: ['./my-nav.component.css']
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css']
 })
-export class MyNavComponent implements OnInit {
+export class HeaderComponent implements OnInit {
 
   user: User;
 

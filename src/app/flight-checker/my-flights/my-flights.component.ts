@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FlightService } from '../shared/services/flight.service';
-import { setMap } from '../shared/services/map.service';
+import { FlightService } from '../../shared/services/flight.service';
+import { setMap } from '../../shared/services/map.service';
 import { MapOptions, MapStyles } from 'app/shared/map.model';
 
 declare var google: any;
@@ -9,7 +9,6 @@ declare var google: any;
   selector: 'app-my-flights',
   templateUrl: './my-flights.component.html',
   styleUrls: ['./my-flights.component.css'],
-  providers: [FlightService]
 })
 export class MyFlightsComponent implements OnInit {
   constructor(private flightService: FlightService) {}
