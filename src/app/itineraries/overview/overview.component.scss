@@ -1,0 +1,37 @@
+.fluid-container, .row, .left-side, .right-side {
+  margin: 0;
+  padding: 0;
+}
+
+#home-top {
+  box-shadow: inset 5px 0 5px #ccc;
+}
+
+.left-side, .right-side {
+  height: 100vh;
+}
+
+.map-view {
+  height: 65vh;
+}
+
+#map-canvas {
+  height: 100%;
+}
+
+.visa-view {
+  height: 35vh;
+  background-color: #fff;
+  text-align: center;
+}
+
+.goto {
+  // background-image:url('../../../assets/goto.jpg');
+  background-size: contain;
+  height: 10vh;
+  margin: 0 15%;
+}
+
+
+
+

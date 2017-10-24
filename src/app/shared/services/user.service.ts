@@ -17,18 +17,6 @@ export class UserService {
 
   options = new RequestOptions({ headers: this.headers });
 
-  // getList() {
-  //   return this.http
-  //     .get(`${this.BASE_URL}/users`, this.options)
-  //     .map(res => res.json());
-  // }
-
-  // getUser(id) {
-  //   return this.http
-  //     .get(`${this.BASE_URL}/users/${id}`, this.options)
-  //     .map(res => res.json());
-  // }
-
   getTest(id) {
     return this.http
       .get(`${this.BASE_URL}/api/users/${id}`, this.options)

@@ -1,85 +1,53 @@
 //modules
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, ApplicationRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
-import { AgmCoreModule } from 'angular2-google-maps/core';
-import { AlertModule, CollapseModule } from 'ngx-bootstrap';
-import { RoutingModule } from 'app/app-routing.module';
-import { TabsModule } from 'ngx-bootstrap/tabs';
+import { NgModule } from '@angular/core';
+import { AlertModule } from 'ngx-bootstrap';
+import { ProfileModule } from 'app/profiles/profiles.module';
+import { RoutingModule } from 'app/app-routes.module';
+import { ItinerariesModule } from 'app/itineraries/itineraries.module';
+import { AuthModule } from 'app/auth/auth.module';
+import { FlightsModule } from 'app/flight-checker/flights.module';
 
 //components
 import { AppComponent } from './app.component';
-import { MyHomeViewComponent } from './my-home/my-home.component';
-import { MyAboutComponent } from './my-about/my-about.component';
-import { MyLoginComponent } from './my-login/my-login.component';
-import { MyNavComponent } from './my-nav/my-nav.component';
-import { ProfileComponent } from './containers/profile/profile.component';
-import { ProfileOverviewComponent } from './profile-overview/profile-overview.component';
-import { ProfileEditComponent } from './profile-edit/profile-edit.component';
-import { MySignupFormComponent } from './my-signup-form/my-signup-form.component';
-import { ProfileCountryVisitComponent } from './profile-country-visit/profile-country-visit.component';
-import { ProfileItinerariesComponent } from './profile-itineraries/profile-itineraries.component';
-import { ProfileNavComponent } from './profile-nav/profile-nav.component';
-import { MyFlightsComponent } from './my-flights/my-flights.component';
-import { ItineraryPlannerComponent } from './itinerary-planner/itinerary-planner.component';
-import { VisaCheckerComponent } from './visa-checker/visa-checker.component';
-import { HomeComponent } from './containers/home/home.component';
+import { AboutUsComponent } from './about-us/about-us.component';
+import { HeaderComponent } from './header/header.component';
+import { HomeComponent } from './template/home-template-wrapper/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-
-
 
 //services
 import { CountryService } from './shared/services/country.service';
 import { WarningService } from './shared/services/warning.service';
 import { SessionService } from './shared/services/session.service';
 import { UserService } from './shared/services/user.service';
-import { ItineraryService } from 'app/shared/services/itinerary.service';
-
-//pipes
-import { SearchFilterPipe } from 'app/shared/pipes/search-filter.pipe';
-
+import { ItineraryService } from './shared/services/itinerary.service';
+import { FlightService } from 'app/shared/services/flight.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MyHomeViewComponent,
-    MyAboutComponent,
-    MyLoginComponent,
-    MyNavComponent,
-    ProfileEditComponent,
-    ProfileOverviewComponent,
-    MySignupFormComponent,
-    ProfileComponent,
-    ProfileCountryVisitComponent,
-    ProfileItinerariesComponent,
-    ProfileNavComponent,
-    MyFlightsComponent,
-    ItineraryPlannerComponent,
-    VisaCheckerComponent,
+    AboutUsComponent,
+    HeaderComponent,
     HomeComponent,
-    NotFoundComponent,
-
-    //pipes
-    SearchFilterPipe,
+    NotFoundComponent
   ],
   imports: [
-    BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpModule,
-    CommonModule,
     RoutingModule,
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyD0I9Hi4pdArBe7w4bxrZfLTTKfFKp64nw',
-      libraries: ['places']
-    }),
-    AlertModule.forRoot(),
-    TabsModule.forRoot(),
-    CollapseModule.forRoot()
+    BrowserModule,
+    AuthModule,
+    ProfileModule,
+    ItinerariesModule,
+    FlightsModule,
+    AlertModule.forRoot()
   ],
-  providers: [CountryService, WarningService, SessionService, UserService, ItineraryService],
+  providers: [
+    CountryService,
+    WarningService,
+    SessionService,
+    UserService,
+    ItineraryService,
+    FlightService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

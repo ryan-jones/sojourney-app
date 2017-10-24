@@ -1,0 +1,25 @@
+<div class="fluid-container">
+  <div class="col-md-3"></div>
+  <div class="col-md-6 form-box">
+    <form (ngSubmit)="login()" [formGroup]="user">
+      <div class="form-group ">
+        <div class="input-group input-group-unstyled">
+          <input id="email" type="email" class="form-control" formControlName="username" placeholder="Your email (this will be your username)"
+          />
+          <span class="input-group-addon"><i *ngIf="user.get('username').valid && user.get('username').touched" class="fa fa-check" aria-hidden="true"></i></span>
+        </div>
+        <span class="help-block" *ngIf="!user.get('username').valid && user.get('username').touched"> Oy! An email-based username is required.</span>
+      </div>
+      <div class="form-group">
+        <div class="input-group input-group-unstyled">
+          <input id="password" type="password" class="form-control" formControlName="password" placeholder="Your password (at least 6 characters)"
+            minlength="6" />
+          <span class="input-group-addon"><i *ngIf="user.get('password').valid && user.get('password').touched" class="fa fa-check" aria-hidden="true"></i></span>
+        </div>
+        <span class="help-block" *ngIf="!user.get('password').valid && user.get('password').touched">Sorry! Passwords are required and must be at least 6 characters long.</span>
+      </div>
+      <button class="btn btn default" [disabled]="!user.valid" type="submit"> login </button>
+      <h4 *ngIf="error"> {{ error }} </h4>
+    </form>
+  </div>
+</div>
