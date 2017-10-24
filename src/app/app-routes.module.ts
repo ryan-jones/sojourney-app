@@ -16,7 +16,7 @@ const routes: Routes = [
   { path: 'signup', component: MySignupFormComponent },
   { path: 'login', component: MyLoginComponent },
   {
-    path: 'profile',
+    path: 'user',
     loadChildren: './profiles/profiles.module#ProfileModule'
   },
   { path: 'not-found', component: NotFoundComponent },

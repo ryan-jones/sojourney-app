@@ -7,6 +7,8 @@ import {
 } from '@angular/core';
 import { CountryService } from '../../shared/services/country.service';
 import { Country } from 'app/shared/country.model';
+import { buildDataLayer, initializeDataLayer } from 'app/utils';
+import { DataLayer, Colors } from 'app/shared/map.model';
 
 @Component({
   selector: 'visa-checker',
@@ -19,7 +21,9 @@ export class VisaCheckerComponent implements OnChanges {
   @Input() countries: Country[];
   @Output() createDataLayers: EventEmitter<any> = new EventEmitter();
 
-  countrySelector2: any;
+  dataLayer: DataLayer;
+  colors: Colors;
+  countrySelector2: Country[] | '';
   countryName1: string;
   countryName2: string;
   selectedNationalityId1: string;
@@ -31,99 +35,67 @@ export class VisaCheckerComponent implements OnChanges {
     this.countryName2 = this.countryName2 ? this.countryName2 : '';
   }
 
-  //********************** shows country layers *************
-  selectCountries(selectedNationalityId1, selectedNationalityId2, createDataLayers) {
+  selectCountries(
+    selectedNationalityId1: string,
+    selectedNationalityId2: string,
+  ) {
     const selectedCountries = [selectedNationalityId1, selectedNationalityId2];
-    const colors = {
-      visaFree: ['red', 'blue'],
-      visaOnArrival: ['yellow', 'green']
-    };
     let index = 0;
-    this.showCountries(selectedCountries, colors, index);
+    this.showCountries(selectedCountries, this.colors, index);
   }
 
-  //********************   creates country data layers ***************
-  showCountries(selectedCountries, colors, index) {
+
+  showCountries(selectedCountries: string[], colors: Colors, index: number) {
     if (index === 2) {
       return;
     }
-    this.setDataLayersForSelectedCountry(selectedCountries, index, colors);
+    this.setLayersForSelectedCountry(selectedCountries, index, colors);
   }
 
-  setDataLayersForSelectedCountry(selectedCountries, index, colors) {
-    this.countryService.getCountry(selectedCountries[index]).subscribe(nation => {
-      this.setDataLayers(
-        nation,
-        index,
-        colors,
-        selectedCountries,
-      );
-    });
+
+  setLayersForSelectedCountry(selectedCountries: string[], index: number, colors: Colors) {
+    this.countryService
+      .getCountry(selectedCountries[index])
+      .subscribe(nation => {
+        this.setDataLayers(nation, index, colors, selectedCountries);
+      });
   }
 
-  setDataLayers(nation, index, colors, countries) {
-    const visaKindArray = ['visaFree', 'visaOnArrival'];
-    let visaKindIndex = 0;
-    let counter = 0;
+
+  setDataLayers(nation: any, index: number, colors: Colors, countries: string[]) { 
     index === 0 ? (this.countryName1 = nation) : (this.countryName2 = nation);
-
-    this.loadDataLayers(
-      visaKindArray,
-      visaKindIndex,
-      nation,
-      index,
-      colors,
-      counter,
-      countries,
-    );
+    this.dataLayer = initializeDataLayer(nation, index, colors, countries)
+    this.loadDataLayers(this.dataLayer);
   }
 
-  loadDataLayers(
-    visaKindArray: any[],
-    visaKindIndex: number,
-    nation: any,
-    index: number,
-    colors: any,
-    counter: number,
-    countries: any,
-  ) {
-    const visaKind = visaKindArray[visaKindIndex];
-    let dataLayerData = {
-      visaKind,
-      nation,
-      index,
-      colors,
-      counter
-    };
-    this.createDataLayers.emit(dataLayerData);
-    counter++;
-    if (counter === nation[visaKind].length) {
-      counter = 0;
+
+  loadDataLayers(dataLayer: DataLayer) {
+    this.emitDataLayer(dataLayer);
+    dataLayer.counter++;
+    this.checkCountryIndexValues(dataLayer);
+  }
+
+
+  emitDataLayer(dataLayer: DataLayer) {
+    const currentDataLayerData = buildDataLayer(dataLayer);
+    this.createDataLayers.emit(currentDataLayerData);
+  }
+
+
+  checkCountryIndexValues(layer: DataLayer) {
+    const visaKind = layer.visaKindArray[layer.visaKindIndex];
+
+    if (layer.counter === layer.nation[visaKind].length) {
+      layer.counter = 0;
       if (visaKind === 'visaOnArrival') {
-        index++;
-        this.showCountries(countries, colors, index);
+        layer.index++;
+        this.showCountries(layer.countries, layer.colors, layer.index);
       } else {
-        visaKindIndex++;
-        this.loadDataLayers(
-          visaKindArray,
-          visaKindIndex,
-          nation,
-          index,
-          colors,
-          counter,
-          countries,
-        );
+        layer.visaKindIndex++;
+        this.loadDataLayers(layer);
       }
     } else {
-      this.loadDataLayers(
-        visaKindArray,
-        visaKindIndex,
-        nation,
-        index,
-        colors,
-        counter,
-        countries,
-      );
+      this.loadDataLayers(layer);
     }
   }
 }

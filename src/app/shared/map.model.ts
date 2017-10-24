@@ -56,3 +56,23 @@ export class MapOptions {
     }
   ) {}
 }
+
+export interface DataLayer {
+  visaKindArray: any[];
+  visaKindIndex: number;
+  nation: any;
+  index: number;
+  colors: any;
+  counter: number;
+  countries: any;
+}
+
+export interface Colors {
+  visaFree: ['red', 'blue'];
+  visaOnArrival: ['yellow', 'green'];
+}
+
+export interface Coordinate {
+  lat: number;
+  lng: number;
+}

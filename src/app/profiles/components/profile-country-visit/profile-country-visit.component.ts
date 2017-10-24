@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MapStyles, MapOptions } from '../../../shared/map.model';
-import { setMap } from 'app/shared/services/map.service';
 import { User } from 'app/shared/user.model';
+import { setMap } from 'app/utils';
 
 declare const google: any;
 

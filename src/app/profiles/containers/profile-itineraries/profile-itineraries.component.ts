@@ -1,17 +1,12 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ViewChildren,
-  QueryList
-} from '@angular/core';
-import { Router } from '@angular/router';
-import { SessionService } from '../../../shared/services/session.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../../../shared/services/user.service';
-import { CountryService } from '../../../shared/services/country.service';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TabsetComponent } from 'ngx-bootstrap';
-import { setMap, createDataLayers } from 'app/shared/services/map.service';
+import { Country } from 'app/shared/country.model';
+import { UserItinerary, User } from 'app/shared/user.model';
+import { CountryService } from 'app/shared/services/country.service';
+import { setMap, createDataLayers, initializeDataLayer } from 'app/utils';
+import { Colors, DataLayer } from 'app/shared/map.model';
 
 declare var google: any;
 
@@ -23,172 +18,129 @@ declare var google: any;
 export class ProfileItinerariesComponent implements OnInit {
   @ViewChild('staticTabs') staticTabs: TabsetComponent;
 
-  user: any;
-  userItineraries: any;
-  map: any;
-  nation;
-
   constructor(
-    private router: Router,
-    private session: SessionService,
     private userService: UserService,
     private countryService: CountryService
   ) {}
 
-  selectedNationalityId1;
-  selectedNationalityId2;
-  countries;
-  countries2;
-  countryName1;
-  countryName2;
-  address: any;
-  newAddress: any;
-  geocoder;
-  flightPathData;
+  marker: any;
+  user: User;
+  userItineraries: UserItinerary[];
+  dataLayer: DataLayer;
+  map: any;
+  geocoder: any;
+  flightPathData: any;
 
-  place: any;
+  selectedNationalityId1: string;
+  selectedNationalityId2: string;
+  countryName1: string;
+  countryName2: string;
+
   differenceBetweenDates: number;
-  totalItinerary;
   totalPrice: number;
-  deleteLocation;
-  marker;
+
+  countries: Country[];
+
   locations: any[] = [];
   itineraryDays: any[] = [];
-  dates = [];
+  dates: any[] = [];
   destinationCoordinates = [];
   itineraryPath: any[] = [];
   mapMarkers: any[] = [];
   allItineraries: any[] = [];
-  colorLayers: any[] = [];
+
   layers: any[] = [];
   coordinates: any[] = [];
 
+  colors = {
+    visaFree: ['red', 'blue'],
+    visaOnArrival: ['yellow', 'green']
+  };
+
   ngOnInit() {
-    const user = JSON.parse(localStorage.getItem('user'));
-
-    this.userService.getTest(user._id).subscribe(user => {
-      this.userItineraries = user;
-      const date = [];
-
-      this.userItineraries.arr.forEach((itinerary, index) => {
-        this.selectedNationalityId1 = !itinerary.nationality1
-          ? ''
-          : itinerary.nationality1;
-        this.selectedNationalityId2 = !itinerary.nationality3
-          ? ''
-          : itinerary.nationality2;
-
-        this.locations.push(itinerary.placesAndDates);
-
-        itinerary.placesAndDates.forEach(place => {
-          this.coordinates.push(place.geometry.location);
-          date.push(place.date);
-        });
-
-        this.destinationCoordinates.push(this.coordinates);
-        this.dates.push(date);
-
-        this.allItineraries.push(itinerary);
-       
-
-        this.initiateMap();
-        // this.loadCountries(this.selectedNationalityId1, this.selectedNationalityId2)
-        // this.loadPolylines(this.coordinates);
-        // this.differenceInDays();
-      });
-    });
-
-    this.countryService.getList().subscribe(countries => {
-      this.countries = countries;
-      this.countries2 = countries;
-    });
-    this.countryName1 = !this.countryName1 ? '' : this.countryName1;
-    this.countryName2 = !this.countryName2 ? '' : this.countryName2;
-
-    this.totalPrice = 0;
+    this.user = JSON.parse(localStorage.getItem('user'));
+    this.initiateMap();
+    this.getUserItineraries();
   }
 
   initiateMap() {
     this.map = setMap();
   }
 
+  getUserItineraries() {
+    this.userService.getUser(this.user._id).subscribe(user => {
+      this.userItineraries = user.itineraries;
+      console.log('userItineraries', this.userItineraries);
+      const selectedCountries = this.userItineraries[0].nationalities.length
+        ? this.userItineraries[0].nationalities
+        : ['United States', 'Taiwan'];
+      let index = 0;
+      this.showCountries(selectedCountries, this.colors, index);
+    });
+  }
+
   showCountries(selectedCountries, colors, index) {
     if (index === 2) {
       return;
     }
-    this.setDataLayersForSelectedCountry(selectedCountries, index, colors);
+    this.setLayersForSelectedCountry(selectedCountries, index, colors);
   }
 
-  setDataLayersForSelectedCountry(selectedCountries, index, colors) {
-    this.countryService.getCountry(selectedCountries[index]).subscribe(nation => {
-      this.setDataLayers(nation, index, colors, selectedCountries);
-    });
+  setLayersForSelectedCountry(
+    selectedCountries: string[],
+    index: number,
+    colors: Colors
+  ) {
+    this.countryService
+      .getCountry(selectedCountries[index])
+      .subscribe(nation => {
+        this.setDataLayers(nation, index, colors, selectedCountries);
+      });
   }
 
-  setDataLayers(nation, index, colors, countries) {
-    const visaKindArray = ['visaFree', 'visaOnArrival'];
-    let visaKindIndex = 0;
-    let counter = 0;
-    index === 0 ? (this.countryName1 = nation) : (this.countryName2 = nation);
-
-    this.loadDataLayers(
-      visaKindArray,
-      visaKindIndex,
-      nation,
-      index,
-      colors,
-      counter,
-      countries
-    );
-  }
-
-  loadDataLayers(
-    visaKindArray: any[],
-    visaKindIndex: number,
+  setDataLayers(
     nation: any,
     index: number,
-    colors: any,
-    counter: number,
-    countries: any
+    colors: Colors,
+    countries: string[]
   ) {
-    const visaKind = visaKindArray[visaKindIndex];
-    let dataLayerData = {
-      visaKind,
-      nation,
-      index,
-      colors,
-      counter
-    };
-    const layer = createDataLayers(dataLayerData);
-    counter++;
-    if (counter === nation[visaKind].length) {
-      counter = 0;
+    index === 0 ? (this.countryName1 = nation) : (this.countryName2 = nation);
+    this.dataLayer = initializeDataLayer(nation, index, colors, countries);
+    this.loadDataLayers(this.dataLayer);
+  }
+
+
+  loadDataLayers(dataLayer: DataLayer) {
+    dataLayer.counter++;
+    this.checkCountryIndexValues(dataLayer);
+  }
+
+
+  checkCountryIndexValues(layer: DataLayer) {
+    const visaKind = layer.visaKindArray[layer.visaKindIndex];
+    if (layer.counter === layer.nation[visaKind].length) {
+      layer.counter = 0;
       if (visaKind === 'visaOnArrival') {
-        index++;
-        this.showCountries(countries, colors, index);
+        layer.index++;
+        this.showCountries(layer.countries, layer.colors, layer.index);
       } else {
-        visaKindIndex++;
-        this.loadDataLayers(
-          visaKindArray,
-          visaKindIndex,
-          nation,
-          index,
-          colors,
-          counter,
-          countries
-        );
+        layer.visaKindIndex++;
+        this.loadDataLayers(layer);
       }
     } else {
-      this.loadDataLayers(
-        visaKindArray,
-        visaKindIndex,
-        nation,
-        index,
-        colors,
-        counter,
-        countries
-      );
+      this.loadDataLayers(layer);
     }
+  }
+
+  buildDataLayers(event: {
+    visaKind: string;
+    nation: any;
+    index: number;
+    colors: any;
+    counter: number;
+  }) {
+    const layer = createDataLayers(event);
+    this.layers.push(layer);
   }
 
   selectTab(tab_id: number) {

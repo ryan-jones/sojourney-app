@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FlightService } from '../../shared/services/flight.service';
-import { setMap } from '../../shared/services/map.service';
 import { MapOptions, MapStyles } from 'app/shared/map.model';
+import { setMap } from 'app/utils';
 
 declare var google: any;
 

@@ -4,9 +4,17 @@ import { SessionService } from '../../shared/services/session.service';
 import { UserService } from '../../shared/services/user.service';
 import { User } from 'app/shared/user.model';
 import { Country } from 'app/shared/country.model';
-import { MapStyles, MapOptions } from 'app/shared/map.model';
-import { setMap, createDataLayers } from 'app/shared/services/map.service';
+import { MapStyles, MapOptions, Coordinate } from 'app/shared/map.model';
 import { Itinerary } from 'app/shared/itinerary.model';
+import {
+  setMap,
+  createDataLayers,
+  setPolyline,
+  newPolyline,
+  newMarker,
+  removeLocation,
+  setNewMarker
+} from 'app/utils';
 
 declare var google: any;
 
@@ -27,11 +35,10 @@ export class ItineraryOverViewComponent implements OnInit {
   private locations: any[] = [];
   private destinationCoordinates: any[] = [];
 
-//Defined properties
+  //Defined properties
   private user: User;
   private countries: Country[];
   private newItinerary: Itinerary;
-
 
   private selectedNationalityId1: string;
   private selectedNationalityId2: string;
@@ -47,7 +54,6 @@ export class ItineraryOverViewComponent implements OnInit {
     this.authorizeUser();
     this.getCountries();
   }
-
 
   authorizeUser() {
     const currentUser = JSON.parse(localStorage.getItem('user'));
@@ -110,14 +116,7 @@ export class ItineraryOverViewComponent implements OnInit {
 
   createflightPath(point) {
     this.destinationCoordinates.push(point);
-
-    this.flightPathData = new google.maps.Polyline({
-      path: this.destinationCoordinates,
-      geodesic: true,
-      strokeColor: 'yellow',
-      strokeOpacity: 1.0,
-      strokeWeight: 4
-    });
+    this.flightPathData = setPolyline(this.destinationCoordinates);
     this.itineraryPath.push(this.flightPathData);
     this.flightPathData.setMap(this.map);
   }
@@ -132,16 +131,7 @@ export class ItineraryOverViewComponent implements OnInit {
     price: number,
     infowindow: any
   ) {
-    this.marker = new google.maps.Marker({
-      position: point,
-      map: this.map,
-      name: name,
-      country: country,
-      date: date,
-      days: days,
-      transport: transport,
-      price: price
-    });
+    this.marker = setNewMarker(point, this.map, name, country, date, days, transport, price)
     this.marker.setIcon(
       'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
     );
@@ -212,33 +202,30 @@ export class ItineraryOverViewComponent implements OnInit {
         lng: location.geoLocation.geometry.location.lng()
       };
       this.destinationCoordinates.push(point);
-      this.flightPathData = new google.maps.Polyline({
-        path: this.destinationCoordinates,
-        geodesic: true,
-        strokeColor: 'yellow',
-        strokeOpacity: 1.0,
-        strokeWeight: 4
-      });
-      this.flightPathData.setMap(this.map);
-      this.itineraryPath.push(this.flightPathData);
-      this.marker = new google.maps.Marker({
-        position: point,
-        map: this.map
-      });
-      this.marker.setIcon(
-        'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
-      );
-      this.mapMarkers.push(this.marker);
+      this.resetFlightPath();
+      this.buildMarkers(point);
     });
+  }
+
+  resetFlightPath() {
+    this.flightPathData = newPolyline(this.destinationCoordinates);
+    this.flightPathData.setMap(this.map);
+    this.itineraryPath.push(this.flightPathData);
+  }
+
+  buildMarkers(point: Coordinate) {
+    this.marker = newMarker(point, this.map);
+    this.marker.setIcon(
+      'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
+    );
+    this.mapMarkers.push(this.marker);
   }
 
   deleteLocation(locationInput) {
-    this.locations = this.locations.filter(savedLocation => {
-      return savedLocation !== locationInput;
-    });
+    this.locations = removeLocation(this.locations, locationInput);
   }
 
-  //saving to user profile in the database
+
   addItinerary(event) {
     this.newItinerary = Object.assign({}, event);
     this.buildItinerary(this.newItinerary);

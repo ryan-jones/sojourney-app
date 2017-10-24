@@ -17,19 +17,10 @@ export class UserService {
 
   options = new RequestOptions({ headers: this.headers });
 
-  getTest(id) {
+  getUser(id) {
     return this.http
       .get(`${this.BASE_URL}/api/users/${id}`, this.options)
-      .map(res => res.json())
-      .map(data => {
-        const arr = [];
-        data.itineraries.forEach((item, index) => {
-          arr.push(item);
-        });
-        return {
-          arr: arr
-        };
-      });
+      .map(res => res.json());
   }
 
   signup(user) {
@@ -42,7 +33,7 @@ export class UserService {
 
   login(user) {
     return this.http
-      .post(`${this.BASE_URL}/login`, user)
+      .post(`${this.BASE_URL}/login`, user._value)
       .map((response: Response) => {
         return this.sessionService.mapResponse(response);
       });
@@ -55,9 +46,7 @@ export class UserService {
   editUser(id) {
     return this.http
       .put(`${this.BASE_URL}/api/users`, id, this.options)
-      .map((response: Response) => 
-        this.sessionService.mapResponse(response)
-      );
+      .map((response: Response) => this.sessionService.mapResponse(response));
   }
 
   editItinerary(id) {

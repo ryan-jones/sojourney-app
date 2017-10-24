@@ -36,12 +36,14 @@ export class SessionService implements CanActivate {
   }
 
   mapResponse(response) {
+    console.log('response', response)
     const token = response.json() && response.json().token;
     const user = response.json() && response.json().user;
     return this.checkForToken(token, user);
   }
 
   checkForToken(token, user) {
+    console.log('token and user', token, user)
     if (token) this.token = token;
     this.setLocalStorage(token, user);
     this.isAuth = true;
