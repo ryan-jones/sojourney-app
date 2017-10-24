@@ -9,7 +9,7 @@ import * as jwtDecode from 'jwt-decode';
 @Injectable()
 export class SessionService implements CanActivate {
   public token: string;
-  public isAuth: boolean;
+  public isAuth: boolean = false;
   public user: string;
 
   // BASE_URL: string = 'https://sojourney.herokuapp.com';

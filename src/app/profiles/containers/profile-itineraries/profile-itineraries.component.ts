@@ -6,9 +6,9 @@ import {
   QueryList
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { SessionService } from '../shared/services/session.service';
-import { UserService } from '../shared/services/user.service';
-import { CountryService } from '../shared/services/country.service';
+import { SessionService } from '../../../shared/services/session.service';
+import { UserService } from '../../../shared/services/user.service';
+import { CountryService } from '../../../shared/services/country.service';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TabsetComponent } from 'ngx-bootstrap';
 import { setMap, createDataLayers } from 'app/shared/services/map.service';

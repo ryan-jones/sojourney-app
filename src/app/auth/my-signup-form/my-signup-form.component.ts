@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UserService } from '../shared/services/user.service';
+import { UserService } from '../../shared/services/user.service';
 import {
   NgForm,
   FormGroup,

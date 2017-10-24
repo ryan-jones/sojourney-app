@@ -1,34 +1,33 @@
-<div class="fluid-container">
-  <div class="col-md-3">
 
-  </div>
+<div class="fluid-container">
+  <div class="col-md-3"></div>
   <div class="col-md-6 form-box">
-    <form (ngSubmit)="signup()" [formGroup]="newUser">
+    <form (ngSubmit)="signup()" [formGroup]="editUser">
       <div class="form-group">
         <div class="input-group input-group-unstyled">
           <input id="name" type="text" class="form-control" formControlName="name" placeholder="Your name" />
-          <span class="input-group-addon"><i *ngIf="newUser.get('name').valid && newUser.get('name').touched" class="fa fa-check" aria-hidden="true"></i></span>
+          <span class="input-group-addon"><i *ngIf="editUser.get('name').valid && editUser.get('name').touched" class="fa fa-check" aria-hidden="true"></i></span>
         </div>
-        <span class="help-block" *ngIf="!newUser.get('name').valid && newUser.get('name').touched"> How can we greet you if you don't have a name?</span>
+        <span class="help-block" *ngIf="!editUser.get('name').valid && editUser.get('name').touched"> How can we greet you if you don't have a name?</span>
       </div>
 
       <div class="form-group ">
         <div class="input-group input-group-unstyled">
           <input id="email" type="email" class="form-control" formControlName="username" placeholder="Your email (this will be your username)"
           />
-          <span class="input-group-addon"><i *ngIf="newUser.get('username').valid && newUser.get('username').touched" class="fa fa-check" aria-hidden="true"></i></span>
+          <span class="input-group-addon"><i *ngIf="editUser.get('username').valid && editUser.get('username').touched" class="fa fa-check" aria-hidden="true"></i></span>
         </div>
-        <span class="help-block" *ngIf="!newUser.get('username').valid && newUser.get('username').touched"> Oy! An email-based username is required.</span>
+        <span class="help-block" *ngIf="!editUser.get('username').valid && editUser.get('username').touched"> Oy! An email-based username is required.</span>
 
       </div>
 
-      <div class="form-group oi">
+      <div class="form-group">
         <div class="input-group input-group-unstyled">
           <input id="password" type="password" class="form-control" formControlName="password" placeholder="Your password (at least 6 characters)"
             minlength="6" />
-          <span class="input-group-addon"><i *ngIf="newUser.get('password').valid && newUser.get('password').touched" class="fa fa-check" aria-hidden="true"></i></span>
+          <span class="input-group-addon"><i *ngIf="editUser.get('password').valid && editUser.get('password').touched" class="fa fa-check" aria-hidden="true"></i></span>
         </div>
-        <span class="help-block" *ngIf="!newUser.get('password').valid && newUser.get('password').touched">Sorry! Passwords are required and must be at least 6 characters long.</span>
+        <span class="help-block" *ngIf="!editUser.get('password').valid && editUser.get('password').touched">Sorry! Passwords are required and must be at least 6 characters long.</span>
       </div>
 
       <div formArrayName="nationalities" class="btn-group dropdown form-group nationality-input">
@@ -42,11 +41,11 @@
         </ul>
       </div>
 
-      <button class="btn btn default" [disabled]="!newUser.valid" type="submit"> signup </button>
+      <button class="btn btn default" [disabled]="!editUser.valid" type="submit"> signup </button>
+      <button class="btn btn-danger" type="button" (click)="deleteUser()">delete</button>
       <h4 *ngIf="error"> {{ error }} </h4>
     </form>
   </div>
   <div class="col-md-3">
-
   </div>
 </div>

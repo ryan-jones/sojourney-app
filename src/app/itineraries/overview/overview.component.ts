@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { CountryService } from '../shared/services/country.service';
-import { SessionService } from '../shared/services/session.service';
-import { UserService } from '../shared/services/user.service';
+import { CountryService } from '../../shared/services/country.service';
+import { SessionService } from '../../shared/services/session.service';
+import { UserService } from '../../shared/services/user.service';
 import { User } from 'app/shared/user.model';
 import { Country } from 'app/shared/country.model';
 import { MapStyles, MapOptions } from 'app/shared/map.model';
@@ -12,11 +12,11 @@ declare var google: any;
 
 @Component({
   selector: 'my-home',
-  templateUrl: './my-home.component.html',
-  styleUrls: ['./my-home.component.scss'],
+  templateUrl: './overview.component.html',
+  styleUrls: ['./overview.component.scss'],
   providers: [CountryService, SessionService, UserService]
 })
-export class MyHomeViewComponent implements OnInit {
+export class ItineraryOverViewComponent implements OnInit {
   //google properties
   private marker: any;
   private map: any;

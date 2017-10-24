@@ -5,7 +5,7 @@ import {
   Output,
   EventEmitter
 } from '@angular/core';
-import { CountryService } from '../shared/services/country.service';
+import { CountryService } from '../../shared/services/country.service';
 import { Country } from 'app/shared/country.model';
 
 @Component({

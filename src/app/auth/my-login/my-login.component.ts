@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { UserService } from '../shared/services/user.service';
+import { UserService } from '../../shared/services/user.service';
 import { Router } from '@angular/router';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-my-login',
@@ -8,10 +9,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./my-login.component.css']
 })
 export class MyLoginComponent {
-  user = {
-    username: '',
-    password: ''
-  };
+  user: FormGroup = new FormGroup({
+    username: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6)
+    ]),
+  });
 
   error: string;
 
