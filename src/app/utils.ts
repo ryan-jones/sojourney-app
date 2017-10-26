@@ -88,6 +88,7 @@ export function buildDataLayer(layer): any {
 }
 
 export function createDataLayers(e: GeoJsonLayer): any {
+  console.log('e', e)
   const freeLayer = new google.maps.Data();
   freeLayer.loadGeoJson(
     'https://raw.githubusercontent.com/johan/world.geo.json/master/countries/' +
