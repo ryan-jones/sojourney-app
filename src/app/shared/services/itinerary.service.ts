@@ -22,7 +22,7 @@ export interface Export {
 
 @Injectable()
 export class ItineraryService {
-  createCountryName(itineraryDestination) {
+  createCountryName(itineraryDestination): string {
     const countryStringSplit = itineraryDestination.geoLocation.formatted_address.split(
       ','
     );
@@ -45,7 +45,7 @@ export class ItineraryService {
     };
   }
 
-  calculateDateRange(dates) {
+  calculateDateRange(dates: string[]): number {
     const range = Math.round(
       Math.abs(
         new Date(dates[dates.length - 1]).getTime() -
@@ -56,7 +56,7 @@ export class ItineraryService {
     return !range ? 0 : range;
   }
 
-  updateDateRange(dates, dayIndex) {
+  updateDateRange(dates: string[], dayIndex: number): number {
     const range =
       Math.abs(
         new Date(dates[dayIndex]).getTime() -
@@ -66,7 +66,7 @@ export class ItineraryService {
     return !range ? 0 : range;
   }
 
-  aggregate(input) {
+  aggregate(input: number[]): number {
     return input.reduce((a, b) => a + b, 0);
   }
 }

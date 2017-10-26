@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { CountryService } from '../../shared/services/country.service';
+import { CountryService } from '../../shared/services/countries.service';
 import { SessionService } from '../../shared/services/session.service';
 import { UserService } from '../../shared/services/user.service';
 import { User } from 'app/shared/user.model';
 import { Country } from 'app/shared/country.model';
 import { MapStyles, MapOptions, Coordinate } from 'app/shared/map.model';
-import { Itinerary } from 'app/shared/itinerary.model';
+import { Itinerary, Destination } from 'app/shared/itinerary.model';
 import {
   setMap,
   createDataLayers,
@@ -15,8 +15,9 @@ import {
   removeLocation,
   setNewMarker
 } from 'app/utils';
+import { Observable } from 'rxjs/Observable';
 
-declare var google: any;
+declare const google: any;
 
 @Component({
   selector: 'my-home',
@@ -33,11 +34,12 @@ export class ItineraryOverViewComponent implements OnInit {
   private mapMarkers: any[] = [];
   private itineraryPath: any[] = [];
   private locations: any[] = [];
-  private destinationCoordinates: any[] = [];
+  private destinationCoordinates: Coordinate[] = [];
 
   //Defined properties
   private user: User;
   private countries: Country[];
+  private countries$: Observable<any>
   private newItinerary: Itinerary;
 
   private selectedNationalityId1: string;
@@ -47,12 +49,13 @@ export class ItineraryOverViewComponent implements OnInit {
     private country: CountryService,
     private session: SessionService,
     private userService: UserService
-  ) {}
+  ) {
+    this.countries$ = this.country.countries$
+  }
 
   ngOnInit() {
     this.initiateMap();
     this.authorizeUser();
-    this.getCountries();
   }
 
   authorizeUser() {
@@ -60,11 +63,6 @@ export class ItineraryOverViewComponent implements OnInit {
     this.user = currentUser ? currentUser : new User();
   }
 
-  getCountries() {
-    this.country.getList().subscribe(countries => {
-      this.countries = countries;
-    });
-  }
 
   //**************** creates initial map *********
   initiateMap() {
@@ -87,7 +85,7 @@ export class ItineraryOverViewComponent implements OnInit {
     this.buildflightPath(geocoder, data);
   }
 
-  buildflightPath(geocoder, data) {
+  buildflightPath(geocoder: any, data) {
     const that = this;
     const name = data.name;
     const date = data.date;
@@ -114,7 +112,7 @@ export class ItineraryOverViewComponent implements OnInit {
     });
   }
 
-  createflightPath(point) {
+  createflightPath(point: Coordinate) {
     this.destinationCoordinates.push(point);
     this.flightPathData = setPolyline(this.destinationCoordinates);
     this.itineraryPath.push(this.flightPathData);
@@ -221,7 +219,7 @@ export class ItineraryOverViewComponent implements OnInit {
     this.mapMarkers.push(this.marker);
   }
 
-  deleteLocation(locationInput) {
+  deleteLocation(locationInput: Destination) {
     this.locations = removeLocation(this.locations, locationInput);
   }
 
@@ -234,8 +232,7 @@ export class ItineraryOverViewComponent implements OnInit {
 
   buildItinerary(newItinerary) {
     newItinerary.id = this.user._id;
-    newItinerary.nationality1 = this.selectedNationalityId1;
-    newItinerary.nationality2 = this.selectedNationalityId2;
+    newItinerary.nationalities = [this.selectedNationalityId1, this.selectedNationalityId2]
   }
 
   updateItinerary(newItinerary) {

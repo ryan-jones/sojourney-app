@@ -5,9 +5,8 @@ import {
   Output,
   EventEmitter
 } from '@angular/core';
-import { CountryService } from '../../shared/services/country.service';
 import { Country } from 'app/shared/country.model';
-import { buildDataLayer, initializeDataLayer } from 'app/utils';
+import { buildDataLayer, initializeDataLayer, COLORS } from 'app/utils';
 import { DataLayer, Colors } from 'app/shared/map.model';
 
 @Component({
@@ -16,34 +15,34 @@ import { DataLayer, Colors } from 'app/shared/map.model';
   styleUrls: ['./visa-checker.component.scss']
 })
 export class VisaCheckerComponent implements OnChanges {
-  constructor(private countryService: CountryService) {}
+  constructor() {}
 
-  @Input() countries: Country[];
+  // @Input() countries: Country[];
+  @Input() countries$: Country[];
   @Output() createDataLayers: EventEmitter<any> = new EventEmitter();
 
   dataLayer: DataLayer;
-  colors: Colors;
-  countrySelector2: Country[] | '';
+  colors: Colors = COLORS;
+  countrySelector2: Country[];
   countryName1: string;
   countryName2: string;
   selectedNationalityId1: string;
   selectedNationalityId2: string;
 
   ngOnChanges() {
-    this.countrySelector2 = this.countries ? this.countries : '';
+    this.countrySelector2 = this.countries$;
     this.countryName1 = this.countryName1 ? this.countryName1 : '';
     this.countryName2 = this.countryName2 ? this.countryName2 : '';
   }
 
   selectCountries(
     selectedNationalityId1: string,
-    selectedNationalityId2: string,
+    selectedNationalityId2: string
   ) {
     const selectedCountries = [selectedNationalityId1, selectedNationalityId2];
     let index = 0;
     this.showCountries(selectedCountries, this.colors, index);
   }
-
 
   showCountries(selectedCountries: string[], colors: Colors, index: number) {
     if (index === 2) {
@@ -52,22 +51,27 @@ export class VisaCheckerComponent implements OnChanges {
     this.setLayersForSelectedCountry(selectedCountries, index, colors);
   }
 
-
-  setLayersForSelectedCountry(selectedCountries: string[], index: number, colors: Colors) {
-    this.countryService
-      .getCountry(selectedCountries[index])
-      .subscribe(nation => {
-        this.setDataLayers(nation, index, colors, selectedCountries);
-      });
+  setLayersForSelectedCountry(
+    selectedCountries: string[],
+    index: number,
+    colors: Colors
+  ) {
+    const nation = this.countries$.find(
+      country => country._id === selectedCountries[index]
+    );
+    this.setDataLayers(nation, index, colors, selectedCountries);
   }
 
-
-  setDataLayers(nation: any, index: number, colors: Colors, countries: string[]) { 
+  setDataLayers(
+    nation: any,
+    index: number,
+    colors: Colors,
+    countries: string[]
+  ) {
     index === 0 ? (this.countryName1 = nation) : (this.countryName2 = nation);
-    this.dataLayer = initializeDataLayer(nation, index, colors, countries)
+    this.dataLayer = initializeDataLayer(nation, index, colors, countries);
     this.loadDataLayers(this.dataLayer);
   }
-
 
   loadDataLayers(dataLayer: DataLayer) {
     this.emitDataLayer(dataLayer);
@@ -75,12 +79,10 @@ export class VisaCheckerComponent implements OnChanges {
     this.checkCountryIndexValues(dataLayer);
   }
 
-
   emitDataLayer(dataLayer: DataLayer) {
     const currentDataLayerData = buildDataLayer(dataLayer);
     this.createDataLayers.emit(currentDataLayerData);
   }
-
 
   checkCountryIndexValues(layer: DataLayer) {
     const visaKind = layer.visaKindArray[layer.visaKindIndex];

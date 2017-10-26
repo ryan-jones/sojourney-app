@@ -1,9 +1,22 @@
-import { DataLayer, Colors } from 'app/shared/map.model';
-import { MapStyles, MapOptions, Coordinate } from './shared/map.model';
+import { DataLayer } from 'app/shared/map.model';
+import { MapStyles, MapOptions, Coordinate, Colors } from './shared/map.model';
 import { Destination } from 'app/shared/itinerary.model';
 
 let map;
 declare const google;
+
+export const COLORS = {
+  visaFree: ['red', 'blue'],
+  visaOnArrival: ['yellow', 'green']
+};
+
+export interface GeoJsonLayer {
+  visaKind: string;
+  nation: any;
+  index: number;
+  colors: Colors;
+  counter: number;
+}
 
 export function setMap(): any {
   const myOptions = new MapOptions();
@@ -48,7 +61,7 @@ export function setNewMarker(
 export function initializeDataLayer(
   nation: any,
   index: number,
-  colors: Colors,
+  colors = COLORS,
   countries: string[]
 ): DataLayer {
   const visaKindArray = ['visaFree', 'visaOnArrival'];
@@ -74,33 +87,22 @@ export function buildDataLayer(layer): any {
   return newLayer;
 }
 
-export function createDataLayers(event: {
-  visaKind: string;
-  nation: any;
-  index: number;
-  colors: any;
-  counter: number;
-}): any {
-  const visaKind = event.visaKind;
-  const nation = event.nation;
-  const index = event.index;
-  const colors = event.colors;
-  const counter = event.counter;
+export function createDataLayers(e: GeoJsonLayer): any {
   const freeLayer = new google.maps.Data();
   freeLayer.loadGeoJson(
     'https://raw.githubusercontent.com/johan/world.geo.json/master/countries/' +
-      nation[visaKind][counter] +
+      e.nation[e.visaKind][e.counter] +
       '.geo.json'
   );
   freeLayer.setStyle({
-    fillColor: colors[visaKind][index],
+    fillColor: e.colors[e.visaKind][e.index],
     fillOpacity: 0.5,
-    title: nation[visaKind][counter]
+    title: e.nation[e.visaKind][e.counter]
   });
   return freeLayer.setMap(map);
 }
 
-export function newPolyline(destinationCoordinates): any {
+export function newPolyline(destinationCoordinates: Coordinate[]): any {
   return new google.maps.Polyline({
     path: destinationCoordinates,
     geodesic: true,
@@ -117,8 +119,10 @@ export function newMarker(point: Coordinate, map: any): any {
   });
 }
 
-export function removeLocation(locations: Destination[], locationInput: Destination): any[] {
-  console.log('locationInput', locationInput)
+export function removeLocation(
+  locations: Destination[],
+  locationInput: Destination
+): any[] {
   return locations.filter(savedLocation => {
     return savedLocation !== locationInput;
   });

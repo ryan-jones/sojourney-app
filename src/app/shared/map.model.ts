@@ -67,12 +67,20 @@ export interface DataLayer {
   countries: any;
 }
 
-export interface Colors {
-  visaFree: ['red', 'blue'];
-  visaOnArrival: ['yellow', 'green'];
+export interface GeoJsonLayer {
+  visaKind: string;
+  nation: any;
+  index: number;
+  colors: Colors;
+  counter: number;
 }
 
 export interface Coordinate {
   lat: number;
   lng: number;
+}
+
+export interface Colors {
+  visaFree: string[],
+  visaOnArrival: string[]
 }

@@ -20,22 +20,22 @@ export class UserService {
   getUser(id) {
     return this.http
       .get(`${this.BASE_URL}/api/users/${id}`, this.options)
-      .map(res => res.json());
+      .map((res: Response) => res.json());
   }
 
   signup(user) {
     return this.http
       .post(`${this.BASE_URL}/signup`, user._value)
-      .map((response: Response) => {
-        return this.sessionService.mapResponse(response);
+      .map((res: Response) => {
+        return this.sessionService.mapResponse(res);
       });
   }
 
   login(user) {
     return this.http
       .post(`${this.BASE_URL}/login`, user._value)
-      .map((response: Response) => {
-        return this.sessionService.mapResponse(response);
+      .map((res: Response) => {
+        return this.sessionService.mapResponse(res);
       });
   }
 
@@ -46,18 +46,18 @@ export class UserService {
   editUser(id) {
     return this.http
       .put(`${this.BASE_URL}/api/users`, id, this.options)
-      .map((response: Response) => this.sessionService.mapResponse(response));
+      .map((res: Response) => this.sessionService.mapResponse(res));
   }
 
   editItinerary(id) {
     return this.http
       .post(`${this.BASE_URL}/api/itinerary`, id, this.options)
-      .map(res => res.json());
+      .map((res: Response) => res.json());
   }
 
   deleteUser(id) {
     return this.http
       .delete(`${this.BASE_URL}/api/users/${id}`, this.options)
-      .map(res => res.json());
+      .map((res: Response) => res.json());
   }
 }
