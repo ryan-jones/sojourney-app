@@ -1,7 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy
+} from '@angular/core';
 import { UserService } from '../../../shared/services/user.service';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TabsetComponent } from 'ngx-bootstrap';
 import { Country } from 'app/shared/country.model';
 import { UserItinerary, User } from 'app/shared/user.model';
 import { CountryService } from 'app/shared/services/countries.service';
@@ -23,8 +27,8 @@ declare const google: any;
   templateUrl: './profile-itineraries.component.html',
   styleUrls: ['./profile-itineraries.component.css']
 })
-export class ProfileItinerariesComponent implements OnInit {
-  @ViewChild('staticTabs') staticTabs: TabsetComponent;
+export class ProfileItinerariesComponent
+  implements OnInit, OnDestroy {
 
   constructor(
     private userService: UserService,
@@ -34,22 +38,19 @@ export class ProfileItinerariesComponent implements OnInit {
 
   user: User;
   map: any;
-  countries: any;
+  countries: Country[];
   userItineraries: UserItinerary[];
-
-  
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('user'));
-
+    this.initiateMap();
     this.countryService.countries$.subscribe(countries => {
       this.countries = countries;
-      this.initiateMap();
       this.getUserItineraries();
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.flightPathService.clearMapValues();
   }
 
@@ -66,15 +67,11 @@ export class ProfileItinerariesComponent implements OnInit {
       );
       const itineraries = user.itineraries[3].placesAndDates;
 
-      itineraries.forEach(place => {
-        const userData = FlightPathBuilder.buildFlightPath(place, true);
-        this.flightPathService.setGeocodeMarkers(userData, this.map);
-      });
-      this.countryService.createDataLayersForDisplay(selectedCountries);
+      // itineraries.forEach(place => {
+      //   const userData = FlightPathBuilder.buildFlightPath(place, true);
+      //   this.flightPathService.setGeocodeMarkers(userData, this.map);
+      // });
+      // this.countryService.createDataLayersForDisplay(selectedCountries);
     });
-  }
-
-  selectTab(tab_id: number) {
-    this.staticTabs.tabs[tab_id].active = true;
   }
 }

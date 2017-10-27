@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  OnDestroy
+} from '@angular/core';
 import { CountryService } from '../../shared/services/countries.service';
 import { UserService } from '../../shared/services/user.service';
 import { User } from 'app/shared/user.model';
@@ -22,7 +26,8 @@ declare const google: any;
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.scss'],
 })
-export class ItineraryOverViewComponent implements OnInit {
+export class ItineraryOverViewComponent implements AfterViewInit, OnDestroy {
+
   //google properties
   private marker: any;
   private map: any;
@@ -45,7 +50,7 @@ export class ItineraryOverViewComponent implements OnInit {
     this.countries$ = this.country.countries$;
   }
 
-  ngOnInit() {
+  ngAfterViewInit(){
     this.initiateMap();
     this.authorizedUser();
   }

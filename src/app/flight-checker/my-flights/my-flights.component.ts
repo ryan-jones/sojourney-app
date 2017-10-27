@@ -22,6 +22,7 @@ export class MyFlightsComponent implements OnInit {
   checked: boolean = false;
   toggle: boolean = true;
   map: any;
+  mapCanvas: string = "flightChecker"
   flightPath;
 
   ngOnInit() {
@@ -129,7 +130,7 @@ export class MyFlightsComponent implements OnInit {
   }
 
   initiateMap() {
-    this.map = setMap();
+    this.map = setMap(this.mapCanvas);
   }
 
   hover() {

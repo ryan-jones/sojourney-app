@@ -9,6 +9,7 @@ import {
   buildDataLayer,
   COLORS
 } from 'app/utils';
+import { Country } from 'app/shared/country.model';
 
 @Injectable()
 export class CountryService {
@@ -23,7 +24,7 @@ export class CountryService {
   dataLayer: DataLayer;
   colors: Colors = COLORS;
 
-  countries$: Observable<Response> = this.http
+  countries$: Observable<Country[]> = this.http
     .get(`${this.BASE_URL}/api/countries`)
     .map(res => res.json());
 

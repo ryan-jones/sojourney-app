@@ -29,7 +29,6 @@ export class FlightPathService {
   }
 
   buildflightPath(geocoder: any, data) {
-    console.log('buildFlightPath', data)
     const that = this;
     const name = data.name;
     const date = data.date;
@@ -82,7 +81,6 @@ export class FlightPathService {
       transport,
       price
     );
-    console.log('marker', this.marker)
     this.marker.setIcon(
       'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
     );
@@ -215,7 +213,6 @@ export class FlightPathService {
     transport,
     price
   ): any {
-    console.log('position', position)
     return new google.maps.Marker({
       position,
       map,

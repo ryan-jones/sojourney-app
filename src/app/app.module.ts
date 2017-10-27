@@ -1,7 +1,7 @@
 //modules
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AlertModule } from 'ngx-bootstrap';
+import { AlertModule, TabsModule } from 'ngx-bootstrap';
 import { ProfileModule } from 'app/profiles/profiles.module';
 import { RoutingModule } from 'app/app-routes.module';
 import { ItinerariesModule } from 'app/itineraries/itineraries.module';
@@ -38,7 +38,7 @@ import { FlightPathService } from 'app/shared/services/flightPath.service';
     ProfileModule,
     ItinerariesModule,
     FlightsModule,
-    AlertModule.forRoot()
+    AlertModule.forRoot(),
   ],
   providers: [
     CountryService,
