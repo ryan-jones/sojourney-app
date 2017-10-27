@@ -1,6 +1,6 @@
 import { DataLayer } from 'app/shared/map.model';
 import { MapStyles, MapOptions, Coordinate, Colors } from './shared/map.model';
-import { Destination } from 'app/shared/itinerary.model';
+import { Destination, Export } from 'app/shared/itinerary.model';
 
 let map;
 declare const google;
@@ -24,38 +24,6 @@ export function setMap(): any {
   const styles = new MapStyles();
   map.setOptions({ styles: styles });
   return map;
-}
-
-export function setPolyline(destinationCoordinates: Coordinate[]): any {
-  return new google.maps.Polyline({
-    path: destinationCoordinates,
-    geodesic: true,
-    strokeColor: 'yellow',
-    strokeOpacity: 1.0,
-    strokeWeight: 4
-  });
-}
-
-export function setNewMarker(
-  position,
-  map,
-  name,
-  country,
-  date,
-  days,
-  transport,
-  price
-): any {
-  return new google.maps.Marker({
-    position,
-    map,
-    name,
-    country,
-    date,
-    days,
-    transport,
-    price
-  });
 }
 
 export function initializeDataLayer(
@@ -88,7 +56,6 @@ export function buildDataLayer(layer): any {
 }
 
 export function createDataLayers(e: GeoJsonLayer): any {
-  console.log('e', e)
   const freeLayer = new google.maps.Data();
   freeLayer.loadGeoJson(
     'https://raw.githubusercontent.com/johan/world.geo.json/master/countries/' +
@@ -103,28 +70,95 @@ export function createDataLayers(e: GeoJsonLayer): any {
   return freeLayer.setMap(map);
 }
 
-export function newPolyline(destinationCoordinates: Coordinate[]): any {
-  return new google.maps.Polyline({
-    path: destinationCoordinates,
-    geodesic: true,
-    strokeColor: 'yellow',
-    strokeOpacity: 1.0,
-    strokeWeight: 4
-  });
-}
-
-export function newMarker(point: Coordinate, map: any): any {
-  return new google.maps.Marker({
-    map,
-    position: point
-  });
-}
-
 export function removeLocation(
   locations: Destination[],
   locationInput: Destination
 ): any[] {
   return locations.filter(savedLocation => {
     return savedLocation !== locationInput;
+  });
+}
+
+export function createCountryName(itineraryDestination): string {
+  const countryStringSplit = itineraryDestination.geoLocation.formatted_address.split(
+    ','
+  );
+  return countryStringSplit[countryStringSplit.length - 1];
+}
+
+export function combineTransportOptions(
+  details: [{ note: string; expense: number; transport: string }]
+): string {
+  const options = [];
+  const transportOpts = details.map(detail => detail.transport);
+  return accountForDuplicateTransportOptions(transportOpts);
+}
+
+export function accountForDuplicateTransportOptions(
+  transportOpts: string[]
+): string {
+  const options = [];
+  transportOpts.forEach(option => {
+    if (options.indexOf(option) === -1) options.push(option);
+  });
+  return options.join().replace(/,/g, ' and ');
+}
+
+export function calculateDateRange(dates: string[]): number {
+  const range = Math.round(
+    Math.abs(
+      new Date(dates[dates.length - 1]).getTime() -
+        new Date(dates[dates.length - 2]).getTime()
+    ) /
+      (1000 * 3600 * 24)
+  );
+  return !range ? 0 : range;
+}
+
+export function updateDateRange(dates: string[], dayIndex: number): number {
+  const range =
+    Math.abs(
+      new Date(dates[dayIndex]).getTime() -
+        new Date(dates[dayIndex - 1]).getTime()
+    ) /
+    (1000 * 3600 * 24);
+  return !range ? 0 : range;
+}
+
+export function aggregate(input: number[]): number {
+  return input.reduce((a, b) => a + b, 0);
+}
+
+export function initialInfoWindow(
+  marker,
+  name: string,
+  country: string,
+  infowindow: any,
+  map: any
+) {
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.setContent(
+      `<div><h3> Starting in ${name}, ${country} </h3></div>`
+    );
+    infowindow.open(map, this);
+  });
+}
+
+export function supplementaryInfoWindow(
+  marker,
+  name: string,
+  country: string,
+  infowindow: any,
+  map: any,
+  days: any,
+  date,
+  transport,
+  price
+) {
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.setContent(
+      `<div><h3> Location: ${name}, ${country} </h3></div><div><p><strong>Arriving on Day </strong> ${days} <strong> of the trip </strong></p></div> <div><p><strong>Arriving on </strong> ${date}  via  <i>${transport}</i> </p></div><div><p><strong>Price: </strong>  ${price} per person  </p></div> `
+    );
+    infowindow.open(map, this);
   });
 }

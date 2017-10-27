@@ -6,11 +6,14 @@ import {
   AfterViewInit,
   ViewChild
 } from '@angular/core';
-import { Itinerary, Destination } from 'app/shared/itinerary.model';
+import { Itinerary, Destination, Expense } from 'app/shared/itinerary.model';
 import {
-  Expense,
-  ItineraryService
-} from 'app/shared/services/itinerary.service';
+  createCountryName,
+  calculateDateRange,
+  aggregate,
+  updateDateRange
+} from 'app/utils';
+import { FlightPathBuilder } from 'app/builders/flightPath.builder';
 
 declare var google: any;
 
@@ -20,7 +23,7 @@ declare var google: any;
   styleUrls: ['./itinerary-planner.component.scss']
 })
 export class ItineraryPlannerComponent implements AfterViewInit {
-  constructor(private itineraryService: ItineraryService) {}
+  constructor() {}
 
   @ViewChild('address') addressInput;
   @Input() locations: any;
@@ -78,7 +81,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   deleteExpense() {
     this.displayableExpenses.pop();
     this.accumulatedDailyExpense.pop();
-    const newTotalExpense = this.itineraryService.aggregate(this.accumulatedDailyExpense);
+    const newTotalExpense = aggregate(this.accumulatedDailyExpense);
     this.createCurrentCost(newTotalExpense);
   }
 
@@ -90,7 +93,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
     };
     this.displayableExpenses.push(newestExpense);
     this.accumulatedDailyExpense.push(newestExpense.expense);
-    return this.itineraryService.aggregate(this.accumulatedDailyExpense)
+    return aggregate(this.accumulatedDailyExpense)
   }
 
   createCurrentCost(newTotalExpense): void {
@@ -100,17 +103,17 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   }
 
   getTotalPrice(): void {
-    this.totalPrice = this.itineraryService.aggregate(this.costs);
+    this.totalPrice = aggregate(this.costs);
   }
 
   getTotalDays(): void {
-    this.totalTripDuration = this.itineraryService.aggregate(this.itineraryDays);
+    this.totalTripDuration = aggregate(this.itineraryDays);
   }
 
-  updateTotalDays() {
+  updateTotalDays(): void {
     this.dates.forEach(day => {
       const dayIndex = this.dates.indexOf(day);
-      this.differenceBetweenDates = this.itineraryService.updateDateRange(
+      this.differenceBetweenDates = updateDateRange(
         this.dates,
         dayIndex
       );
@@ -118,6 +121,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
         this.differenceBetweenDates = 0;
       }
       this.itineraryDays.push(this.differenceBetweenDates);
+      this.itineraryDestination.days = this.differenceBetweenDates;
     });
   }
 
@@ -129,18 +133,18 @@ export class ItineraryPlannerComponent implements AfterViewInit {
     this.setLocations();
     this.setDates();
     this.setItineraryLength();
-    this.sendMarker(this.newAddress);
+    this.sendMarker();
     this.resetValues();
   }
 
-  setPlaceDetails() {
+  setPlaceDetails(): void {
     this.itineraryDestination.details = !this.displayableExpenses.length
       ? ''
       : this.displayableExpenses;
   }
 
   setCountryName() {
-    this.itineraryDestination.country = this.itineraryService.createCountryName(
+    this.itineraryDestination.country = createCountryName(
       this.itineraryDestination
     );
   }
@@ -166,16 +170,16 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   }
 
   setItineraryLength() {
-    this.differenceBetweenDates = this.itineraryService.calculateDateRange(
+    this.differenceBetweenDates = calculateDateRange(
       this.dates
     );
     this.itineraryDays.push(this.differenceBetweenDates);
+    this.itineraryDestination.days = this.differenceBetweenDates
     this.getTotalDays();
   }
 
-  sendMarker(address) {
-    const exportedValues = this.itineraryService.buildExportValue(
-      address,
+  sendMarker() {
+    const exportedValues = FlightPathBuilder.buildFlightPath(
       this.itineraryDestination
     );
     this.createMarker.emit(exportedValues);

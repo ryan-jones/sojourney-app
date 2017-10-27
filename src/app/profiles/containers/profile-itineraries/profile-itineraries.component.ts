@@ -13,6 +13,8 @@ import {
   buildDataLayer
 } from 'app/utils';
 import { DataLayer, Coordinate, Colors } from 'app/shared/map.model';
+import { FlightPathService } from 'app/shared/services/flightPath.service';
+import { FlightPathBuilder } from 'app/builders/flightPath.builder';
 
 declare const google: any;
 
@@ -26,47 +28,29 @@ export class ProfileItinerariesComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private countryService: CountryService
+    private countryService: CountryService,
+    private flightPathService: FlightPathService
   ) {}
 
   user: User;
-  colors: Colors = COLORS;
-  dataLayer: DataLayer;
-
-  //google objects
-  marker: any;
   map: any;
-  geocoder: any;
-
-  selectedNationalityId1: string;
-  selectedNationalityId2: string;
-  countryName1: string;
-  countryName2: string;
-
-  differenceBetweenDates: number;
-  totalPrice: number;
-
   countries: any;
   userItineraries: UserItinerary[];
-  coordinates: Coordinate[] = [];
-  destinationCoordinates: Coordinate[] = [];
 
-  locations: any[] = [];
-  itineraryDays: any[] = [];
-  dates: any[] = [];
-  itineraryPath: any[] = [];
-  mapMarkers: any[] = [];
-  allItineraries: any[] = [];
-  flightPathData: any[] = [];
-  layers: any[] = [];
+  
 
   ngOnInit() {
+    this.user = JSON.parse(localStorage.getItem('user'));
+
     this.countryService.countries$.subscribe(countries => {
       this.countries = countries;
       this.initiateMap();
       this.getUserItineraries();
     });
-    this.user = JSON.parse(localStorage.getItem('user'));
+  }
+
+  ngOnDestroy(){
+    this.flightPathService.clearMapValues();
   }
 
   initiateMap() {
@@ -80,74 +64,14 @@ export class ProfileItinerariesComponent implements OnInit {
         this.userItineraries,
         this.countries
       );
-      let index = 0;
-      this.showCountries(selectedCountries, this.colors, index);
+      const itineraries = user.itineraries[3].placesAndDates;
+
+      itineraries.forEach(place => {
+        const userData = FlightPathBuilder.buildFlightPath(place, true);
+        this.flightPathService.setGeocodeMarkers(userData, this.map);
+      });
+      this.countryService.createDataLayersForDisplay(selectedCountries);
     });
-  }
-
-  
-
-  showCountries(selectedCountries: string[], colors: Colors, index: number) {
-    if (index === 2) {
-      return;
-    }
-    this.setLayersForSelectedCountry(selectedCountries, index, colors);
-  }
-
-  setLayersForSelectedCountry(
-    selectedCountries: string[],
-    index: number,
-    colors: Colors
-  ) {
-    const nation = this.countries.find(
-      country => country._id === selectedCountries[index]
-    );
-    this.setDataLayers(nation, index, colors, selectedCountries);
-  }
-
-  setDataLayers(
-    nation: any,
-    index: number,
-    colors: Colors,
-    countries: string[]
-  ) {
-    index === 0 ? (this.countryName1 = nation) : (this.countryName2 = nation);
-    this.dataLayer = initializeDataLayer(nation, index, colors, countries);
-    this.loadDataLayers(this.dataLayer);
-  }
-
-  loadDataLayers(dataLayer: DataLayer) {
-    const editedLayer = buildDataLayer(dataLayer)
-    this.buildDataLayers(editedLayer)
-    dataLayer.counter++;
-    this.checkCountryIndexValues(dataLayer);
-  }
-
-  checkCountryIndexValues(layer: DataLayer) {
-    const visaKind = layer.visaKindArray[layer.visaKindIndex];
-    if (layer.counter === layer.nation[visaKind].length) {
-      layer.counter = 0;
-      if (visaKind === 'visaOnArrival') {
-        layer.index++;
-        this.showCountries(layer.countries, layer.colors, layer.index);
-      } else {
-        layer.visaKindIndex++;
-        this.loadDataLayers(layer);
-      }
-    } else {
-      this.loadDataLayers(layer);
-    }
-  }
-
-  buildDataLayers(event: {
-    visaKind: string;
-    nation: any;
-    index: number;
-    colors: any;
-    counter: number;
-  }) {
-    const layer = createDataLayers(event);
-    this.layers.push(layer);
   }
 
   selectTab(tab_id: number) {
