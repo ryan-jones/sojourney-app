@@ -56,3 +56,31 @@ export class MapOptions {
     }
   ) {}
 }
+
+export interface DataLayer {
+  visaKindArray: any[];
+  visaKindIndex: number;
+  nation: any;
+  index: number;
+  colors: any;
+  counter: number;
+  countries: any;
+}
+
+export interface GeoJsonLayer {
+  visaKind: string;
+  nation: any;
+  index: number;
+  colors: Colors;
+  counter: number;
+}
+
+export interface Coordinate {
+  lat: number;
+  lng: number;
+}
+
+export interface Colors {
+  visaFree: string[],
+  visaOnArrival: string[]
+}

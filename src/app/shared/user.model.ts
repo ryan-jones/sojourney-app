@@ -1,6 +1,6 @@
 export class User {
     _id: string;
-    itineraries: any[];
+    itineraries: UserItinerary[];
     places_visited: any[];
     name: string;
     username: string;
@@ -18,4 +18,12 @@ export class User {
         this.nationality2 = '',
         this.password = ''
     }
+}
+
+export interface UserItinerary {
+  flightPaths: any[],
+  name: string,
+  nationalities: string[],
+  placesAndDates: any[],
+  userId: string[],
 }

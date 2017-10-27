@@ -54,7 +54,7 @@ footer p {
 }
 
 .goto{
-  background-image:url('../assets/goto.jpg');
+  background-image:url('../src/assets/goto.jpg');
   background-size: contain;
   height: 10vh;
   margin: 10% 15% 0;
@@ -63,8 +63,6 @@ footer p {
 .go-to-flights{
   background-color: #222061;
   border-radius: 5px;
-  /*padding-top: 1%;
-  padding-right: 1%;*/
   padding: 1% 1% 5% 0;
 }
 

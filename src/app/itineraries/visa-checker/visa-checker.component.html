@@ -29,7 +29,7 @@
         <div class="form-group">
             <label for="nationalityInput"> Select Nationality 1</label>
             <select [(ngModel)]="selectedNationalityId1" class="form-control" id="nationality" name="nationality">
-            <option value = {{country._id}} *ngFor="let country of countries">{{country.name}}</option>
+            <option value = {{country._id}} *ngFor="let country of countries$">{{country.name}}</option>
                     </select>
         </div>
     </div>

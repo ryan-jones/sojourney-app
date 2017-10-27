@@ -16,12 +16,12 @@ import { HomeComponent } from './template/home-template-wrapper/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 //services
-import { CountryService } from './shared/services/country.service';
+import { CountryService } from './shared/services/countries.service';
 import { WarningService } from './shared/services/warning.service';
 import { SessionService } from './shared/services/session.service';
 import { UserService } from './shared/services/user.service';
-import { ItineraryService } from './shared/services/itinerary.service';
 import { FlightService } from 'app/shared/services/flight.service';
+import { FlightPathService } from 'app/shared/services/flightPath.service';
 
 @NgModule({
   declarations: [
@@ -45,8 +45,8 @@ import { FlightService } from 'app/shared/services/flight.service';
     WarningService,
     SessionService,
     UserService,
-    ItineraryService,
-    FlightService
+    FlightService,
+    FlightPathService
   ],
   bootstrap: [AppComponent]
 })

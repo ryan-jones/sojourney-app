@@ -31,24 +31,24 @@ export class SessionService implements CanActivate {
     return false;
   }
 
-  isAuthenticated() {
+  isAuthenticated(): Boolean {
     return this.token ? true : false;
   }
 
-  mapResponse(response) {
+  mapResponse(response: Response) {
     const token = response.json() && response.json().token;
     const user = response.json() && response.json().user;
     return this.checkForToken(token, user);
   }
 
-  checkForToken(token, user) {
+  checkForToken(token: any, user: any) {
     if (token) this.token = token;
     this.setLocalStorage(token, user);
     this.isAuth = true;
     return user;
   }
 
-  setLocalStorage(token, user) {
+  setLocalStorage(token: any, user: any) {
     if (token) localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user));
   }
