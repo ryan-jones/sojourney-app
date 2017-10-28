@@ -1,20 +1,26 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy
+} from '@angular/core';
 import { UserService } from '../../../shared/services/user.service';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TabsetComponent } from 'ngx-bootstrap';
-import { Country } from 'app/shared/country.model';
-import { UserItinerary, User } from 'app/shared/user.model';
-import { CountryService } from 'app/shared/services/countries.service';
+import { Country } from 'app/shared/models/country.model';
+import { UserItinerary, User } from 'app/shared/models/user.model';
+import { CountryLayersService } from 'app/shared/services/country-layers.service';
 import {
   setMap,
   createDataLayers,
   initializeDataLayer,
   COLORS,
-  buildDataLayer
+  buildDataLayer,
+  removeDataLayer
 } from 'app/utils';
-import { DataLayer, Coordinate, Colors } from 'app/shared/map.model';
+import { DataLayer, Coordinate, Colors } from 'app/shared/models/map.model';
 import { FlightPathService } from 'app/shared/services/flightPath.service';
 import { FlightPathBuilder } from 'app/builders/flightPath.builder';
+import { Destination } from 'app/shared/models/itinerary.model';
 
 declare const google: any;
 
@@ -23,33 +29,30 @@ declare const google: any;
   templateUrl: './profile-itineraries.component.html',
   styleUrls: ['./profile-itineraries.component.css']
 })
-export class ProfileItinerariesComponent implements OnInit {
-  @ViewChild('staticTabs') staticTabs: TabsetComponent;
-
+export class ProfileItinerariesComponent implements OnInit, OnDestroy {
   constructor(
     private userService: UserService,
-    private countryService: CountryService,
+    private countryService: CountryLayersService,
     private flightPathService: FlightPathService
   ) {}
 
   user: User;
   map: any;
-  countries: any;
+  countries: Country[];
   userItineraries: UserItinerary[];
-
-  
+  tabActive: string;
+  activeItinerary: any;
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('user'));
-
+    this.initiateMap();
     this.countryService.countries$.subscribe(countries => {
       this.countries = countries;
-      this.initiateMap();
       this.getUserItineraries();
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.flightPathService.clearMapValues();
   }
 
@@ -59,22 +62,61 @@ export class ProfileItinerariesComponent implements OnInit {
 
   getUserItineraries() {
     this.userService.getUser(this.user._id).subscribe(user => {
-      this.userItineraries = user.itineraries;
-      const selectedCountries = this.countryService.identifyCountryId(
-        this.userItineraries,
-        this.countries
-      );
-      const itineraries = user.itineraries[3].placesAndDates;
-
-      itineraries.forEach(place => {
-        const userData = FlightPathBuilder.buildFlightPath(place, true);
-        this.flightPathService.setGeocodeMarkers(userData, this.map);
-      });
-      this.countryService.createDataLayersForDisplay(selectedCountries);
+      this.setInitialValues(user);
+      const selectedCountries = this.countryService.identifyCountryId(this.userItineraries, this.countries, 0);
+      const itineraries = user.itineraries[0].placesAndDates;
+      this.setFlightPathAndLayers(itineraries, selectedCountries);
     });
   }
 
-  selectTab(tab_id: number) {
-    this.staticTabs.tabs[tab_id].active = true;
+  setInitialValues(user: User) {
+    this.userItineraries = user.itineraries;
+    this.activeItinerary = this.userItineraries[0];
+  }
+
+  setActiveTab(itinerary: UserItinerary) {
+    this.removeFlightPathAndLayers();
+    this.tabActiveEquals(itinerary);
+    this.activeItineraryEquals(itinerary);
+    const index = this.indexEquals(itinerary);
+    const itineraryDestinations = this.itineraryDestinationsEquals(index);
+    const selectedCountries = this.countryService.identifyCountryId(
+      this.userItineraries,
+      this.countries,
+      index
+    );
+    this.setFlightPathAndLayers(itineraryDestinations, selectedCountries);
+  }
+
+  setFlightPathAndLayers(
+    itineraries: Destination[],
+    selectedCountries: string[]
+  ) {
+    itineraries.forEach(place => {
+      const userData = FlightPathBuilder.buildFlightPath(place, true);
+      this.flightPathService.setGeocodeMarkers(userData, this.map);
+    });
+    this.countryService.createDataLayersForDisplay(selectedCountries);
+  }
+
+  removeFlightPathAndLayers() {
+    removeDataLayer();
+    this.flightPathService.clearMapValues();
+  }
+
+  tabActiveEquals(itinerary: UserItinerary) {
+    this.tabActive = itinerary.name;
+  }
+
+  activeItineraryEquals(itinerary: UserItinerary) {
+    this.activeItinerary = itinerary;
+  }
+
+  indexEquals(itinerary: UserItinerary): number {
+    return this.userItineraries.indexOf(itinerary);
+  }
+
+  itineraryDestinationsEquals(index: number): Destination[] {
+    return this.userItineraries[index].placesAndDates;
   }
 }

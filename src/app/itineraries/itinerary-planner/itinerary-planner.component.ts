@@ -6,16 +6,18 @@ import {
   AfterViewInit,
   ViewChild
 } from '@angular/core';
-import { Itinerary, Destination, Expense } from 'app/shared/itinerary.model';
+import { Itinerary, Destination, Expense } from 'app/shared/models/itinerary.model';
 import {
   createCountryName,
   calculateDateRange,
   aggregate,
-  updateDateRange
+  updateDateRange,
+  buildAutocomplete,
+  addAutoCompleteListener
 } from 'app/utils';
 import { FlightPathBuilder } from 'app/builders/flightPath.builder';
+import { FlightPathService } from 'app/shared/services/flightPath.service';
 
-declare var google: any;
 
 @Component({
   selector: 'itinerary-planner',
@@ -23,13 +25,12 @@ declare var google: any;
   styleUrls: ['./itinerary-planner.component.scss']
 })
 export class ItineraryPlannerComponent implements AfterViewInit {
-  constructor() {}
+  constructor(private flightPathService: FlightPathService) {}
 
   @ViewChild('address') addressInput;
   @Input() locations: any;
   @Output() changeAddress: EventEmitter<any> = new EventEmitter();
   @Output() createMarker: EventEmitter<any> = new EventEmitter();
-  @Output() resetMapMarkers: EventEmitter<any> = new EventEmitter();
   @Output() onAddItinerary: EventEmitter<any> = new EventEmitter();
 
   private itineraryDestination: Destination = new Destination();
@@ -63,22 +64,20 @@ export class ItineraryPlannerComponent implements AfterViewInit {
     this.checkCollapsed();
   }
 
-  autoCompleteAddress() {
+  autoCompleteAddress(): void {
     const input = this.addressInput.nativeElement;
-    const autocomplete = new google.maps.places.Autocomplete(input);
-    autocomplete.addListener('place_changed', () => {
-      this.itineraryDestination.geoLocation = autocomplete.getPlace();
-    });
+    const autocomplete = buildAutocomplete(input)
+    addAutoCompleteListener(autocomplete, this.itineraryDestination)
   }
 
   //adds expense to a single destination in the itinerary
-  addExpense() {
+  addExpense(): void {
     const newTotalExpense = this.createNewExpense();
     this.createCurrentCost(newTotalExpense);
   }
 
   //deletes expense from current destination
-  deleteExpense() {
+  deleteExpense(): void {
     this.displayableExpenses.pop();
     this.accumulatedDailyExpense.pop();
     const newTotalExpense = aggregate(this.accumulatedDailyExpense);
@@ -96,7 +95,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
     return aggregate(this.accumulatedDailyExpense)
   }
 
-  createCurrentCost(newTotalExpense): void {
+  createCurrentCost(newTotalExpense: number): void {
     this.newNote = '';
     this.newPrice = null;
     this.currentCost = !newTotalExpense ? 0 : newTotalExpense;
@@ -117,16 +116,14 @@ export class ItineraryPlannerComponent implements AfterViewInit {
         this.dates,
         dayIndex
       );
-      if (!this.differenceBetweenDates) {
-        this.differenceBetweenDates = 0;
-      }
+      if (!this.differenceBetweenDates) this.differenceBetweenDates = 0;
       this.itineraryDays.push(this.differenceBetweenDates);
       this.itineraryDestination.days = this.differenceBetweenDates;
     });
   }
 
   //**********************Create a new marker and flightPath******************* */
-  createPoint() {
+  createPoint(): void {
     this.setPlaceDetails();
     this.setCountryName();
     this.setPrice();
@@ -143,13 +140,13 @@ export class ItineraryPlannerComponent implements AfterViewInit {
       : this.displayableExpenses;
   }
 
-  setCountryName() {
+  setCountryName(): void {
     this.itineraryDestination.country = createCountryName(
       this.itineraryDestination
     );
   }
 
-  setPrice() {
+  setPrice(): void {
     if (this.accumulatedDailyExpense.length === 0) {
       this.itineraryDestination.price = this.newPrice ? this.newPrice : 0;
       this.currentCost = this.itineraryDestination.price;
@@ -160,16 +157,16 @@ export class ItineraryPlannerComponent implements AfterViewInit {
     this.getTotalPrice();
   }
 
-  setDates() {
+  setDates(): void {
     this.dates.push(this.itineraryDestination.date);
   }
 
-  setLocations() {
+  setLocations(): void {
     this.locations.push(this.itineraryDestination);
     this.newItinerary.placesAndDates.push(this.itineraryDestination);
   }
 
-  setItineraryLength() {
+  setItineraryLength(): void {
     this.differenceBetweenDates = calculateDateRange(
       this.dates
     );
@@ -178,20 +175,20 @@ export class ItineraryPlannerComponent implements AfterViewInit {
     this.getTotalDays();
   }
 
-  sendMarker() {
+  sendMarker(): void {
     const exportedValues = FlightPathBuilder.buildFlightPath(
       this.itineraryDestination
     );
     this.createMarker.emit(exportedValues);
   }
 
-  deletePoint(locationInput) {
-    this.resetMapMarkers.emit(locationInput);
+  deletePoint(locationInput: Destination): void {
+    this.flightPathService.resetMapValues(locationInput);
     this.adjustDates();
     this.adjustItineraryCost();
   }
 
-  adjustDates() {
+  adjustDates(): void {
     this.dates = [];
     this.itineraryDays = [];
     this.locations.forEach(place => {
@@ -201,7 +198,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
     this.getTotalDays();
   }
 
-  adjustItineraryCost() {
+  adjustItineraryCost(): void {
     this.costs = [];
     this.locations.forEach(place => {
       this.costs.push(place.price);
@@ -209,7 +206,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
     this.getTotalPrice();
   }
 
-  resetValues() {
+  resetValues(): void {
     this.newNote = '';
     this.newPrice = null;
     this.newAddress = '';
@@ -221,16 +218,16 @@ export class ItineraryPlannerComponent implements AfterViewInit {
     this.itineraryDestination = new Destination();
   }
 
-  toggleNote() {
+  toggleNote(): void {
     this.checked = !this.checked;
   }
 
-  addItinerary() {
+  addItinerary(): void {
     this.newItinerary.placesAndDates.push(this.itineraryDestination);
     this.onAddItinerary.emit(this.newItinerary);
   }
 
-  checkCollapsed() {
+  checkCollapsed(): void {
     this.isCollapsed = !this.isCollapsed;
     this.arrow = !this.isCollapsed ? '>' : 'v';
   }

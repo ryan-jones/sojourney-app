@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { MapStyles, MapOptions } from '../../../shared/map.model';
-import { User } from 'app/shared/user.model';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { MapStyles, MapOptions } from '../../../shared/models/map.model';
+import { User } from 'app/shared/models/user.model';
 import { setMap } from 'app/utils';
 
 declare const google: any;
@@ -10,7 +10,7 @@ declare const google: any;
   templateUrl: './profile-country-visit.component.html',
   styleUrls: ['./profile-country-visit.component.css']
 })
-export class ProfileCountryVisitComponent implements OnInit {
+export class ProfileCountryVisitComponent implements OnInit, AfterViewInit {
   constructor() {}
 
   user: User;
@@ -18,10 +18,9 @@ export class ProfileCountryVisitComponent implements OnInit {
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('user'));
-    this.initiateMap();
   }
 
-  initiateMap() {
+  ngAfterViewInit() {
     this.map = setMap();
   }
 }

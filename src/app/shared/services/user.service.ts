@@ -17,13 +17,13 @@ export class UserService {
 
   options = new RequestOptions({ headers: this.headers });
 
-  getUser(id) {
+  getUser(id: string) {
     return this.http
       .get(`${this.BASE_URL}/api/users/${id}`, this.options)
       .map((res: Response) => res.json());
   }
 
-  signup(user) {
+  signup(user: any) {
     return this.http
       .post(`${this.BASE_URL}/signup`, user._value)
       .map((res: Response) => {
@@ -31,7 +31,7 @@ export class UserService {
       });
   }
 
-  login(user) {
+  login(user: any) {
     return this.http
       .post(`${this.BASE_URL}/login`, user._value)
       .map((res: Response) => {
@@ -43,19 +43,19 @@ export class UserService {
     this.sessionService.resetTokens();
   }
 
-  editUser(id) {
+  editUser(user: any) {
     return this.http
-      .put(`${this.BASE_URL}/api/users`, id, this.options)
+      .put(`${this.BASE_URL}/api/users`, user, this.options)
       .map((res: Response) => this.sessionService.mapResponse(res));
   }
 
-  editItinerary(id) {
+  editItinerary(id: any) {
     return this.http
       .post(`${this.BASE_URL}/api/itinerary`, id, this.options)
       .map((res: Response) => res.json());
   }
 
-  deleteUser(id) {
+  deleteUser(id: any) {
     return this.http
       .delete(`${this.BASE_URL}/api/users/${id}`, this.options)
       .map((res: Response) => res.json());

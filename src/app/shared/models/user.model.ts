@@ -4,8 +4,7 @@ export class User {
     places_visited: any[];
     name: string;
     username: string;
-    nationality: string;
-    nationality2: string;
+    nationalities: string[]
     password: string;
 
     constructor() {
@@ -14,8 +13,7 @@ export class User {
         this.places_visited = [],
         this.name = '',
         this.username = '',
-        this.nationality = '',
-        this.nationality2 = '',
+        this.nationalities = []
         this.password = ''
     }
 }

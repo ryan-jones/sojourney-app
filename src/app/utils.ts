@@ -1,9 +1,15 @@
-import { DataLayer } from 'app/shared/map.model';
-import { MapStyles, MapOptions, Coordinate, Colors } from './shared/map.model';
-import { Destination, Export } from 'app/shared/itinerary.model';
+import { DataLayer } from 'app/shared/models/map.model';
+import {
+  MapStyles,
+  MapOptions,
+  Coordinate,
+  Colors
+} from './shared/models/map.model';
+import { Destination, Export } from 'app/shared/models/itinerary.model';
 
 let map;
 declare const google;
+const freeLayers = [];
 
 export const COLORS = {
   visaFree: ['red', 'blue'],
@@ -67,19 +73,26 @@ export function createDataLayers(e: GeoJsonLayer): any {
     fillOpacity: 0.5,
     title: e.nation[e.visaKind][e.counter]
   });
+  freeLayers.push(freeLayer);
   return freeLayer.setMap(map);
+}
+
+export function removeDataLayer() {
+  freeLayers.forEach(freeLayer => {
+    freeLayer.setMap(null);
+  });
 }
 
 export function removeLocation(
   locations: Destination[],
   locationInput: Destination
-): any[] {
+): Destination[] {
   return locations.filter(savedLocation => {
     return savedLocation !== locationInput;
   });
 }
 
-export function createCountryName(itineraryDestination): string {
+export function createCountryName(itineraryDestination: Destination): string {
   const countryStringSplit = itineraryDestination.geoLocation.formatted_address.split(
     ','
   );
@@ -130,7 +143,7 @@ export function aggregate(input: number[]): number {
 }
 
 export function initialInfoWindow(
-  marker,
+  marker: any,
   name: string,
   country: string,
   infowindow: any,
@@ -145,20 +158,30 @@ export function initialInfoWindow(
 }
 
 export function supplementaryInfoWindow(
-  marker,
+  marker: any,
   name: string,
   country: string,
   infowindow: any,
   map: any,
-  days: any,
-  date,
-  transport,
-  price
+  days: number,
+  date: string,
+  transport: string,
+  price: number
 ) {
   google.maps.event.addListener(marker, 'click', function() {
     infowindow.setContent(
       `<div><h3> Location: ${name}, ${country} </h3></div><div><p><strong>Arriving on Day </strong> ${days} <strong> of the trip </strong></p></div> <div><p><strong>Arriving on </strong> ${date}  via  <i>${transport}</i> </p></div><div><p><strong>Price: </strong>  ${price} per person  </p></div> `
     );
     infowindow.open(map, this);
+  });
+}
+
+export function buildAutocomplete(input): any {
+  return new google.maps.places.Autocomplete(input);
+}
+
+export function addAutoCompleteListener(autocomplete, itineraryDestination) {
+  autocomplete.addListener('place_changed', () => {
+    itineraryDestination.geoLocation = autocomplete.getPlace();
   });
 }

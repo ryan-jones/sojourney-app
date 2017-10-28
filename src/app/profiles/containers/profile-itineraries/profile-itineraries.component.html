@@ -1,11 +1,22 @@
 <div class="container-fluid overview">
-  <!--<div *ngIf="allItineraries.length > 0">
-    <tabset>
-      <tab heading="{{allItineraries[0].name}}"></tab>
-      <tab #map></tab>
-    </tabset>
-  </div>-->
+  <div class="row" *ngIf="userItineraries">
+    <ul class="nav nav-tabs">
+      <li *ngFor="let itinerary of userItineraries" class="nav-item">
+        <a class="nav-link" (click)="setActiveTab(itinerary)"> {{itinerary.name}}</a>
+      </li>
+    </ul>
+  </div>
   <div class="row map-view">
     <div id="map-canvas"></div>
+  </div>
+  <div class="row" *ngIf="activeItinerary">
+    <button class="btn btn-primary" *ngFor="let place of activeItinerary.placesAndDates">
+      <div>
+        {{ place.geoLocation.name}}, {{place.country}}
+      </div>
+      <div>
+        {{place.date}} via {{ place.transport}} at {{place.currency}}{{place.price}}
+      </div>
+      </button>
   </div>
 </div>

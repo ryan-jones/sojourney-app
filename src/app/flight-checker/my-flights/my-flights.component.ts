@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FlightService } from '../../shared/services/flight.service';
-import { MapOptions, MapStyles } from 'app/shared/map.model';
+import { MapOptions, MapStyles } from 'app/shared/models/map.model';
 import { setMap } from 'app/utils';
 
 declare var google: any;
@@ -22,6 +22,7 @@ export class MyFlightsComponent implements OnInit {
   checked: boolean = false;
   toggle: boolean = true;
   map: any;
+  mapCanvas: string = "flightChecker"
   flightPath;
 
   ngOnInit() {
@@ -131,7 +132,7 @@ export class MyFlightsComponent implements OnInit {
   initiateMap() {
     this.map = setMap();
   }
-
+  
   hover() {
     let hoverItem = document.getElementsByClassName('results');
     for (let i = 0; i < hoverItem.length; i++) {

@@ -3,8 +3,8 @@ import {
   OnChanges,
   Input
 } from '@angular/core';
-import { Country } from 'app/shared/country.model';
-import { CountryService } from 'app/shared/services/countries.service';
+import { Country } from 'app/shared/models/country.model';
+import { CountryLayersService } from 'app/shared/services/country-layers.service';
 
 @Component({
   selector: 'visa-checker',
@@ -12,7 +12,7 @@ import { CountryService } from 'app/shared/services/countries.service';
   styleUrls: ['./visa-checker.component.scss']
 })
 export class VisaCheckerComponent implements OnChanges {
-  constructor(private countryService: CountryService) {}
+  constructor(private countryService: CountryLayersService) {}
 
   @Input() countries$: Country[];
 
