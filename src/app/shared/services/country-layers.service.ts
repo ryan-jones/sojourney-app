@@ -1,24 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
-import { Colors, DataLayer } from 'app/shared/map.model';
+import { Colors, DataLayer } from 'app/shared/models/map.model';
+import { Country } from 'app/shared/models/country.model';
+import { UserItinerary } from 'app/shared/models/user.model';
 import {
   initializeDataLayer,
   createDataLayers,
   buildDataLayer,
   COLORS
 } from 'app/utils';
-import { Country } from 'app/shared/country.model';
+import 'rxjs/add/operator/map';
+
 
 @Injectable()
-export class CountryService {
+export class CountryLayersService {
   // BASE_URL: string = 'https://sojourney.herokuapp.com';
   BASE_URL: string = 'http://localhost:3000';
 
   constructor(private http: Http) {}
 
-  countries: any;
+  countries: Country[];
   countryName1: string;
   countryName2: string;
   dataLayer: DataLayer;
@@ -28,9 +30,9 @@ export class CountryService {
     .get(`${this.BASE_URL}/api/countries`)
     .map(res => res.json());
 
-  identifyCountryId(userItineraries, countries): string[] {
-    const nationalities = userItineraries[3].nationalities[0]
-      ? userItineraries[3].nationalities
+  identifyCountryId(userItineraries: UserItinerary[], countries: Country[], number: number): string[] {
+    const nationalities = userItineraries[number].nationalities[0]
+      ? userItineraries[number].nationalities
       : ['Taiwan', 'United States'];
 
     return nationalities.map(nationality => {
@@ -48,10 +50,7 @@ export class CountryService {
   }
 
   showCountries(selectedCountries: string[], colors: Colors, index: number) {
-    if (index === 2) {
-      return;
-    }
-    this.setLayersForSelectedCountry(selectedCountries, index, colors);
+    if (index < 2) this.setLayersForSelectedCountry(selectedCountries, index, colors);
   }
 
   setLayersForSelectedCountry(
@@ -66,12 +65,12 @@ export class CountryService {
   }
 
   setDataLayers(
-    nation: any,
+    nation: Country,
     index: number,
     colors: Colors,
     countries: string[]
   ) {
-    index === 0 ? (this.countryName1 = nation) : (this.countryName2 = nation);
+    index === 0 ? (this.countryName1 = nation.name) : (this.countryName2 = nation.name);
     this.dataLayer = initializeDataLayer(nation, index, colors, countries);
     this.loadDataLayers(this.dataLayer);
   }

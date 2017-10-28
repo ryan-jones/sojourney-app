@@ -1,10 +1,10 @@
-import { Export } from 'app/shared/itinerary.model';
+import { Export, Destination } from 'app/shared/models/itinerary.model';
 import { combineTransportOptions } from 'app/utils';
 
 declare const google: any;
 
 export class FlightPathBuilder {
-  static buildFlightPath(itineraryDestination, saved?: boolean): Export | any {
+  static buildFlightPath(itineraryDestination: Destination, saved?: boolean): Export {
     if (itineraryDestination.geoLocation && itineraryDestination.date) {
       return {
         details: itineraryDestination.details,
@@ -23,11 +23,11 @@ export class FlightPathBuilder {
       };
     }
     else {
-      return itineraryDestination;
+      return;
     }
   }
 
-  static setCoordinates(itineraryDestination, coordinate: string, saved?, ){
+  static setCoordinates(itineraryDestination: Destination, coordinate: string, saved?): number | any {
     return saved ? itineraryDestination[coordinate] : itineraryDestination[coordinate]()
   }
 }

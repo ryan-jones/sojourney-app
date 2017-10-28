@@ -1,7 +1,6 @@
 //modules
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AlertModule, TabsModule } from 'ngx-bootstrap';
 import { ProfileModule } from 'app/profiles/profiles.module';
 import { RoutingModule } from 'app/app-routes.module';
 import { ItinerariesModule } from 'app/itineraries/itineraries.module';
@@ -16,12 +15,12 @@ import { HomeComponent } from './template/home-template-wrapper/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 //services
-import { CountryService } from './shared/services/countries.service';
 import { WarningService } from './shared/services/warning.service';
 import { SessionService } from './shared/services/session.service';
 import { UserService } from './shared/services/user.service';
 import { FlightService } from 'app/shared/services/flight.service';
 import { FlightPathService } from 'app/shared/services/flightPath.service';
+import { CountryLayersService } from 'app/shared/services/country-layers.service';
 
 @NgModule({
   declarations: [
@@ -38,10 +37,9 @@ import { FlightPathService } from 'app/shared/services/flightPath.service';
     ProfileModule,
     ItinerariesModule,
     FlightsModule,
-    AlertModule.forRoot(),
   ],
   providers: [
-    CountryService,
+    CountryLayersService,
     WarningService,
     SessionService,
     UserService,

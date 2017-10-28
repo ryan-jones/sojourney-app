@@ -3,12 +3,12 @@ import {
   AfterViewInit,
   OnDestroy
 } from '@angular/core';
-import { CountryService } from '../../shared/services/countries.service';
+import { CountryLayersService } from '../../shared/services/country-layers.service';
 import { UserService } from '../../shared/services/user.service';
-import { User } from 'app/shared/user.model';
-import { Country } from 'app/shared/country.model';
-import { MapStyles, MapOptions, Coordinate } from 'app/shared/map.model';
-import { Itinerary, Destination } from 'app/shared/itinerary.model';
+import { User } from 'app/shared/models/user.model';
+import { Country } from 'app/shared/models/country.model';
+import { MapStyles, MapOptions, Coordinate } from 'app/shared/models/map.model';
+import { Itinerary, Destination } from 'app/shared/models/itinerary.model';
 import {
   setMap,
   createDataLayers,
@@ -19,7 +19,6 @@ import {
 import { Observable } from 'rxjs/Observable';
 import { FlightPathService } from 'app/shared/services/flightPath.service';
 
-declare const google: any;
 
 @Component({
   selector: 'my-home',
@@ -43,11 +42,11 @@ export class ItineraryOverViewComponent implements AfterViewInit, OnDestroy {
   private selectedNationalityId2: string;
 
   constructor(
-    private country: CountryService,
+    private countryService: CountryLayersService,
     private userService: UserService,
     private flightPathService: FlightPathService
   ) {
-    this.countries$ = this.country.countries$;
+    this.countries$ = this.countryService.countries$;
   }
 
   ngAfterViewInit(){

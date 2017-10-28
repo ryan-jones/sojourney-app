@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Coordinate } from 'app/shared/map.model';
-import { Export, Destination } from 'app/shared/itinerary.model';
+import { Coordinate } from 'app/shared/models/map.model';
+import { Export, Destination } from 'app/shared/models/itinerary.model';
 import {
   initialInfoWindow,
   supplementaryInfoWindow,
@@ -22,13 +22,13 @@ export class FlightPathService {
   private locations: any[] = [];
 
   setGeocodeMarkers(data: Export, map: any) {
-    if (data.point && data.date) {
+    if (data) {
       this.map = map;
       this.buildflightPath(this.geocoder, data);
     }
   }
 
-  buildflightPath(geocoder: any, data) {
+  buildflightPath(geocoder: any, data: Export) {
     const that = this;
     const name = data.name;
     const date = data.date;
@@ -62,7 +62,7 @@ export class FlightPathService {
   }
 
   setMarker(
-    point: any,
+    point: Coordinate,
     name: string,
     country: string,
     date: string,
@@ -147,7 +147,7 @@ export class FlightPathService {
     });
   }
 
-  resetMapValues(input) {
+  resetMapValues(input: Destination) {
     this.clearPolylines();
     this.clearMarkers(this.mapMarkers);
     this.deleteLocation(input);
