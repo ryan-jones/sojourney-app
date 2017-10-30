@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { SessionService } from './session.service';
 import 'rxjs/add/operator/map';
+import { flightDetails } from 'app/shared/models/flights.model';
 
 @Injectable()
 export class FlightService {
@@ -12,10 +13,13 @@ export class FlightService {
   getLocation(location) {
     return this.http
       .get(`https://api.skypicker.com/places?term=${location}&v=2&locale=en`)
-      .map(res => res.json());
+      .map(res => res.json())
+      .map(res => {
+        return res[0];
+      });
   }
 
-  getFlights(flight) {
+  getFlights(flight: flightDetails) {
     const departureDays = [];
     const returnDays = [];
     let request = `${this.BASE_URL}${flight.from}&to=${flight.to}&dateFrom=`;
@@ -42,5 +46,32 @@ export class FlightService {
       }
     }
     return this.http.get(request).map(res => res.json());
+  }
+
+  buildFlightPlan(
+    departureLocation,
+    arrivalLocation,
+    departureDates,
+    returnDates
+  ): flightDetails {
+    return {
+      from: departureLocation,
+      to: arrivalLocation,
+      departures: departureDates,
+      returns: returnDates,
+      type: 'return'
+    };
+  }
+
+  autoCompleteFlightDestination(selectLocation): any {
+    return this.getLocation(selectLocation.name).subscribe(location => {
+      return location.id;
+    });
+  }
+
+  createFlightCoordinates(routes): any{
+    return routes.map(route => {
+      return { lat: route.latFrom, lng: route.lngFrom };
+    });
   }
 }

@@ -32,6 +32,23 @@ export function setMap(): any {
   return map;
 }
 
+export function formatSelectDates(dates: string[]): string[] {
+  return (dates = dates.map(date => {
+    return formatDate(date);
+  }));
+}
+
+export function formatDate(date: string): string {
+  const newDate = new Date(date);
+  const month =
+    newDate.getMonth() <= 8
+      ? `0${newDate.getMonth() + 1}`
+      : `${newDate.getMonth() + 1}`;
+
+  const convertedDates = `${newDate.getDate()}/${month}/${newDate.getFullYear()}`;
+  return convertedDates;
+}
+
 export function initializeDataLayer(
   nation: any,
   index: number,
@@ -180,8 +197,3 @@ export function buildAutocomplete(input): any {
   return new google.maps.places.Autocomplete(input);
 }
 
-export function addAutoCompleteListener(autocomplete, itineraryDestination) {
-  autocomplete.addListener('place_changed', () => {
-    itineraryDestination.geoLocation = autocomplete.getPlace();
-  });
-}

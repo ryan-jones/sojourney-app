@@ -17,6 +17,7 @@
           <ng-container *ngIf="user && this.sessionService.isAuth; else notAuth">
             <li><a><span class="white">Hi {{ user.name }}! </span> </a></li>
             <li><a (click)="navigateTo('user', user._id)"> <span class="white"> Profile </span></a></li>
+            <li> <a (click)="navigateTo('flights')"><span class="white"> Flights </span></a></li>
             <li><a (click)="logout()"> <span class="white"> Logout </span></a></li>
           </ng-container>
 

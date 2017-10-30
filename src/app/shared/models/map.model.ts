@@ -84,3 +84,31 @@ export interface Colors {
   visaFree: string[],
   visaOnArrival: string[]
 }
+
+export interface GoogleMap {
+  zg: {
+    Y: any;
+    center: {
+      lat: any,
+      lng: any
+    };
+    controls: any[];
+    data: any;
+    features: any;
+    gm_accessors: any;
+    gm_bindings: any;
+    mapDataProviders: string;
+    mapTypeId: string;
+    mapTypes: any;
+    mapUrl: string;
+    overlayMapTypes: any;
+    rmiUrl: string;
+    streetView: any;
+    styles: any;
+    tilt: number;
+    tosUrl: string;
+    zoom: number;
+    __e3_: any;
+    __gm: any;
+  }
+}

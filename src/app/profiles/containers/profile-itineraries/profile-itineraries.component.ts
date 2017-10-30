@@ -17,7 +17,12 @@ import {
   buildDataLayer,
   removeDataLayer
 } from 'app/utils';
-import { DataLayer, Coordinate, Colors } from 'app/shared/models/map.model';
+import {
+  DataLayer,
+  Coordinate,
+  Colors,
+  GoogleMap
+} from 'app/shared/models/map.model';
 import { FlightPathService } from 'app/shared/services/flightPath.service';
 import { FlightPathBuilder } from 'app/builders/flightPath.builder';
 import { Destination } from 'app/shared/models/itinerary.model';
@@ -37,11 +42,11 @@ export class ProfileItinerariesComponent implements OnInit, OnDestroy {
   ) {}
 
   user: User;
-  map: any;
+  map: GoogleMap;
   countries: Country[];
   userItineraries: UserItinerary[];
   tabActive: string;
-  activeItinerary: any;
+  activeItinerary: UserItinerary;
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('user'));

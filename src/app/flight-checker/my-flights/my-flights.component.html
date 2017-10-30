@@ -2,20 +2,20 @@
   <div class="flight-search">
     <div class="col-md-6">
       <div class="flights">
-        <input type="text" id="departure" placeholder="Departing from" />
+        <input type="text" id="departure" #departure placeholder="Departing from" />
       </div>
       <div class="dates">
-        From: <input id="departure-date-start" value="" type="date" name="date" /> To: <input id="departure-date-end" value=""
-          type="date" name="date" />
+        From: <input id="departure-date-start" [(ngModel)]="departureStartDate" value="" type="date" name="date" /> To: <input id="departure-date-end"
+          [(ngModel)]="departureEndDate" value="" type="date" name="date" />
       </div>
     </div>
     <div class="col-md-6">
       <div class="flights">
-        <input type="text" id="arrival" placeholder="Going to" />
+        <input type="text" id="arrival" #arrival placeholder="Going to" />
       </div>
       <div class="dates">
-        Returning From: <input id="return-date-start" value="" type="date" name="date" />To: <input id="return-date-end"
-          value="" type="date" name="date" />
+        Returning From: <input id="return-date-start" [(ngModel)]="returnStartDate" value="" type="date" name="date" />To: <input id="return-date-end"
+          [(ngModel)]="returnEndDate" value="" type="date" name="date" />
       </div>
     </div>
     <button id="search-button" (click)="searchFlights()">Search for flights</button>
@@ -24,7 +24,7 @@
 
   <section class="search-result-container">
     <div class="col-md-5 map">
-      <div [id]="mapCanvas">
+      <div id="map-canvas">
       </div>
     </div>
     <div class="col-md-7 search-result">
@@ -32,7 +32,7 @@
         <div id="loading">
           <h3>Loading ...</h3>
           <p> Sorry for the wait as we find the cheapest flights from {{departureView.name}} to {{arrivalView.name}} for you
-            </p>
+          </p>
         </div>
       </div>
       <div *ngIf="checked == true">
