@@ -1,138 +1,113 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FlightService } from '../../shared/services/flight.service';
-import { MapOptions, MapStyles } from 'app/shared/models/map.model';
-import { setMap } from 'app/utils';
+import { MapOptions, MapStyles, GoogleMap } from 'app/shared/models/map.model';
+import {
+  setMap,
+  buildAutocomplete,
+  formatDate,
+  formatSelectDates
+} from 'app/utils';
+import { FlightPathService } from 'app/shared/services/flightPath.service';
+import { GooglePlace } from 'app/shared/models/google.model';
 
-declare var google: any;
+declare const google: any;
 
 @Component({
   selector: 'app-my-flights',
   templateUrl: './my-flights.component.html',
-  styleUrls: ['./my-flights.component.css'],
+  styleUrls: ['./my-flights.component.css']
 })
 export class MyFlightsComponent implements OnInit {
-  constructor(private flightService: FlightService) {}
+  constructor(
+    private flightService: FlightService,
+    private flightPathService: FlightPathService
+  ) {}
 
-  departureLocation: any;
-  arrivalLocation: any;
-  departureView: string;
-  arrivalView: string;
+  @ViewChild('departure') departureInput;
+  @ViewChild('arrival') arrivalInput;
+
+  map: GoogleMap;
+  flightPath: any;
   searchResult: any;
-  durations = ['result.fly_duration', 'result.return_duration'];
+
+  departureView: GooglePlace;
+  arrivalView: GooglePlace;
+
+  departureLocation: string;
+  arrivalLocation: string;
+  departureStartDate: string;
+  departureEndDate: string;
+  returnStartDate: string;
+  returnEndDate: string;
+  mapCanvas: string = 'flightChecker';
+
+  durations: string[] = ['result.fly_duration', 'result.return_duration'];
   checked: boolean = false;
   toggle: boolean = true;
-  map: any;
-  mapCanvas: string = "flightChecker"
-  flightPath;
 
   ngOnInit() {
     this.initiateMap();
-
-    this.arrivalView = !this.arrivalView ? '' : this.arrivalView;
-
-    const departureInput = document.getElementById('departure');
-    const departureAutocomplete = new google.maps.places.Autocomplete(
-      departureInput
-    );
-
-    departureAutocomplete.addListener('place_changed', () => {
-      this.departureLocation = departureAutocomplete.getPlace();
-      this.departureView = departureAutocomplete.getPlace();
-    });
-
-    const arrivalInput = document.getElementById('arrival');
-    const arrivalAutocomplete = new google.maps.places.Autocomplete(
-      arrivalInput
-    );
-
-    arrivalAutocomplete.addListener('place_changed', () => {
-      this.arrivalLocation = arrivalAutocomplete.getPlace();
-      this.arrivalView = arrivalAutocomplete.getPlace();
-
-      this.departureAutocomplete();
-      this.arrivalAutocomplete();
-    });
-  }
-
-  departureAutocomplete() {
-    this.flightService
-      .getLocation(this.departureLocation.name)
-      .subscribe(location => {
-        this.departureLocation = location[0].id;
-      });
-  }
-
-  arrivalAutocomplete() {
-    this.flightService
-      .getLocation(this.arrivalLocation.name)
-      .subscribe(location => {
-        this.arrivalLocation = location[0].id;
-      });
-  }
-
-  searchFlights() {
-    this.toggle = false;
-    this.departureAutocomplete();
-    this.arrivalAutocomplete();
-    const departureDates = [];
-    const returnDates = [];
-
-    let startDateFrom = document.getElementById('departure-date-start')[
-      'valueAsDate'
-    ];
-    startDateFrom = this.formatDate(startDateFrom);
-    let startDateEnd = document.getElementById('departure-date-end')[
-      'valueAsDate'
-    ];
-    startDateEnd = this.formatDate(startDateEnd);
-    departureDates.push(startDateFrom, startDateEnd);
-
-    let returnDateFrom = document.getElementById('return-date-start')[
-      'valueAsDate'
-    ];
-    returnDateFrom = this.formatDate(returnDateFrom);
-    let returnDateEnd = document.getElementById('return-date-end')[
-      'valueAsDate'
-    ];
-    returnDateEnd = this.formatDate(returnDateEnd);
-    returnDates.push(returnDateFrom, returnDateEnd);
-
-    if (this.departureLocation && this.arrivalLocation) {
-      let flight = {
-        from: this.departureLocation,
-        to: this.arrivalLocation,
-        departures: departureDates,
-        returns: returnDates,
-        type: 'return'
-      };
-      this.flightService.getFlights(flight).subscribe(result => {
-        this.searchResult = result;
-        this.checked = !this.checked;
-        this.toggle = true;
-      });
-    }
-  }
-
-  formatDate(date) {
-    let dateLength = date.getMonth();
-    if (dateLength <= 8) {
-      date =
-        date.getDate() +
-        '/0' +
-        (date.getMonth() + 1) +
-        '/' +
-        date.getFullYear();
-    } else {
-      date =
-        date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
-    }
-    return date;
+    this.setAutoCompletes();
+    // this.arrivalView = !this.arrivalView ? '' : this.arrivalView;
   }
 
   initiateMap() {
     this.map = setMap();
   }
-  
+
+  setAutoCompletes() {
+    this.setDepartureAutocomplete();
+    this.setArrivalAutocomplete();
+  }
+
+  setDepartureAutocomplete() {
+    const departureAutocomplete = buildAutocomplete(
+      this.departureInput.nativeElement
+    );
+    departureAutocomplete.addListener('place_changed', () => {
+      this.departureView = departureAutocomplete.getPlace();
+      this.flightService
+        .getLocation(this.departureView.name)
+        .subscribe(result => (this.departureLocation = result.id));
+    });
+  }
+
+  setArrivalAutocomplete() {
+    const arrivalAutocomplete = buildAutocomplete(
+      this.arrivalInput.nativeElement
+    );
+    arrivalAutocomplete.addListener('place_changed', () => {
+      this.arrivalView = arrivalAutocomplete.getPlace();
+      this.flightService
+        .getLocation(this.arrivalView.name)
+        .subscribe(result => (this.arrivalLocation = result.id));
+    });
+  }
+
+  searchFlights() {
+    this.toggle = false;
+    const dates = [
+      this.departureStartDate,
+      this.departureEndDate,
+      this.returnStartDate,
+      this.returnEndDate
+    ];
+    const newDates = formatSelectDates(dates);
+    this.arrangeFlightDates(newDates);
+  }
+
+  arrangeFlightDates(dates: string[]) {
+    const departureDates = [dates[0], dates[1]];
+    const returnDates = [dates[2], dates[3]];
+    const flight = this.flightService.buildFlightPlan(
+      this.departureLocation,
+      this.arrivalLocation,
+      departureDates,
+      returnDates
+    );
+    this.getFlights(flight);
+  }
+
   hover() {
     let hoverItem = document.getElementsByClassName('results');
     for (let i = 0; i < hoverItem.length; i++) {
@@ -143,27 +118,24 @@ export class MyFlightsComponent implements OnInit {
 
   addFlightPath(index) {
     const routes = this.searchResult.data[index].route;
-    const coordinates = [];
-    let that = this;
-    routes.forEach(route => {
-      const routeLatLng = { lat: route.latFrom, lng: route.lngFrom };
-      coordinates.push(routeLatLng);
-    });
+    const coordinates = this.flightService.createFlightCoordinates(routes);
     const lastRoute = routes[routes.length - 1];
-    const lastRouteLatLng = { lat: lastRoute.latTo, lng: lastRoute.lngTo };
-    coordinates.push(lastRouteLatLng);
-
-    this.flightPath = new google.maps.Polyline({
-      path: coordinates,
-      geodesic: true,
-      strokeColor: 'yellow',
-      strokeOpacity: 1.0,
-      strokeWeight: 4
-    });
+    coordinates.push({ lat: lastRoute.latTo, lng: lastRoute.lngTo });
+    this.flightPath = this.flightPathService.setPolyline(coordinates);
+    console.log('flightPath', this.flightPath)
     this.flightPath.setMap(this.map);
   }
 
   removeFlightPath(index) {
     this.flightPath.setMap(null);
+  }
+
+  getFlights(flight) {
+    this.flightService.getFlights(flight).subscribe(result => {
+      this.searchResult = result;
+      console.log('searchResult', this.searchResult)
+      this.checked = !this.checked;
+      this.toggle = true;
+    });
   }
 }

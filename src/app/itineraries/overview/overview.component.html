@@ -1,11 +1,13 @@
 <div class="container-fluid" id="home-top">
   <div class="row">
-    <div class="col-md-9 left-side">
+    <div class="col-xs-12 col-md-9 left-side">
       <div class="row map-view">
         <div id="map-canvas"></div>
       </div>
       <div class="row visa-view">
-        <visa-checker [countries$] = "countries$ | async"></visa-checker>
+        <div class="col-xs-12">
+          <visa-checker [countries$]="countries$ | async"></visa-checker>
+        </div>
       </div>
     </div>
     <div class="col-md-3 right-side">

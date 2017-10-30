@@ -6,18 +6,20 @@ import {
   AfterViewInit,
   ViewChild
 } from '@angular/core';
-import { Itinerary, Destination, Expense } from 'app/shared/models/itinerary.model';
+import {
+  Itinerary,
+  Destination,
+  Expense
+} from 'app/shared/models/itinerary.model';
 import {
   createCountryName,
   calculateDateRange,
   aggregate,
   updateDateRange,
   buildAutocomplete,
-  addAutoCompleteListener
 } from 'app/utils';
 import { FlightPathBuilder } from 'app/builders/flightPath.builder';
 import { FlightPathService } from 'app/shared/services/flightPath.service';
-
 
 @Component({
   selector: 'itinerary-planner',
@@ -29,9 +31,8 @@ export class ItineraryPlannerComponent implements AfterViewInit {
 
   @ViewChild('address') addressInput;
   @Input() locations: any;
-  @Output() changeAddress: EventEmitter<any> = new EventEmitter();
   @Output() createMarker: EventEmitter<any> = new EventEmitter();
-  @Output() onAddItinerary: EventEmitter<any> = new EventEmitter();
+  @Output() onAddItinerary: EventEmitter<Itinerary> = new EventEmitter<Itinerary>();
 
   private itineraryDestination: Destination = new Destination();
   private newItinerary: Itinerary = new Itinerary();
@@ -47,7 +48,6 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   private locationPlaceholder: string = 'Enter a starting location';
   private arrow: string;
 
-
   private itineraryDays: number[] = [];
   private displayableExpenses: Expense[] = [];
   private accumulatedDailyExpense: number[] = [];
@@ -58,6 +58,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   private newPrice: number;
   private newAddress: string;
   private newNote: string = '';
+  private autocomplete: any;
 
   ngAfterViewInit() {
     this.autoCompleteAddress();
@@ -66,8 +67,14 @@ export class ItineraryPlannerComponent implements AfterViewInit {
 
   autoCompleteAddress(): void {
     const input = this.addressInput.nativeElement;
-    const autocomplete = buildAutocomplete(input)
-    addAutoCompleteListener(autocomplete, this.itineraryDestination)
+    this.autocomplete = buildAutocomplete(input);
+    this.addAutoComplete();
+  }
+
+  addAutoComplete(){
+    this.autocomplete.addListener('place_changed', () => {
+    this.itineraryDestination.geoLocation = this.autocomplete.getPlace();
+  });
   }
 
   //adds expense to a single destination in the itinerary
@@ -92,7 +99,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
     };
     this.displayableExpenses.push(newestExpense);
     this.accumulatedDailyExpense.push(newestExpense.expense);
-    return aggregate(this.accumulatedDailyExpense)
+    return aggregate(this.accumulatedDailyExpense);
   }
 
   createCurrentCost(newTotalExpense: number): void {
@@ -112,10 +119,7 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   updateTotalDays(): void {
     this.dates.forEach(day => {
       const dayIndex = this.dates.indexOf(day);
-      this.differenceBetweenDates = updateDateRange(
-        this.dates,
-        dayIndex
-      );
+      this.differenceBetweenDates = updateDateRange(this.dates, dayIndex);
       if (!this.differenceBetweenDates) this.differenceBetweenDates = 0;
       this.itineraryDays.push(this.differenceBetweenDates);
       this.itineraryDestination.days = this.differenceBetweenDates;
@@ -167,11 +171,9 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   }
 
   setItineraryLength(): void {
-    this.differenceBetweenDates = calculateDateRange(
-      this.dates
-    );
+    this.differenceBetweenDates = calculateDateRange(this.dates);
     this.itineraryDays.push(this.differenceBetweenDates);
-    this.itineraryDestination.days = this.differenceBetweenDates
+    this.itineraryDestination.days = this.differenceBetweenDates;
     this.getTotalDays();
   }
 

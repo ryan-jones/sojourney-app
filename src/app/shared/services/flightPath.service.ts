@@ -6,6 +6,7 @@ import {
   supplementaryInfoWindow,
   removeLocation
 } from 'app/utils';
+import { GoogleFlightPath } from 'app/shared/models/flights.model';
 
 declare const google;
 
@@ -120,16 +121,6 @@ export class FlightPathService {
         );
   }
 
-  newPolyline(destinationCoordinates: Coordinate[]): any {
-    return new google.maps.Polyline({
-      path: destinationCoordinates,
-      geodesic: true,
-      strokeColor: 'yellow',
-      strokeOpacity: 1.0,
-      strokeWeight: 4
-    });
-  }
-
   newMarker(point: Coordinate, map: any): any {
     return new google.maps.Marker({
       map,
@@ -137,7 +128,7 @@ export class FlightPathService {
     });
   }
 
-  setPolyline(destinationCoordinates: Coordinate[]): any {
+  setPolyline(destinationCoordinates: Coordinate[]): GoogleFlightPath {
     return new google.maps.Polyline({
       path: destinationCoordinates,
       geodesic: true,
@@ -186,7 +177,7 @@ export class FlightPathService {
   }
 
   resetFlightPath() {
-    this.flightPathData = this.newPolyline(this.destinationCoordinates);
+    this.flightPathData = this.setPolyline(this.destinationCoordinates);
     this.flightPathData.setMap(this.map);
     this.itineraryPath.push(this.flightPathData);
   }

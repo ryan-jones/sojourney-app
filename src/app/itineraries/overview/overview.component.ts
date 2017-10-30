@@ -7,7 +7,12 @@ import { CountryLayersService } from '../../shared/services/country-layers.servi
 import { UserService } from '../../shared/services/user.service';
 import { User } from 'app/shared/models/user.model';
 import { Country } from 'app/shared/models/country.model';
-import { MapStyles, MapOptions, Coordinate } from 'app/shared/models/map.model';
+import {
+  MapStyles,
+  MapOptions,
+  Coordinate,
+  GoogleMap
+} from 'app/shared/models/map.model';
 import { Itinerary, Destination } from 'app/shared/models/itinerary.model';
 import {
   setMap,
@@ -29,7 +34,7 @@ export class ItineraryOverViewComponent implements AfterViewInit, OnDestroy {
 
   //google properties
   private marker: any;
-  private map: any;
+  private map: GoogleMap;
   private locations: any[] = [];
   private destinationCoordinates: Coordinate[] = [];
 
