@@ -11,7 +11,7 @@ import {
   COLORS
 } from 'app/utils';
 import 'rxjs/add/operator/map';
-
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class CountryLayersService {
@@ -21,8 +21,8 @@ export class CountryLayersService {
   constructor(private http: Http) {}
 
   countries: Country[];
-  countryName1: string;
-  countryName2: string;
+  countryName1: Subject<any> = new Subject();
+  countryName2: Subject<any> = new Subject();
   dataLayer: DataLayer;
   colors: Colors = COLORS;
 
@@ -30,7 +30,11 @@ export class CountryLayersService {
     .get(`${this.BASE_URL}/api/countries`)
     .map(res => res.json());
 
-  identifyCountryId(userItineraries: UserItinerary[], countries: Country[], number: number): string[] {
+  identifyCountryId(
+    userItineraries: UserItinerary[],
+    countries: Country[],
+    number: number
+  ): string[] {
     const nationalities = userItineraries[number].nationalities[0]
       ? userItineraries[number].nationalities
       : ['Taiwan', 'United States'];
@@ -50,7 +54,8 @@ export class CountryLayersService {
   }
 
   showCountries(selectedCountries: string[], colors: Colors, index: number) {
-    if (index < 2) this.setLayersForSelectedCountry(selectedCountries, index, colors);
+    if (index < 2)
+      this.setLayersForSelectedCountry(selectedCountries, index, colors);
   }
 
   setLayersForSelectedCountry(
@@ -70,7 +75,9 @@ export class CountryLayersService {
     colors: Colors,
     countries: string[]
   ) {
-    index === 0 ? (this.countryName1 = nation.name) : (this.countryName2 = nation.name);
+    index === 0
+      ? this.countryName1.next(nation.name)
+      : this.countryName2.next(nation.name);
     this.dataLayer = initializeDataLayer(nation, index, colors, countries);
     this.loadDataLayers(this.dataLayer);
   }

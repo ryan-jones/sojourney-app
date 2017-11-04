@@ -8,7 +8,7 @@ declare const google: any;
 @Component({
   selector: 'app-profile-country-visit',
   templateUrl: './profile-country-visit.component.html',
-  styleUrls: ['./profile-country-visit.component.css']
+  styleUrls: ['./profile-country-visit.component.scss']
 })
 export class ProfileCountryVisitComponent implements OnInit, AfterViewInit {
   constructor() {}

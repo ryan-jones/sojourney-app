@@ -1,9 +1,11 @@
+@import 'src/styles/variables';
+
 * {
   font-family: 'Special Elite', cursive;
 }
 
 .navbar {
-  background-color: #222061;
+  background-color: $dark-blue;
 }
 
 .white {

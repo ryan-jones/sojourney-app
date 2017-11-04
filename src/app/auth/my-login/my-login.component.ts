@@ -6,7 +6,7 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 @Component({
   selector: 'app-my-login',
   templateUrl: './my-login.component.html',
-  styleUrls: ['./my-login.component.css']
+  styleUrls: ['./my-login.component.scss']
 })
 export class MyLoginComponent {
   user: FormGroup = new FormGroup({

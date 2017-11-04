@@ -6,12 +6,59 @@
       </div>
       <div class="row visa-view">
         <div class="col-xs-12">
-          <visa-checker [countries$]="countries$ | async"></visa-checker>
+          <div class="row color-row">
+            <div class="col-xs-3 color-column">
+              <div class="col-md-3 red-box"></div>
+              <div class="col-xs-12 col-md-9">
+                <strong>Visa-free:</strong><br />{{countryName1}}
+              </div>
+            </div>
+            <div class="col-xs-3 color-column">
+              <div class="col-md-3 yellow-box"></div>
+              <div class="col-md-9">
+                <strong>VOA:</strong><br />{{countryName1}}
+              </div>
+            </div>
+            <div class="col-xs-3 color-column">
+              <div class="col-md-3 blue-box"></div>
+              <div class="col-md-9">
+                <strong>Visa-free:</strong><br />{{countryName2}}
+              </div>
+            </div>
+            <div class="col-xs-3 color-column">
+              <div class="col-md-3 green-box"></div>
+              <div class="col-md-9">
+                <strong>VOA:</strong><br />{{countryName2}}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-3 right-side">
-      <itinerary-planner (createMarker)="geocodeMarker($event)" (onAddItinerary)="addItinerary($event)" [locations]="locations"></itinerary-planner>
+    <div class="col-xs-12 col-md-3 right-side">
+      <div class="itinerary-container">
+        <div class="itinerary-wrapper" ng-change="totalDays()">
+          <div class="itinerary">
+            <div class="row">
+              <div class="col-xs-12">
+                <ul class="nav nav-pills">
+                  <li class="nav-item">
+                    <a class="nav-link active" (click)="toggleItineraryOpts('itinerary')">Itinerary</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" (click)="toggleItineraryOpts('visas')">Check Visas</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <itinerary-planner *ngIf="itineraryOpt==='itinerary'; else visas" (createMarker)="geocodeMarker($event)" (onAddItinerary)="addItinerary($event)"
+              [locations]="locations"></itinerary-planner>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+
+  <ng-template #visas>
+    <visa-checker [countries$]="countries$ | async" (onRetrieveCountryNames)="setCountryNames($event)"></visa-checker>
+  </ng-template>

@@ -12,7 +12,7 @@ import {
 @Component({
   selector: 'app-my-signup-form',
   templateUrl: './my-signup-form.component.html',
-  styleUrls: ['./my-signup-form.component.css'],
+  styleUrls: ['./my-signup-form.component.scss'],
 })
 export class MySignupFormComponent {
   @ViewChild('nationality') nationalityInput;

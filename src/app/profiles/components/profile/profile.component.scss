@@ -1,3 +1,5 @@
+@import 'src/styles/variables';
+
 .container-fluid,
 .row,
 .left-side,
@@ -7,14 +9,14 @@
 }
 
 button {
-  background-color: #879dc9;
+  background-color: $light-blue;
   color: #fff;
   border-radius: 5px;
-  box-shadow: 1px 3px 3px 1px #ccc;
+  box-shadow: 1px 3px 3px 1px $shadow;
 }
 
 #home-top {
-  box-shadow: inset 5px 0 5px #ccc;
+  box-shadow: inset 5px 0 5px $shadow;
 }
 
 .left-side,
@@ -25,7 +27,7 @@ button {
 
 .left-side {
   background-color: #eeedec;
-  box-shadow: inset -5px 5px 5px #ccc;
+  box-shadow: inset -5px 5px 5px $shadow;
 }
 
 .left-side > div {

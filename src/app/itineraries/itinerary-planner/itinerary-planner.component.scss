@@ -1,13 +1,23 @@
-.itinerary-box {
+@import 'src/styles/variables';
+
+
+* {
+  margin: 0;
+}
+.itinerary-container {
   height: 100vh;
-  box-shadow: inset 5px 0 5px #ccc;
+  box-shadow: inset 5px 0 5px $shadow;
+  padding-top: 5%;
+}
+.itinerary-wrapper {
+  margin: 0 5%;
+  box-shadow: 3px 3px 3px 3px $shadow;
+  border-radius: 5px;
 }
 
 .itinerary {
-  margin-top: 2%;
   padding: 2% 2% 2% 3%;
   border-radius: 5px 5px 0 0;
-  box-shadow: 3px 3px 3px 3px #ccc;
 }
 
 .itinerary,
@@ -16,13 +26,14 @@
 }
 
 #new-submit {
-  background-color: #222061;
+  background-color: $dark-blue;
   padding: 1% 2%;
-  box-shadow: 3px 3px 3px 1px #ccc;
+  box-shadow: 3px 3px 3px 1px $shadow;
 }
 
-.location-box, .itinerary {
-  background-color: #879dc9;
+.location-box,
+.itinerary {
+  background-color: $light-blue;
 }
 
 .location-box,
@@ -125,7 +136,7 @@
 }
 
 .addCost {
-  background-color: #222061;
+  background-color: $dark-blue;
   margin: 2% 0;
 }
 
@@ -134,8 +145,7 @@
 }
 
 .total-days {
-  color: #879dc9;
-  box-shadow: 7px 2px 3px -1px #ccc;
+  color: $light-blue;
 }
 
 .save {
@@ -153,7 +163,7 @@
 
 .total-days,
 .save {
-  border: 1px solid #879dc9;
+  border: 1px solid $light-blue;
   padding: 2%;
 }
 
@@ -163,7 +173,7 @@
 
 .hidden-details,
 .save {
-  box-shadow: 3px 3px 3px 3px #ccc;
+  box-shadow: 3px 3px 3px 3px $shadow;
 }
 
 .hidden-details,

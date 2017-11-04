@@ -1,8 +1,4 @@
-import {
-  Component,
-  AfterViewInit,
-  OnDestroy
-} from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { CountryLayersService } from '../../shared/services/country-layers.service';
 import { UserService } from '../../shared/services/user.service';
 import { User } from 'app/shared/models/user.model';
@@ -24,14 +20,13 @@ import {
 import { Observable } from 'rxjs/Observable';
 import { FlightPathService } from 'app/shared/services/flightPath.service';
 
-
 @Component({
   selector: 'my-home',
   templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.scss'],
+  styleUrls: ['./overview.component.scss']
 })
-export class ItineraryOverViewComponent implements AfterViewInit, OnDestroy {
-
+export class ItineraryOverViewComponent
+  implements AfterViewInit, OnDestroy {
   //google properties
   private marker: any;
   private map: GoogleMap;
@@ -45,6 +40,9 @@ export class ItineraryOverViewComponent implements AfterViewInit, OnDestroy {
 
   private selectedNationalityId1: string;
   private selectedNationalityId2: string;
+  private countryName1: string;
+  private countryName2: string;
+  private itineraryOpt: string = 'itinerary';
 
   constructor(
     private countryService: CountryLayersService,
@@ -54,13 +52,21 @@ export class ItineraryOverViewComponent implements AfterViewInit, OnDestroy {
     this.countries$ = this.countryService.countries$;
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.initiateMap();
     this.authorizedUser();
+    this.countryService.countryName1.subscribe(
+      (country: string) => (this.countryName1 = country)
+    );
+    this.countryService.countryName2.subscribe(
+      (country: string) => (this.countryName2 = country)
+    );
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.flightPathService.clearMapValues();
+    this.countryService.countryName1.unsubscribe();
+    this.countryService.countryName2.unsubscribe();
   }
 
   authorizedUser() {
@@ -95,5 +101,14 @@ export class ItineraryOverViewComponent implements AfterViewInit, OnDestroy {
       this.user = user;
       alert('Itinerary saved! View in your user profile.');
     });
+  }
+
+  toggleItineraryOpts(input: string) {
+    this.itineraryOpt = input;
+  }
+
+  setCountryNames(input: { countryName1: string; countryName2: string }) {
+    this.countryName1 = input.countryName1;
+    this.countryName2 = input.countryName2;
   }
 }

@@ -1,6 +1,9 @@
+@import 'src/styles/variables';
+
+
 .container-fluid {
   height: 100vh;
-  background-color: #ccc;
+  background-color: $shadow;
   text-align: center;
   margin: 0;
   padding: 0;
@@ -49,7 +52,7 @@
 }
 
 #search-button {
-  background-color: #222061;
+  background-color: $dark-blue;
   color: #fff;
   margin-top: 1%;
 }
@@ -87,7 +90,7 @@
 
 #map-canvas {
   height: 100%;
-  box-shadow: 1px 3px 3px 1px #ccc;
+  box-shadow: 1px 3px 3px 1px $shadow;
 }
 
 .search-result {
@@ -101,7 +104,7 @@
 }
 
 .results, .ind-route {
-  box-shadow: 0px 3px 3px 1px #ccc;
+  box-shadow: 0px 3px 3px 1px $shadow;
   margin-bottom: 1%;
 }
 
@@ -124,9 +127,9 @@
 }
 
 .ind-route {
-  border-top: 1px solid #ccc;
+  border-top: 1px solid $shadow;
 }
 
 .ind-route:hover {
-  box-shadow: 0px 3px 3px 3px #ccc;
+  box-shadow: 0px 3px 3px 3px $shadow;
 }

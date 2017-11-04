@@ -15,7 +15,7 @@ declare const google: any;
 @Component({
   selector: 'app-my-flights',
   templateUrl: './my-flights.component.html',
-  styleUrls: ['./my-flights.component.css']
+  styleUrls: ['./my-flights.component.scss']
 })
 export class MyFlightsComponent implements OnInit {
   constructor(

@@ -11,7 +11,7 @@ import { ItineraryOverViewComponent } from 'app/itineraries/overview/overview.co
   declarations: [
     VisaCheckerComponent,
     ItineraryPlannerComponent,
-    ItineraryOverViewComponent
+    ItineraryOverViewComponent,
   ],
   imports: [SharedModule, CollapseModule.forRoot()],
   exports: [VisaCheckerComponent, ItineraryPlannerComponent, ItineraryOverViewComponent]

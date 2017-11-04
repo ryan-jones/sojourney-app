@@ -1,138 +1,118 @@
-<div class="itinerary-box">
-  <div class="col-md-1"></div>
-  <div class="col-md-12" ng-change="totalDays()">
-    <div class="itinerary">
-      <section>
-        <div>
-          <h4><span class="white">{{newItinerary.name}}</span></h4>
-          <input id="new-name" [(ngModel)]="newItinerary.name" type="text" [placeholder]="namePlaceholder" />
-          <input id="new-address" #address [(ngModel)]="newAddress" type="text" name="address" [placeholder]="locationPlaceholder">
-          <input id="new-date" [(ngModel)]="itineraryDestination.date" value="" type="date" name="date" />
+<div class="container-fluid">
+  <div class="row">
+    <h4><span class="white">{{newItinerary.name}}</span></h4>
+    <input id="new-name" [(ngModel)]="newItinerary.name" type="text" [placeholder]="namePlaceholder" />
+    <input id="new-address" #address [(ngModel)]="newAddress" type="text" name="address" [placeholder]="locationPlaceholder">
+    <input id="new-date" [(ngModel)]="itineraryDestination.date" type="date" name="date" />
+  </div>
+  <div id="price-and-transport">
+    <div id="currency-div">
+      <select id="new-currency" [(ngModel)]="itineraryDestination.currency" class="form-control" name="currency">
+        <option value="$"><span class="currency-type">USD</span></option>
+        <option value="£">GBP</option>
+        <option value="€">EUR</option>
+        <option value="¥">JPY</option>
+        <option value="NT$">TWD</option>
+      </select>
+    </div>
+    <div id="price-div">
+      <input id="new-price" [(ngModel)]="newPrice" type="number" name="price" value="" placeholder="Add an expense" />
+    </div>
+    <div id="transport-div">
+      <select id="new-transport" [(ngModel)]="itineraryDestination.transport" class="form-control" name="transport">
+        <option value="plane">Plane</option>
+        <option value="train">Train</option>
+        <option value="bus">Bus</option>
+        <option value="boat">Boat</option>
+        <option value="car">Car</option>
+      </select>
+    </div>
+  </div>
+  <div>
+    <div *ngFor="let expense of displayableExpenses">
+      <div class="white" *ngIf="displayableExpenses.length">
+        {{selectedCurrency}}{{expense.expense}} <i>Via</i> {{expense.transport}} <br />
+        <i>Note: {{expense.note}}</i>
+      </div>
+    </div>
+    <div class="notes">
+      <input type="checkbox" (click)="toggleNote()" /> <span class="white"> Add a note </span>
+      <div class="form-group" *ngIf="checked">
+        <input id="new-note" [(ngModel)]="newNote" type="text" />
+      </div>
+    </div>
+    <div class="white">
+      <button class="btn btn-default addCost" (click)="addExpense()"> + </button><span class="space">Add Expense</span>
+      <button class="btn btn-default deleteCost" (click)="deleteExpense()"> - </button> Delete Expense Expenditures: {{selectedCurrency}}{{currentCost}}
+    </div>
+  </div>
+  <input id="new-submit" (click)="createPoint()" type="submit" name="" value="Add to itinerary">
+  <div class="location-box">
+    <div *ngFor="let location of locations, let i = index">
+      <div *ngIf="i === 0">
+        <p class="days white">
+          Starting in
+        </p>
+        <div class="location-list row">
+          <div class="col-md-11">
+            <div class="location-date">
+              <div class="col-md-12">
+                <strong>{{location.geoLocation.name}}</strong>, <strong>{{location.country}}</strong>
+              </div>
+              <div class="col-md-12">
+                <p> {{location.date}}</p>
+              </div>
+              <div class="currency-and-price">
+                <strong>{{location.currency}}{{location.price}}</strong> <i>Via {{location.transport}}</i>
+              </div>
+            </div>
+            <button type="button" (click)="checkCollapsed()">{{arrow}}</button>
+            <div class="col-md-12 hidden-details" [collapse]="!isCollapsed" *ngFor="let detail of location.details">
+              <div>
+                <div>
+                  <p> {{selectedCurrency}}{{detail.expense}} via {{detail.transport}} </p>
+                  <p> Note: {{detail.note}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-1 delete-input">
+            <button class="btn btn-default delete" (click)="deletePoint(location)"> - </button>
+          </div>
         </div>
-        <section id="price-and-transport">
-          <div id="currency-div">
-            <select id="new-currency" [(ngModel)]="itineraryDestination.currency" class="form-control" name="currency">
-                <option value="$"><span class="currency-type">USD</span></option>
-                <option value="£">GBP</option>
-                <option value="€">EUR</option>
-                <option value="¥">JPY</option>
-                <option value="NT$">TWD</option>
-              </select>
-          </div>
-          <div id="price-div">
-            <input id="new-price" [(ngModel)]="newPrice" type="number" name="price" value="" placeholder="Add an expense" />
-          </div>
-          <div id="transport-div">
-            <select id="new-transport" [(ngModel)]="itineraryDestination.transport" class="form-control" name="transport">
-                <option value="plane">Plane</option>
-                <option value="train">Train</option>
-                <option value="bus">Bus</option>
-                <option value="boat">Boat</option>
-                <option value="car">Car</option>
-              </select>
-          </div>
-        </section>
-        <section>
-          <div *ngFor="let expense of displayableExpenses">
-            <div class="white" *ngIf="displayableExpenses.length">
-              {{selectedCurrency}}{{expense.expense}} <i>Via</i> {{expense.transport}} <br />
-              <i>Note: {{expense.note}}</i>
-            </div>
-          </div>
-          <section class="notes">
-            <input type="checkbox" (click)="toggleNote()" /> <span class="white"> Add a note </span>
-            <div class="form-group" *ngIf="checked">
-              <input id="new-note"  [(ngModel)]="newNote" type="text" />
-            </div>
-          </section>
-          <div class="white">
-            <button class="btn btn-default addCost" (click)="addExpense()"> + </button><span class="space">Add Expense</span>
-            <button class="btn btn-default deleteCost" (click)="deleteExpense()"> - </button>  Delete Expense
-            Expenditures: {{selectedCurrency}}{{currentCost}}
-          </div>
-        </section>
-      </section>
-      <input id="new-submit" (click)="createPoint()" type="submit" name="" value="Add to itinerary">
-
-      <div class="location-box">
-        <div *ngFor="let location of locations, let i = index">
-          <div *ngIf="i === 0">
-            <p class="days white">
-              Starting in
-            </p>
-            <div class="location-list row">
-              <div class="col-md-11">
-                <div class="location-date">
-                  <div class="col-md-12">
-                    <strong>{{location.geoLocation.name}}</strong>, <strong>{{location.country}}</strong>
-                  </div>
-                  <div class="col-md-12">
-                    <p> {{location.date}}</p>
-                  </div>
-                  <div class="currency-and-price">
-                    <strong>{{location.currency}}{{location.price}}</strong> <i>Via {{location.transport}}</i>
-                  </div>
-                </div>
-                <button type="button" (click)="checkCollapsed()">{{arrow}}</button>
-                <div class="col-md-12 hidden-details" [collapse]="!isCollapsed" *ngFor="let detail of location.details">
-                  <div>
-                    <div>
-                      <p> {{selectedCurrency}}{{detail.expense}} via {{detail.transport}} </p>
-                      <p> Note: {{detail.note}}</p>
-                    </div>
-                  </div>
-                </div>
+      </div>
+      <div *ngIf="i !== 0">
+        <p class="days white">
+          For {{itineraryDays[i]}} days
+        </p>
+        <div class="location-list row">
+          <div class="col-md-11">
+            <div class="location-date">
+              <div class="col-md-12">
+                <strong>{{location.name}}</strong>, <strong>{{location.country}}</strong>
               </div>
-              <div class="col-md-1 delete-input">
-                <button class="btn btn-default delete" (click)="deletePoint(location)"> - </button>
+              <div class="col-md-12">
+                <p> {{location.date}}</p>
+              </div>
+              <div class="currency-and-price">
+                <strong>{{location.currency}}{{location.price}}</strong> <i>Via {{location.transport}}</i>
+              </div>
+            </div>
+            <button type="button" (click)="isCollapsed = !isCollapsed">{{arrow}}</button>
+            <div class="col-md-12 hidden-details" [collapse]="!isCollapsed" *ngFor="let detail of location.details">
+              <div>
+                <div>
+                  <p> {{selectedCurrency}}{{detail.expense}} via {{detail.transport}} </p>
+                  <p> Note: {{detail.note}}</p>
+                </div>
               </div>
             </div>
           </div>
-          <div *ngIf="i !== 0">
-            <p class="days white">
-              For {{itineraryDays[i]}} days
-            </p>
-            <div class="location-list row">
-              <div class="col-md-11">
-                <div class="location-date">
-                  <div class="col-md-12">
-                    <strong>{{location.name}}</strong>, <strong>{{location.country}}</strong>
-                  </div>
-                  <div class="col-md-12">
-                    <p> {{location.date}}</p>
-                  </div>
-                  <div class="currency-and-price">
-                    <strong>{{location.currency}}{{location.price}}</strong> <i>Via {{location.transport}}</i>
-                  </div>
-                </div>
-                <button type="button" (click)="isCollapsed = !isCollapsed">{{arrow}}</button>
-                <div class="col-md-12 hidden-details" [collapse]="!isCollapsed"
-                  *ngFor="let detail of location.details">
-                  <div>
-                    <div>
-                      <p> {{selectedCurrency}}{{detail.expense}} via {{detail.transport}} </p>
-                      <p> Note: {{detail.note}}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-1 delete-input">
-                <button class="btn btn-default delete" (click)="deletePoint(location)"> - </button>
-              </div>
-            </div>
+          <div class="col-md-1 delete-input">
+            <button class="btn btn-default delete" (click)="deletePoint(location)"> - </button>
           </div>
         </div>
       </div>
     </div>
-    <div class="total-days">
-      <span>Total Trip Length: {{totalTripDuration}} Days</span>
-    </div>
-    <div class="total-days">
-      <span>Total Trip Cost: {{selectedCurrency}}{{totalPrice}}</span>
-    </div>
-    <div class="save" (click)="addItinerary()">
-      <p>Save itinerary</p>
-    </div>
   </div>
-  <div class="col-md-1"></div>
 </div>

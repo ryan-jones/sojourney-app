@@ -32,7 +32,7 @@ declare const google: any;
 @Component({
   selector: 'app-profile-itineraries',
   templateUrl: './profile-itineraries.component.html',
-  styleUrls: ['./profile-itineraries.component.css']
+  styleUrls: ['./profile-itineraries.component.scss']
 })
 export class ProfileItinerariesComponent implements OnInit, OnDestroy {
   constructor(

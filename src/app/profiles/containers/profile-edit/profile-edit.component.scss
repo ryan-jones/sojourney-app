@@ -1,3 +1,12 @@
+@import 'src/styles/variables';
+
+.fluid-container {
+  margin: 0;
+  padding: 0;
+  background-image: url('https://fthmb.tqn.com/hJ15yQ7ljpj3Kuk9VZ-LbkMlOa0=/1500x1000/filters:no_upscale():fill(FFCC00,1)/about/SaharaDesert-58c1a5603df78c353c3d525d.jpg');
+  background-image: cover;
+}
+
 input.ng-touched {
   border-color: blue;
 }
@@ -8,14 +17,6 @@ input.ng-invalid.ng-touched {
 
 input.ng-touched.ng-valid {
   border-color: green;
-}
-
-.fluid-container {
-  margin: 0;
-  padding: 0;
-  background-image: url('http://cdn-image.travelandleisure.com/sites/default/files/styles/1600x1000/public/1477342854/positano-amalfi-coast-italy-AMALFI1024.jpg?itok=Aa5bXDAF');
-  background-size: cover;
-  height: 100vh;
 }
 
 .form-box {
@@ -42,11 +43,11 @@ h4 {
 }
 
 button {
-  background-color: #222061;
+  background-color: $dark-blue;
   margin-top: 1%;
   color: #fff;
   padding: 1% 2%;
-  box-shadow: 3px 3px 3px 1px #ccc;
+  box-shadow: 3px 3px 3px 1px $shadow;
 }
 
 .nationality-input {
@@ -84,5 +85,3 @@ li:hover {
 .input-group-addon{
   color: green;
 }
-
-

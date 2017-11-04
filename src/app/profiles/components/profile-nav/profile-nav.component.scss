@@ -1,7 +1,9 @@
+@import 'src/styles/variables';
+
 button {
-  background-color: #879dc9;
+  background-color: $light-blue;
   border-radius: 5px;
-  box-shadow: 1px 3px 3px 1px #ccc;
+  box-shadow: 1px 3px 3px 1px $shadow;
 }
 
 .left-side > div {

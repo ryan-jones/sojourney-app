@@ -5,7 +5,7 @@ import { User } from 'app/shared/models/user.model';
 @Component({
   selector: 'app-profile-nav',
   templateUrl: './profile-nav.component.html',
-  styleUrls: ['./profile-nav.component.css']
+  styleUrls: ['./profile-nav.component.scss']
 })
 export class ProfileNavComponent implements OnInit {
   user: User;
