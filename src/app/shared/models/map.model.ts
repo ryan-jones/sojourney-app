@@ -1,3 +1,6 @@
+
+import { SelectedCountry } from 'app/shared/models/country.model';
+
 declare const google;
 
 export class MapStyles {
@@ -64,7 +67,7 @@ export interface DataLayer {
   index: number;
   colors: any;
   counter: number;
-  countries: any;
+  countries: SelectedCountry;
 }
 
 export interface GeoJsonLayer {
@@ -73,6 +76,7 @@ export interface GeoJsonLayer {
   index: number;
   colors: Colors;
   counter: number;
+  countries: SelectedCountry
 }
 
 export interface Coordinate {

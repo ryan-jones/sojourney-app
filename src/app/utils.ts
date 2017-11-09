@@ -6,6 +6,8 @@ import {
   Colors
 } from './shared/models/map.model';
 import { Destination, Export } from 'app/shared/models/itinerary.model';
+import { SelectedCountry } from 'app/shared/models/country.model';
+import * as _ from 'lodash';
 
 let map;
 declare const google;
@@ -22,6 +24,48 @@ export interface GeoJsonLayer {
   index: number;
   colors: Colors;
   counter: number;
+  countries: SelectedCountry;
+}
+
+export function buildVisaArray(selectedNationalities, visaStatus: string) {
+  return _.uniq(
+    _.flatten(selectedNationalities.map(nationality => nationality[visaStatus]))
+  );
+}
+
+export function buildUniqVisaArray(selectedNationalities, visaStatus: string) {
+  const visa = buildVisaArray(selectedNationalities, visaStatus);
+  return _.reverse(
+    selectedNationalities.map(nationality =>
+      _.remove(visa, n => !nationality[visaStatus].includes(n))
+    )
+  );
+}
+
+export function countryXNeedsVisaLayers(
+  selectedNationalities: any[],
+  status1: string,
+  status2: string
+): string[] {
+  return selectedNationalities.reduce((p, c) =>
+    p[status1].filter(e => c[status2].includes(e))
+  );
+}
+
+export function setStandardVoaLayers(selectedNationalities: any[]): any[] {
+  return selectedNationalities.length > 1
+    ? selectedNationalities.reduce((p, c) =>
+        p['visaOnArrival'].filter(e => c['visaOnArrival'].includes(e))
+      )
+    : selectedNationalities[0].visaOnArrival;
+}
+
+export function setVisaFreeLayers(selectedNationalities: any[]): any[] {
+  return selectedNationalities.length > 1
+    ? selectedNationalities.reduce((p, c) =>
+        p['visaFree'].filter(e => c['visaFree'].includes(e))
+      )
+    : selectedNationalities[0].visaFree;
 }
 
 export function setMap(): any {
@@ -53,7 +97,7 @@ export function initializeDataLayer(
   nation: any,
   index: number,
   colors = COLORS,
-  countries: string[]
+  countries: SelectedCountry
 ): DataLayer {
   const visaKindArray = ['visaFree', 'visaOnArrival'];
   let visaKindIndex = 0;
@@ -89,6 +133,22 @@ export function createDataLayers(e: GeoJsonLayer): any {
     fillColor: e.colors[e.visaKind][e.index],
     fillOpacity: 0.5,
     title: e.nation[e.visaKind][e.counter]
+  });
+  freeLayers.push(freeLayer);
+  return freeLayer.setMap(map);
+}
+
+export function createConditionalDataLayer(visaCountry: string, color: string) {
+  const freeLayer = new google.maps.Data();
+  freeLayer.loadGeoJson(
+    'https://raw.githubusercontent.com/johan/world.geo.json/master/countries/' +
+      visaCountry +
+      '.geo.json'
+  );
+  freeLayer.setStyle({
+    fillColor: color,
+    fillOpacity: 0.8,
+    title: visaCountry
   });
   freeLayers.push(freeLayer);
   return freeLayer.setMap(map);
@@ -197,3 +257,6 @@ export function buildAutocomplete(input): any {
   return new google.maps.places.Autocomplete(input);
 }
 
+export function removeWhiteSpace(input) {
+  return input.replace(/ /g, '');
+}

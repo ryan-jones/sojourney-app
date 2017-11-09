@@ -15,3 +15,9 @@ export class Country {
       (this.visaOnArrival = []);
   }
 }
+
+export interface SelectedCountry {
+  nationalities: string[];
+  visaFree?: string[];
+  voa?: string[];
+}

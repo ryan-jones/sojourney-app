@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Colors, DataLayer } from 'app/shared/models/map.model';
-import { Country } from 'app/shared/models/country.model';
+import { Country, SelectedCountry } from 'app/shared/models/country.model';
 import { UserItinerary } from 'app/shared/models/user.model';
 import {
   initializeDataLayer,
@@ -23,6 +23,8 @@ export class CountryLayersService {
   countries: Country[];
   countryName1: Subject<any> = new Subject();
   countryName2: Subject<any> = new Subject();
+  countryNames: Subject<any> = new Subject();
+
   dataLayer: DataLayer;
   colors: Colors = COLORS;
 
@@ -45,7 +47,7 @@ export class CountryLayersService {
     });
   }
 
-  createDataLayersForDisplay(selectedCountries: string[]) {
+  createDataLayersForDisplay(selectedCountries: SelectedCountry) {
     this.countries$.subscribe(countries => {
       this.countries = countries;
       let index = 0;
@@ -53,18 +55,20 @@ export class CountryLayersService {
     });
   }
 
-  showCountries(selectedCountries: string[], colors: Colors, index: number) {
-    if (index < 2)
+  
+
+  showCountries(selectedCountries: SelectedCountry, colors: Colors, index: number) {
+    if (index < selectedCountries.nationalities.length)
       this.setLayersForSelectedCountry(selectedCountries, index, colors);
   }
 
   setLayersForSelectedCountry(
-    selectedCountries: string[],
+    selectedCountries: SelectedCountry,
     index: number,
     colors: Colors
   ) {
     const nation = this.countries.find(
-      country => country._id === selectedCountries[index]
+      country => country.name === selectedCountries.nationalities[index]
     );
     this.setDataLayers(nation, index, colors, selectedCountries);
   }
@@ -73,7 +77,7 @@ export class CountryLayersService {
     nation: Country,
     index: number,
     colors: Colors,
-    countries: string[]
+    countries: SelectedCountry
   ) {
     index === 0
       ? this.countryName1.next(nation.name)
@@ -111,7 +115,10 @@ export class CountryLayersService {
     index: number;
     colors: any;
     counter: number;
+    countries: SelectedCountry
   }) {
     const layer = event.nation ? createDataLayers(event) : '';
   }
+
+
 }
