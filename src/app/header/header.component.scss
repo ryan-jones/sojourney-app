@@ -1,0 +1,17 @@
+@import 'src/styles/variables';
+
+* {
+  font-family: 'Special Elite', cursive;
+}
+
+.navbar {
+  background-color: $dark-blue;
+}
+
+.white {
+  color: #fff;
+}
+
+li {
+  margin: 5% 0 0 0;
+}

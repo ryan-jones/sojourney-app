@@ -1,0 +1,63 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <h2 class="logo"> Sojourney </h2>
+    </div>
+  </div>
+  <div class="row profile">
+    <div class="col-xs-12 img-div">
+      <img class="img-circle" src="https://cdn4.iconfinder.com/data/icons/user-avatar-flat-icons/512/User_Avatar-35-512.png" />
+      <p>{{ user.name }}</p>
+    </div>
+  </div>
+  <div class="menu">
+    <div class="row menu-item">
+      <div class="col-xs-4">
+        <img [src]="'./assets/visa.svg'" />
+      </div>
+      <div class="col-xs-8">
+        <span (click)="navigateTo('visas')" class="pull-left">
+          <h4>Visas</h4>
+        </span>
+      </div>
+    </div>
+    <div class="row menu-item">
+      <div class="col-xs-4">
+        <img [src]="'./assets/itinerary.svg'" />
+      </div>
+      <div class="col-xs-8">
+        <span (click)="navigateTo('itinerary')" class="pull-left">
+          <h4>Itinerary</h4>
+        </span>
+      </div>
+    </div>
+    <div class="row menu-item">
+      <div class="col-xs-4">
+        <img [src]="'./assets/flights.svg'" />
+      </div>
+      <div class="col-xs-8">
+        <span (click)="navigateTo('flights')" class="pull-left">
+          <h4>Flights</h4>
+        </span>
+      </div>
+    </div>
+    <div class="row menu-item">
+        <div class="col-xs-4">
+            <img [src]="'./assets/warning.svg'" />
+          </div>
+      <div class="col-xs-8">
+        <span (click)="navigateTo('warnings')" class="pull-left">
+          <h4>Warnings</h4>
+        </span>
+      </div>
+    </div>
+    <div class="row menu-item">
+      <div class="col-xs-4"></div>
+      <div class="col-xs-8">
+        <span (click)="navigateTo('login')" class="pull-left">
+          <h4>Login</h4>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+@import 'src/styles/variables';
+
+.container-fluid {
+  background-color: $nav-background;
+}
+
+.logo {
+  font-size: 2em;
+  font-weight: bold;
+  color: $logo;
+}
+
+.profile {
+  margin-top: 20%;
+}
+
+.menu {
+  margin-top: 25%;
+}
+
+.row {
+  text-align: center;
+  margin: 0;
+  color: $non-active-grey;
+
+  &.menu-item {
+    // border: 1px solid red;
+    height: 5vh;
+  }
+
+  img {
+    height: 5vh;
+    color: $non-active-grey;
+  }
+
+  h4:hover {
+    color: $active-grey;
+    cursor: pointer;
+  }
+}
+
+.img-div {
+  height: 15vh;
+  margin: 0 2%;
+
+  img {
+    height: 100%;
+  }
+}
+
+.img-circle {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.white,
+button {
+  color: #fff;
+}

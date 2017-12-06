@@ -1,0 +1,40 @@
+@import 'src/styles/variables';
+
+.container-fluid{
+  height: 100vh;
+  background-image: url('http://www.switchbacktravel.com/sites/default/files/images/articles/Los%20Glaciares%20Patagonia.jpg');
+  background-size: cover;
+}
+
+i,
+li:hover {
+  cursor: pointer;
+}
+
+li:hover {
+  background-color: blue;
+  color: white;
+}
+
+
+.form-box,
+button {
+  border-radius: 5px;
+}
+
+input,
+button {
+  width: 100%;
+}
+
+h4 {
+  margin: 5% 0 2%;
+}
+
+button {
+  background-color: $dark-blue;
+  margin-top: 1%;
+  color: #fff;
+  padding: 1% 2%;
+  box-shadow: 3px 3px 3px 1px $shadow;
+}

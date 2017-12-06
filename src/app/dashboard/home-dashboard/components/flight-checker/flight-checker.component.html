@@ -1,0 +1,73 @@
+<div class="container-fluid">
+  <div class="flight-search">
+    <div class="col-md-6">
+      <div class="flights">
+        <input type="text" id="departure" #departure placeholder="Departing from" />
+      </div>
+      <div class="dates">
+        From: <input id="departure-date-start" [(ngModel)]="departureStartDate" value="" type="date" name="date" /> To: <input id="departure-date-end"
+          [(ngModel)]="departureEndDate" value="" type="date" name="date" />
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="flights">
+        <input type="text" id="arrival" #arrival placeholder="Going to" />
+      </div>
+      <div class="dates">
+        Returning From: <input id="return-date-start" [(ngModel)]="returnStartDate" value="" type="date" name="date" />To: <input id="return-date-end"
+          [(ngModel)]="returnEndDate" value="" type="date" name="date" />
+      </div>
+    </div>
+    <button id="search-button" (click)="searchFlights()">Search for flights</button>
+  </div>
+
+
+  <section class="search-result-container">
+    <div class="col-md-5 map">
+      <div id="map-canvas">
+      </div>
+    </div>
+    <div class="col-md-7 search-result">
+      <div *ngIf="toggle == false">
+        <div id="loading">
+          <h3>Loading ...</h3>
+          <p> Sorry for the wait as we find the cheapest flights from {{departureView.name}} to {{arrivalView.name}} for you
+          </p>
+        </div>
+      </div>
+      <div *ngIf="checked == true">
+        <div *ngIf="toggle == true">
+          <div *ngFor="let result of searchResult.data; let i = index">
+            <div (mouseout)="removeFlightPath(i) " (mouseover)="addFlightPath(i)" class="results container">
+              <div class="col-md-2 pricing">
+                <h3> {{result.price | currency:'EUR':true}}</h3><br />
+                <i><p>{{result.nightsInDest}} nights total in {{arrivalView.name}}</p></i>
+              </div>
+              <div class="col-md-10 routes">
+                <div class="ind-route" *ngFor="let route of result.route, let i of index">
+                  <section>
+                    <div class="col-md-3 airline">
+                      <p>{{route.airline}}</p>
+                      <p>Flight #{{route.flight_no}}</p>
+                    </div>
+                    <div class="col-md-4">
+                      <h5>{{durations[i]}}</h5>
+                      <p><i>{{route.dTime * 1000 | date}} -> {{route.aTime * 1000 | date}}</i> </p>
+                    </div>
+                    <div class="col-md-5">
+                      <h5>{{route.dTime * 1000 | date:'shortTime'}} -> {{route.aTime * 1000 | date:'shortTime'}} </h5>
+                      <p>{{route.cityFrom}}({{route.flyFrom}}) -> {{route.cityTo}}({{route.flyTo}})
+                    </div>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+</div>

@@ -1,0 +1,53 @@
+<div class="container-fluid">
+  <div class="row selectors">
+    <div class="col-xs-2 dividers">
+      <p id="header">Countries</p>
+    </div>
+    <div class="col-xs-7 dividers">
+      <div class="row">
+        <div class="col-xs-4 visas">
+          <input type="radio" [checked]="visaLimit === 'all'" (click)="setVisaLimits('all')" />
+          <p>All</p>
+        </div>
+        <div class="col-xs-4 visas">
+          <input type="radio" [checked]="visaLimit === 'visa-free'" (click)="setVisaLimits('visa-free')" />
+          <p>Visa-free Only</p>
+        </div>
+        <div class="col-xs-4 visas">
+          <input type="radio" [checked]="visaLimit === 'voa'" (click)="setVisaLimits('voa')" />
+          <p>Visa Free + VOA</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-3 dividers">
+      <div class="btn-group dropdown form-group nationality-input">
+        <input id="nationality1" type="text" class="form-control dropdown-toggle" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true"
+          placeholder="Add a nationality" [(ngModel)]="inputValue" (keyup)="filterNationalities($event.target.value)" />
+        <ul class="dropdown-menu nationality-dropdown-menu">
+          <li *ngFor="let country of countries | searchFilter: searchterm" (click)="onAddNationality(country)">{{ country.name }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="countries">
+    <div *ngFor="let nationality of selectedNationalities" class="col-md-3">
+      <img [src]="nationality.img" />
+      <p class="selected-country">{{nationality.name}} <i (click)="onDeleteNationalityFromList(nationality)" class="fa fa-times pull-right" aria-hidden="true"></i></p>
+    </div>
+  </div>
+  <div class="row legend" *ngIf="visaLimit === 'all'">
+    <div class="col-xs-3">
+      <button class="btn btn-danger">Visa-free: {{countryName1}}</button>
+    </div>
+    <div class="col-xs-3">
+      <button class="btn btn-warning">VOA: {{countryName1}}</button>
+    </div>
+    <div class="col-xs-3">
+      <button class="btn btn-primary">Visa-free: {{countryName2}}</button>
+    </div>
+    <div class="col-xs-3">
+      <button class="btn btn-success">VOA: {{countryName2}}</button>
+    </div>
+  </div>
+</div>

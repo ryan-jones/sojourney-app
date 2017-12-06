@@ -1,0 +1,21 @@
+.overview {
+  margin: 0;
+  padding: 0;
+  background-image: url('http://www.getsready.com/wp-content/uploads/2016/09/wonderful-scenery-in-kyoto.jpg');
+  background-size: cover;
+  height: 100vh;
+}
+
+#user-info {
+  background-color: #fff;
+  border-radius: 5px;
+  margin: 25%;
+  border: 1px solid red;
+  padding: 5%;
+}
+
+#user-info > div {
+  margin: 5%;
+}
+
+

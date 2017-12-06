@@ -1,80 +1,66 @@
+//modules
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, ApplicationRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
-import {RouterModule, Routes} from "@angular/router"; //necessary to add on for routers
+import { NgModule } from '@angular/core';
+import { RoutingModule } from 'app/app-routes.module';
+import { AuthModule } from 'app/auth/auth.module';
+import { SharedModule } from 'app/shared/shared.module';
+import { ProfileModule } from 'app/dashboard/profiles/profiles.module';
+import { CollapseModule } from 'ngx-bootstrap';
+
+
+
+//components
 import { AppComponent } from './app.component';
-import { MyHomeComponent } from './my-home/my-home.component';
-import { MyAboutComponent } from './my-about/my-about.component';
-import {MyLoginComponent} from './my-login/my-login.component';
-import { MyNavComponent } from './my-nav/my-nav.component';
-import {AgmCoreModule} from 'angular2-google-maps/core';
-import {CountryService} from './country.service';
-import {WarningService} from './warning.service';
-import {SessionService} from './session.service';
-import {UserService} from './user.service';
-import {ProfileOverviewComponent} from './profile-overview/profile-overview.component';
-import {ProfileEditComponent} from './profile-edit/profile-edit.component';
-import { MySignupFormComponent } from './my-signup-form/my-signup-form.component';
-import { ProfileCountryVisitComponent } from './profile-country-visit/profile-country-visit.component';
-import { ProfileItinerariesComponent } from './profile-itineraries/profile-itineraries.component';
-import { ProfileNavComponent } from './profile-nav/profile-nav.component';
-import { AlertModule, CollapseModule } from 'ngx-bootstrap';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { MyFlightsComponent } from './my-flights/my-flights.component';
+import { AboutUsComponent } from './about-us/about-us.component';
+import { HeaderComponent } from './header/header.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { VisaCheckerComponent } from 'app/dashboard/home-dashboard/components/visa-checker/visa-checker.component';
+import { ItineraryPlannerComponent } from 'app/dashboard/home-dashboard/components/itinerary-planner/itinerary-planner.component';
+import { ItineraryOverViewComponent } from 'app/dashboard/home-dashboard/containers/overview/overview.component';
+import { MyFlightsComponent } from 'app/dashboard/home-dashboard/components/flight-checker/flight-checker.component';
+import { OverviewNavComponent } from 'app/dashboard/home-dashboard/components/overview-nav/overview-nav.component';
 
+//services
+import { WarningService } from './shared/services/warning.service';
+import { SessionService } from './shared/services/session.service';
+import { UserService } from './shared/services/user.service';
+import { FlightService } from 'app/shared/services/flight.service';
+import { FlightPathService } from 'app/shared/services/flightPath.service';
+import { CountryLayersService } from 'app/shared/services/country-layers.service';
+import { VisaCheckerService } from 'app/dashboard/home-dashboard/components/visa-checker/visa-checker.service';
 
-
-
-
-const routes: Routes = [
-  {path: '' , component: MyHomeComponent},
-  {path: 'home', component: MyHomeComponent},
-  {path: 'about', component: MyAboutComponent},
-  {path: 'signup', component: MySignupFormComponent},
-  {path: 'login', component: MyLoginComponent},
-  {path: 'user', component: ProfileOverviewComponent},
-  {path: 'countries_visited', component: ProfileCountryVisitComponent},
-  {path: 'itineraries', component: ProfileItinerariesComponent},
-  { path: 'edit', component: ProfileEditComponent },
-  {path: 'flights', component: MyFlightsComponent}
-  ]
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    MyHomeComponent,
-    MyAboutComponent,
-    MyLoginComponent,
-    MyNavComponent,
-    ProfileEditComponent,
-    ProfileOverviewComponent,
-    MySignupFormComponent,
-    ProfileCountryVisitComponent,
-    ProfileItinerariesComponent,
-    ProfileNavComponent,
+    AboutUsComponent,
+    HeaderComponent,
+    NotFoundComponent,
+    VisaCheckerComponent,
+    ItineraryPlannerComponent,
+    ItineraryOverViewComponent,
     MyFlightsComponent,
-
+    OverviewNavComponent
   ],
   imports: [
+    RoutingModule,
     BrowserModule,
-    FormsModule,
-    HttpModule,
-    CommonModule,
-    RouterModule.forRoot(routes),   //  <!-- "routes" is the array defined above
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyD0I9Hi4pdArBe7w4bxrZfLTTKfFKp64nw',
-      libraries: ["places"]
-    }),
-    AlertModule.forRoot(),
-    TabsModule.forRoot(),
-    CollapseModule.forRoot()
-
+    AuthModule,
+    ProfileModule,
+    SharedModule,
+    CollapseModule
   ],
-  providers: [CountryService, WarningService, SessionService, UserService],
+  providers: [
+    CountryLayersService,
+    WarningService,
+    SessionService,
+    UserService,
+    FlightService,
+    FlightPathService,
+    VisaCheckerService
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

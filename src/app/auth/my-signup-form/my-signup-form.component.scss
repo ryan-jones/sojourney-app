@@ -1,0 +1,50 @@
+@import 'src/styles/variables';
+
+
+.container-fluid{
+  background-image: url('http://cdn-image.travelandleisure.com/sites/default/files/styles/1600x1000/public/1477342854/positano-amalfi-coast-italy-AMALFI1024.jpg?itok=Aa5bXDAF');
+  background-size: cover;
+  height: 100vh;
+}
+
+
+
+.form-box,
+.button {
+  border-radius: 5px;
+}
+
+input,
+button {
+  width: 100%;
+}
+
+h4 {
+  margin: 5% 0 2%;
+}
+
+button {
+  background-color: $dark-blue;
+  margin-top: 1%;
+  color: #fff;
+  padding: 1% 2%;
+  box-shadow: 3px 3px 3px 1px $shadow;
+}
+
+.nationality-input {
+  display: block;
+}
+
+.nationality-dropdown-menu {
+  width: 100%;
+  text-align: center;
+}
+
+i, li:hover {
+  cursor: pointer;
+}
+
+li:hover {
+  background-color: blue;
+  color: white;
+}

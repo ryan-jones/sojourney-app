@@ -1,0 +1,91 @@
+@import 'src/styles/variables';
+
+* {
+  margin: 0;
+}
+
+.container-fluid {
+  background-color: $main-background;
+  font-family: $primary-text;
+  color: $dark-grey;
+}
+
+.selectors{
+  height: 8vh;
+}
+
+.countries {
+  height: 12vh;
+}
+
+.countries > .col-md-3 {
+  padding-top: 1%;
+}
+
+
+.selectors > div{
+  padding-top: 2%;
+}
+
+#header{
+  font-size: 24px;
+}
+
+
+.col-xs-4 > p {
+  font-size: 18px;
+  margin-left: 5%;
+}
+
+.col-xs-4 > input, .col-xs-4 > p {
+  display: inline-block;
+}
+
+.nationality-input {
+  display: block;
+}
+
+.nationality-dropdown-menu {
+  width: 100%;
+  text-align: center;
+}
+
+.visas {
+}
+
+.dividers {
+  height: 100%;
+}
+
+input {
+  background-color: $orange;
+  color: #fff;
+}
+
+input::placeholder {
+  color: #fff;
+}
+
+img {
+  position: absolute;
+  height: 8vh;
+  width: auto;
+  z-index: 100;
+}
+
+.selected-country {
+  background-color: $shadow;
+  margin: 5% 5% 0 20%;
+  z-index: 1;
+  padding: 3% 0% 3% 10%;
+  font-size: 20px;
+}
+
+.selected-country > i {
+  margin: -2% 2% 0 0;
+}
+
+.col-md-3 {
+  padding-top: 2%;
+  height: 100%;
+}

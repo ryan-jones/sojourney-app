@@ -1,0 +1,11 @@
+@import 'src/styles/variables';
+
+.row {
+  margin: 0;
+  padding: 0;
+}
+
+.selector-view {
+  height: 25vh;
+  background-color: $main-background;
+}

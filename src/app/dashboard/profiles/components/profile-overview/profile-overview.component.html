@@ -1,0 +1,14 @@
+<div class="container-fluid overview">
+
+  <div id="user-info">
+    <div>
+      <strong>Name: </strong>{{user.name}}
+    </div>
+    <div>
+      <strong>Username: </strong>{{user.username}}
+    </div>
+    <div>
+      <strong>Nationalities: </strong> <p *ngFor="let nationality of user.nationalities"> {{nationality}}</p>
+    </div>
+  </div>
+</div>
