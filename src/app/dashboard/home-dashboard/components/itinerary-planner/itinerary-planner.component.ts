@@ -27,7 +27,6 @@ import { FlightPathService } from 'app/shared/services/flightPath.service';
   styleUrls: ['./itinerary-planner.component.scss']
 })
 export class ItineraryPlannerComponent implements AfterViewInit {
-  constructor(private flightPathService: FlightPathService) {}
 
   @ViewChild('address') addressInput;
   @Input() locations: any;
@@ -59,6 +58,9 @@ export class ItineraryPlannerComponent implements AfterViewInit {
   private newAddress: string;
   private newNote: string = '';
   private autocomplete: any;
+
+  constructor(private flightPathService: FlightPathService) {}
+
 
   ngAfterViewInit() {
     this.autoCompleteAddress();

@@ -70,8 +70,8 @@ export function setVisaFreeLayers(selectedNationalities: any[]): any[] {
 
 export function setMap(): any {
   const myOptions = new MapOptions();
-  map = new google.maps.Map(document.getElementById('map-canvas'), myOptions);
   const styles = new MapStyles();
+  map = new google.maps.Map(document.getElementById('map-canvas'), myOptions);
   map.setOptions({ styles: styles });
   return map;
 }
@@ -89,7 +89,9 @@ export function formatDate(date: string): string {
       ? `0${newDate.getMonth() + 1}`
       : `${newDate.getMonth() + 1}`;
 
-  const convertedDates = `${newDate.getDate()}/${month}/${newDate.getFullYear()}`;
+  const convertedDates = `${newDate.getDate()}/${
+    month
+  }/${newDate.getFullYear()}`;
   return convertedDates;
 }
 
@@ -100,8 +102,8 @@ export function initializeDataLayer(
   countries: SelectedCountry
 ): DataLayer {
   const visaKindArray = ['visaFree', 'visaOnArrival'];
-  let visaKindIndex = 0;
-  let counter = 0;
+  const visaKindIndex = 0;
+  const counter = 0;
 
   return {
     visaKindArray,
@@ -247,7 +249,15 @@ export function supplementaryInfoWindow(
 ) {
   google.maps.event.addListener(marker, 'click', function() {
     infowindow.setContent(
-      `<div><h3> Location: ${name}, ${country} </h3></div><div><p><strong>Arriving on Day </strong> ${days} <strong> of the trip </strong></p></div> <div><p><strong>Arriving on </strong> ${date}  via  <i>${transport}</i> </p></div><div><p><strong>Price: </strong>  ${price} per person  </p></div> `
+      `<div><h3> Location: ${name}, ${
+        country
+      } </h3></div><div><p><strong>Arriving on Day </strong> ${
+        days
+      } <strong> of the trip </strong></p></div> <div><p><strong>Arriving on </strong> ${
+        date
+      }  via  <i>${transport}</i> </p></div><div><p><strong>Price: </strong>  ${
+        price
+      } per person  </p></div> `
     );
     infowindow.open(map, this);
   });

@@ -54,7 +54,7 @@
     "tslint": "~4.5.0",
     "typescript": "~2.2.0"
   },
-  "description": "This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.3.",
+  "description": "Ultimate Itinerary Planner",
   "main": "karma.conf.js",
   "repository": {
     "type": "git",

@@ -1,6 +1,5 @@
 @import 'src/styles/variables';
 
-
 * {
   margin: 0;
 }
@@ -9,6 +8,7 @@
   box-shadow: inset 5px 0 5px $shadow;
   padding-top: 5%;
 }
+
 .itinerary-wrapper {
   margin: 0 5%;
   box-shadow: 3px 3px 3px 3px $shadow;

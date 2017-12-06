@@ -16,6 +16,10 @@ export class Country {
   }
 }
 
+export class CountryIcon extends Country {
+  img: string;
+}
+
 export interface SelectedCountry {
   nationalities: string[];
   visaFree?: string[];

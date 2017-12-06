@@ -16,9 +16,7 @@ import { Subject } from 'rxjs/Subject';
 @Injectable()
 export class CountryLayersService {
   // BASE_URL: string = 'https://sojourney.herokuapp.com';
-  BASE_URL: string = 'http://localhost:3000';
-
-  constructor(private http: Http) {}
+  BASE_URL = 'http://localhost:3000';
 
   countries: Country[];
   countryName1: Subject<any> = new Subject();
@@ -27,10 +25,13 @@ export class CountryLayersService {
 
   dataLayer: DataLayer;
   colors: Colors = COLORS;
+  countries$: Observable<Country[]>;
 
-  countries$: Observable<Country[]> = this.http
-    .get(`${this.BASE_URL}/api/countries`)
-    .map(res => res.json());
+  constructor(private http: Http) {
+    this.countries$ = this.http
+      .get(`${this.BASE_URL}/api/countries`)
+      .map(res => res.json());
+  }
 
   identifyCountryId(
     userItineraries: UserItinerary[],
@@ -55,9 +56,11 @@ export class CountryLayersService {
     });
   }
 
-  
-
-  showCountries(selectedCountries: SelectedCountry, colors: Colors, index: number) {
+  showCountries(
+    selectedCountries: SelectedCountry,
+    colors: Colors,
+    index: number
+  ) {
     if (index < selectedCountries.nationalities.length)
       this.setLayersForSelectedCountry(selectedCountries, index, colors);
   }
@@ -115,10 +118,8 @@ export class CountryLayersService {
     index: number;
     colors: any;
     counter: number;
-    countries: SelectedCountry
+    countries: SelectedCountry;
   }) {
     const layer = event.nation ? createDataLayers(event) : '';
   }
-
-
 }

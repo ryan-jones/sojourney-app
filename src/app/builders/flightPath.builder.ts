@@ -4,7 +4,10 @@ import { combineTransportOptions } from 'app/utils';
 declare const google: any;
 
 export class FlightPathBuilder {
-  static buildFlightPath(itineraryDestination: Destination, saved?: boolean): Export {
+  static buildFlightPath(
+    itineraryDestination: Destination,
+    saved?: boolean
+  ): Export {
     if (itineraryDestination.geoLocation && itineraryDestination.date) {
       return {
         details: itineraryDestination.details,
@@ -17,17 +20,30 @@ export class FlightPathBuilder {
         country: itineraryDestination.country,
         price: itineraryDestination.price,
         point: {
-          lat: this.setCoordinates(itineraryDestination.geoLocation.geometry.location, 'lat', saved), 
-          lng: this.setCoordinates(itineraryDestination.geoLocation.geometry.location, 'lng', saved) 
+          lat: this.setCoordinates(
+            itineraryDestination.geoLocation.geometry.location,
+            'lat',
+            saved
+          ),
+          lng: this.setCoordinates(
+            itineraryDestination.geoLocation.geometry.location,
+            'lng',
+            saved
+          )
         }
       };
-    }
-    else {
+    } else {
       return;
     }
   }
 
-  static setCoordinates(itineraryDestination: Destination, coordinate: string, saved?): number | any {
-    return saved ? itineraryDestination[coordinate] : itineraryDestination[coordinate]()
+  static setCoordinates(
+    itineraryDestination: Destination,
+    coordinate: string,
+    saved?
+  ): number | any {
+    return saved
+      ? itineraryDestination[coordinate]
+      : itineraryDestination[coordinate]();
   }
 }

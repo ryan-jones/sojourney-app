@@ -11,11 +11,15 @@
 }
 
 .selectors{
-  height: 7vh;
+  height: 8vh;
 }
 
 .countries {
-  height: 13vh;
+  height: 12vh;
+}
+
+.countries > .col-md-3 {
+  padding-top: 1%;
 }
 
 
@@ -47,11 +51,9 @@
 }
 
 .visas {
-  // border: 1px solid black;
 }
 
 .dividers {
-  // border: 1px solid red;
   height: 100%;
 }
 
@@ -84,16 +86,6 @@ img {
 }
 
 .col-md-3 {
-  // border: 1px solid red;
   padding-top: 2%;
   height: 100%;
 }
-
-.legend{
-  // border: 1px solid black;
-}
-
-
-
-
-

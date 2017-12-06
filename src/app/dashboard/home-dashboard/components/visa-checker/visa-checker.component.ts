@@ -1,12 +1,7 @@
 import { Component, Input, EventEmitter, Output, OnInit } from '@angular/core';
-import { Country } from 'app/shared/models/country.model';
+import { Country, CountryIcon } from 'app/shared/models/country.model';
 import { CountryLayersService } from 'app/shared/services/country-layers.service';
-import {
-  removeWhiteSpace,
-  removeDataLayer,
-} from 'app/utils';
-
-import * as _ from 'lodash';
+import { removeWhiteSpace, removeDataLayer } from 'app/utils';
 import { VisaCheckerService } from 'app/dashboard/home-dashboard/components/visa-checker/visa-checker.service';
 
 @Component({
@@ -15,19 +10,19 @@ import { VisaCheckerService } from 'app/dashboard/home-dashboard/components/visa
   styleUrls: ['./visa-checker.component.scss']
 })
 export class VisaCheckerComponent implements OnInit {
-  constructor(
-    private countryService: CountryLayersService,
-    private visaCheckService: VisaCheckerService
-  ) {}
-
   countries: Country[];
   countrySelector2: Country[];
   countryName1: string;
   countryName2: string;
   searchterm: string;
   inputValue: string;
-  visaLimit: string = 'all';
-  selectedNationalities: any = [];
+  visaLimit = 'all';
+  selectedNationalities: any[] = [];
+
+  constructor(
+    private countryService: CountryLayersService,
+    private visaCheckService: VisaCheckerService
+  ) {}
 
   ngOnInit() {
     this.countryService.countries$.subscribe((res: Country[]) => {
@@ -41,7 +36,7 @@ export class VisaCheckerComponent implements OnInit {
     );
   }
 
-  onAddNationality(input) {
+  onAddNationality(input: CountryIcon) {
     const nationality = Object.assign({}, input);
     const flagName = removeWhiteSpace(nationality.name);
     nationality.img = `./assets/${flagName}.svg`;
@@ -81,18 +76,24 @@ export class VisaCheckerComponent implements OnInit {
 
   setVOA() {
     removeDataLayer();
-    this.visaCheckService.createVoaLayers(this.selectedNationalities, this.visaLimit);
+    this.visaCheckService.createVoaLayers(
+      this.selectedNationalities,
+      this.visaLimit
+    );
     this.visaCheckService.createVisaFreeLayers(this.selectedNationalities);
   }
 
   setAllVisas() {
     removeDataLayer();
-    this.visaCheckService.createVoaLayers(this.selectedNationalities, this.visaLimit);
+    this.visaCheckService.createVoaLayers(
+      this.selectedNationalities,
+      this.visaLimit
+    );
     this.visaCheckService.createVisaFreeLayers(this.selectedNationalities);
     this.visaCheckService.createUniqueLayers(this.selectedNationalities);
   }
 
-  filterNationalities(input) {
+  filterNationalities(input: string) {
     this.searchterm = input;
   }
 
@@ -101,7 +102,7 @@ export class VisaCheckerComponent implements OnInit {
     this.inputValue = '';
   }
 
-  onDeleteNationalityFromList(country) {
+  onDeleteNationalityFromList(country: any) {
     this.selectedNationalities = this.selectedNationalities.filter(
       nationality => {
         return nationality !== country;

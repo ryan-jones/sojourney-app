@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { UserService } from '../../shared/services/user.service';
 import {
   NgForm,
@@ -17,7 +17,7 @@ import {
 export class MySignupFormComponent {
   @ViewChild('nationality') nationalityInput;
   error: string;
-  searchterm: string = '';
+  searchterm = '';
   newUser: FormGroup = new FormGroup({
     name: new FormControl('', Validators.required),
     username: new FormControl('', [Validators.required, Validators.email]),

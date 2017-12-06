@@ -1,13 +1,13 @@
-.fluid-container{
-  margin: 0;
-  padding: 0;
+@import 'src/styles/variables';
+
+.container-fluid{
   height: 100vh;
   background-image: url('http://static.asiawebdirect.com/m/bangkok/portals/bali-indonesia-com/homepage/pagePropertiesImage/bali-guide.jpg.jpg');
   background-size: cover;
 }
 
 .notice{
-  background-color: #879dc9;
+  background-color: $light-blue;
   color: white;
   border-radius: 5px;
   text-align: center;

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
-import { SessionService } from './session.service';
 import 'rxjs/add/operator/map';
 import { flightDetails } from 'app/shared/models/flights.model';
 

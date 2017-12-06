@@ -42,7 +42,7 @@ export class ItineraryOverViewComponent
   private selectedNationalityId2: string;
   private countryName1: string;
   private countryName2: string;
-  private itineraryOpt: string = 'itinerary';
+  private itineraryOpt = 'itinerary';
 
   constructor(
     private countryService: CountryLayersService,
@@ -61,13 +61,11 @@ export class ItineraryOverViewComponent
     this.countryService.countryName2.subscribe(
       (country: string) => (this.countryName2 = country)
     );
-    this.countryService.countryNames.subscribe(response=> this.setCountryNames(response));
+    this.countryService.countryNames.subscribe(response => this.setCountryNames(response));
   }
 
   ngOnDestroy() {
     this.flightPathService.clearMapValues();
-    this.countryService.countryName1.unsubscribe();
-    this.countryService.countryName2.unsubscribe();
   }
 
   authorizedUser() {
@@ -79,9 +77,9 @@ export class ItineraryOverViewComponent
     this.map = setMap();
   }
 
-  geocodeMarker(data) {
-    this.flightPathService.setGeocodeMarkers(data, this.map);
-  }
+  // geocodeMarker(data) {
+  //   this.flightPathService.setGeocodeMarkers(data, this.map);
+  // }
 
   addItinerary(event) {
     this.newItinerary = Object.assign({}, event);

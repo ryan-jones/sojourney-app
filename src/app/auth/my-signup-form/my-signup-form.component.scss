@@ -1,33 +1,13 @@
 @import 'src/styles/variables';
 
-input.ng-touched {
-  border-color: blue;
-}
 
-input.ng-invalid.ng-touched {
-  border: 1px solid red;
-}
-
-input.ng-touched.ng-valid {
-  border-color: green;
-}
-
-.fluid-container {
-  margin: 0;
-  padding: 0;
+.container-fluid{
   background-image: url('http://cdn-image.travelandleisure.com/sites/default/files/styles/1600x1000/public/1477342854/positano-amalfi-coast-italy-AMALFI1024.jpg?itok=Aa5bXDAF');
   background-size: cover;
   height: 100vh;
 }
 
-.form-box {
-  margin: 5% 0;
-  padding: 5%;
-  text-align: center;
-  background-color: #eeedec;
-  border-top: 1px solid black;
-  box-shadow: 1px 3px 3px 1px black;
-}
+
 
 .form-box,
 .button {
@@ -68,23 +48,3 @@ li:hover {
   background-color: blue;
   color: white;
 }
-
-.input-group-unstyled {
-  width: 100%;
-}
-
-
-.input-group.input-group-unstyled input.form-control {
-    border-radius: 4px;
-}
-.input-group-unstyled .input-group-addon {
-    border-radius: 4px;
-    border: 0px;
-    background-color: transparent;
-}
-
-.input-group-addon{
-  color: green;
-}
-
-
